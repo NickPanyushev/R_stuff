@@ -1,0 +1,13 @@
+---
+title: "HW5"
+author: "Панюшев Николай"
+date: '12 мая 2016 г '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+

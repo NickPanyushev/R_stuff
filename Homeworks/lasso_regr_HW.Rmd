@@ -1,0 +1,159 @@
+---
+title: "Домашняя работа про болезнь Паркинсона"
+author: "Панюшев Николай"
+date: "April 15, 2016"
+output: html_document
+---
+
+Задача. Постройте две регресионные модели для предсказания целевых переменных motor_UPDRS
+и total_UPDRS.
+
+- если есть проблема, примите решение какой из методов борьбы с коллинеарностью использовать.
+- предложите две регресионные модели для предсказания ЗП.
+
+- дополнительные баллы: проверьте остальные требования к данным для линейных моделей
+## Проверка на мультиколлинеарность
+
+Импортируем данные: 
+
+```{r}
+Parkinsons_data <- read.csv("http://archive.ics.uci.edu/ml/machine-learning-databases/parkinsons/telemonitoring/parkinsons_updrs.data")
+```
+Проверим, есть ли переменные с крайне выраженной мультиколлинеарностью. Возьму для этого функцию из предыдущей домашки! 
+```{r}
+high_corr <- function(data_frame){
+  correlations <- cor(data_frame[sapply(data_frame, is.numeric)],
+                    use = "pairwise.complete.obs",
+                    method = "pearson") # корреляции всех со всеми
+  correlations <- as.data.frame(correlations)
+  correlations[lower.tri(correlations, diag = T)] <- NA # выкинули главную диагональ
+  var1 <- correlations[correlations > 0.75 | correlations  < (-0.75)]
+  var1 <- var1[!is.na(var1)] # выделили только выдающиеся корреляции
+  corr.names <- names(correlations)
+  result <- matrix(ncol=3, dimnames = list(NULL, c('Var1', 'Var2', 'Correlation')))
+  
+  for (i in var1){
+    tmp <- which(correlations == i, arr.ind = T, useNames = F)
+    tmp <- as.vector(tmp)
+    result <- rbind(c(corr.names[tmp], i), result)
+    }
+  return(result)
+}
+print(high_corr(Parkinsons_data))
+```
+Ой вей, как же все плохо! 
+Посмотрим, что переменные означают:
+```{r results='asis', eval=F}
+ATTRIBUTE INFORMATION:
+
+age - Subject age
+sex - Subject gender '0' - male, '1' - female
+test_time - Time since recruitment into the trial. The integer part is the 
+number of days since recruitment.
+motor_UPDRS - Clinician's motor UPDRS score, linearly interpolated
+total_UPDRS - Clinician's total UPDRS score, linearly interpolated
+Jitter(%),Jitter(Abs),Jitter:RAP,Jitter:PPQ5,Jitter:DDP - Several measures of 
+variation in fundamental frequency
+Shimmer,Shimmer(dB),Shimmer:APQ3,Shimmer:APQ5,Shimmer:APQ11,Shimmer:DDA - 
+Several measures of variation in amplitude
+NHR,HNR - Two measures of ratio of noise to tonal components in the voice
+RPDE - A nonlinear dynamical complexity measure
+DFA - Signal fractal scaling exponent
+PPE - A nonlinear measure of fundamental frequency variation 
+
+
+```
+
+
+Ага, видим, что из Shimmer и Jitter - можно оставить по одной переменной
+
+```{r}
+Parkinsons_data$Jitter <- Parkinsons_data$Jitter.Abs.
+Parkinsons_data[grepl('^Jitter.', names(Parkinsons_data))] <- NULL
+Parkinsons_data[grepl('^Shimmer.', names(Parkinsons_data))] <- NULL
+
+#Проверим еще разок:
+print(high_corr(Parkinsons_data))
+```
+Стало гораздо лучше! 
+
+Попробуем протестировать на мультиколлинеарность с помощью пакета vif.
+Сделаем линейную модель, где зависимая переменная - UPDRS
+
+```{r}
+library(car, glmnet, quietly = T)
+library(glmnet, quietly = T)
+fit1 <- lm(total_UPDRS ~ ., Parkinsons_data)
+summary(fit1)
+#А теперь проверим, есть ли вздутые переменные
+vif_score <- vif(fit1)
+max(vif_score)
+good_data <- Parkinsons_data[, -(which.max(vif_score))]
+```
+
+Теперь сделаем линейную модельку, которая предскажет motor_UPDRS и total_UPDRS. 
+
+```{r}
+fit_motor <- lm(motor_UPDRS ~ ., good_data)
+summary_motor <- summary(fit_motor)
+#Сравним, стала ли лучше моделька
+fit2 <- lm(motor_UPDRS ~ ., Parkinsons_data)
+summary_fit2 <- summary(fit2)
+print(summary_fit2$r.squared); print(summary_motor$r.squared)
+#Очень мало изменился R^2! Потому что все мультиколлинеарности выкинули уже
+
+fit_total <- lm(total_UPDRS ~ ., good_data)
+summary_total <- summary(fit_total)
+print(summary_total$adj.r.squared) # неплохой результат!
+```
+
+А теперь опробуем лассо-регрессию на motor_UPDRS: 
+
+```{r}
+Y_data <- as.matrix(good_data$motor_UPDRS)
+X_data <- as.matrix(good_data[, !names(good_data) %in% c("motor_UPDRS", "total_UPDRS")])
+# Не будем включать в модель total_UPDRS, потому что они с motor взаимосвязаны возможно
+lambdas <-  seq(50, 0.1, length = 30) # вектор с лямбдами (величиной штрафа)
+alpha = 1 
+m_lasso <-  glmnet(X_data, Y_data, alpha = 1, lambda = lambdas)
+cv <- cv.glmnet(X_data, Y_data, alpha = 1)
+plot(cv)
+motor_UPDRS_model <- coef(cv, s = "lambda.1se")
+motor_UPDRS_model
+```
+
+А теперь попробуем на total_UPDRS:
+```{r}
+Y_data <- as.matrix(good_data$total_UPDRS) #Перезапишем Y-data, X_data - прежние
+# вектор с лямбдами тот же, альфа та же
+m_lasso <-  glmnet(X_data, Y_data, alpha = 1, lambda = lambdas)
+cv <- cv.glmnet(X_data, Y_data, alpha = 1)
+plot(cv)
+total_UPDRS_model <- coef(cv, s = "lambda.1se")
+total_UPDRS_model
+```
+Посмотрим, какие еще есть требования к моделям:
+
+  *линейная зависимость зависимой переменной от предиктора
+  *нормальное распределение residuals
+  *равномерная дисперсия residuals
+  *независимость residuals
+
+Проверим нормальность residuals - qq-plot
+```{r}
+qqnorm(fit_total$residuals) #для модели fit_total
+qqnorm(fit_motor$residuals) #для модели fit_motor
+
+shapiro.test(sample(fit_total$residuals, 5000))
+shapiro.test(sample(fit_motor$residuals, 5000))
+```
+и там, и там распределение остатков ненормально, а это жаль
+
+Проверим, линейна ли зависимость переменных от предиктора
+```{r}
+library(mgcv)
+fixDependence(Y_data, X_data)
+```
+обе переменных независимы, что не радует((
+
+Не знаю, есть ли смысл какой-то еще проверять дальше(

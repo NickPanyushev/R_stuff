@@ -1,0 +1,154 @@
+---
+title: "HW4"
+author: "Панюшев Николай"
+date: '17 апреля 2016 г '
+output: html_document
+---
+
+## Считывание и форматирование данных
+
+Считаем таблицу и посмотрим, что там:
+
+```{r}
+setwd('~/R')
+raw_data <- read.csv('cafedata.csv', header = T, sep = ",", dec = c("," , "."))
+str(raw_data)
+```
+Непорядок какой-то с переменными Date, Sales. - они как факторы указаны, пофиксим: 
+```{r}
+raw_data$Sales <- as.character(raw_data$Sales.)
+raw_data$Sales <- sub("," , ".", raw_data$Sales)
+raw_data$Sales <- as.numeric(raw_data$Sales)
+raw_data$Date <- as.Date(raw_data$Date, format = "%m/%d/%Y")
+raw_data$Sales. <- NULL #Удалили исходную переменную Sales.
+```
+
+Переименуем все переменные .Sold - уберем этот хвостик
+```{r}
+library(data.table, quietly = T)
+setnames(raw_data, c('Bread.Sand.Sold',
+             'Wraps.Sold', 'Muffins.Sold',
+            'Cookies.Sold', 'Fruit.Cup.Sold'),
+            c('Bread', 'Wraps', 'Muffins', 'Cookies', 'Fruit.Cups'))
+```
+
+##Изгнание мультиколлинеарности
+
+Сделаем функцию для отбора сильно коррелирующих значений:
+```{r}
+high_corr <- function(data_frame){
+  correlations <- cor(data_frame[sapply(raw_data, is.numeric)],
+                    use = "pairwise.complete.obs",
+                    method = "pearson") # корреляции всех со всеми
+  correlations <- as.data.frame(correlations)
+  correlations[lower.tri(correlations, diag = T)] <- NA # выкинули главную диагональ
+  var1 <- correlations[correlations > 0.75 | correlations  < (-0.75)]
+  var1 <- var1[!is.na(var1)] # выделили только выдающиеся корреляции
+  corr.names <- names(correlations)
+  result <- matrix(ncol=3, dimnames = list(NULL, c('Var1', 'Var2', 'Correlation')))
+  
+  for (i in var1){
+    tmp <- which(correlations == i, arr.ind = T, useNames = F)
+    tmp <- as.vector(tmp)
+    result <- rbind(c(corr.names[tmp], i), result)
+    }
+  return(result)
+}
+```
+ОЙ-ОЙ! Кажется, я левелапнулся!
+
+Посмотрим, что тут у нас:
+```{r}
+print(high_corr(raw_data)) 
+```
+Очевидно, что переменные .Share и .Waste будут сильно коррелировать,
+поэтому удалим все .Share
+```{r}
+raw_data[grepl(".Share", names(raw_data))] <- NULL
+```
+Еще коррелируют Wraps.waste и Total.Items.Wasted - удалим Total.Items.Wasted, она как-то косо посчитана.  
+```{r}
+raw_data$Total.Items.Wasted <- NULL
+raw_data$t <- NULL #удалим и ее, зачем она нам, если есть даты?
+```
+А теперь посмотрим, от продажи чего зависят общие продажи:
+
+```{r warning=FALSE, results='asis'}
+library(stargazer, quietly = T)
+fit1 <- lm(Sales ~ Total.Soda.and.Coffee, data = raw_data)
+stargazer(fit1, type="html")
+#А теперь построим линейную модель от всех переменных
+fit2 <- lm(Sales ~ . , data = raw_data)
+stargazer(fit2, type="html")
+```
+Да, по линейной модели видно, что продажи зависят на 60% от продажи кофе и газировки. Но присутствие переменной Total.Soda.and.Coffee сведет на нет вклад всех остальных факторов, поэтому мы ее удалим.
+```{r}
+raw_data$Total.Soda.and.Coffee <- NULL
+```
+
+## Факторный анализ
+
+### Группировка переменных
+
+Чтобы построить хорошую модель, посмотрим, какие признаки можно сгруппировать между собой.
+
+Прогоним метод главных компонент, посмотрим на ординацию признаков, а потом скорректируем наши факторы. 
+
+```{r}
+library(FactoMineR, quietly = T)
+numeric_data <-raw_data[sapply(raw_data, is.numeric)]
+result <- PCA(numeric_data)
+```
+Что мы видим: 5 "пучков" векторов - это все переменные .Waste, Coffees, Остальные продукты, Sodas, Daily Temp.
+Причем продажи кофе отрицательно скоррелированы с температурой! А продажи газировки, наоборот! В принципе, логично.
+
+Теперь сгруппируем переменные .Waste и сделаем переменную Other.Products
+и удалим старые переменные
+```{r}
+group_data <- numeric_data
+group_data$Wastes <- rowSums(numeric_data[endsWith(names(numeric_data), ".Waste")])
+group_data[endsWith(names(numeric_data), ".Waste")] <- NULL
+group_data$Other.Products <- group_data$Bread + group_data$Wraps + group_data$Juices +
+  group_data$Muffins + group_data$Chips
++ group_data$Fruit.Cups + group_data$Cookies
+
+group_data$Bread = group_data$Wraps = group_data$Juices = group_data$Muffins = group_data$Chips = group_data$Fruit.Cups = group_data$Cookies <- NULL
+```
+И еще раз посмотрим на результат PCA:
+```{r}
+result_2 <- PCA(group_data)
+```
+Красота, все очень логично выглядит! 
+В жару никто кофе не пьет, пьют холодненькую газировку; количество выброшенного товара увеличивается, если продажи низкие; продажи зависят еще и от продажи других продуктов!
+Хотя, может, и наоборот, кофе вызывает жару, но не будем об этом..
+
+### Регрессионная модель
+
+```{r, results= "asis"}
+new_fit <-  lm(Coffees ~ Max.Daily.Temp.F, group_data)
+stargazer(new_fit, type="html")
+```
+Отлично! Регрессионная модель подтверждает наше предположение, хотя R^2 и всего около 0.5
+
+## 3d график
+
+Построим красивый график, чтобы все было наглядно!
+К сожалению, у меня не работает rgl - выдает ошибку - 
+'next3d' is not an exported object from 'namespace:rgl'
+Поэтому, ничего красивого не вышло(
+```{r}
+library(ggplot2, ggrepel, quietly = T)
+library(scatterplot3d, quietly = T)
+
+Coffees <-  numeric_data$Coffees
+Sodas <-  numeric_data$Sodas
+Temperature <- numeric_data$Max.Daily.Temp.F
+
+#scatter3d(Coffees, Sodas, Temperature)
+
+library(scatterplot3d) # какой-то некрасивый совсем график
+
+scatterplot3d(Coffees, Sodas, Temperature, highlight.3d=TRUE, col.axis="blue",
+col.grid="lightblue", main="scatterplot3d - 1", pch=20)
+
+```

@@ -1,0 +1,46 @@
+---
+title: "NF-kB sites"
+author: "Панюшев Николай"
+date: '29 марта 2017 г '
+output: html_document
+---
+
+## Цель и задачи этого маленького проектика
+
+Я решил подобрать праймеры для контроля чипсековской библиотеки для секвенирования, чтобы контролировать обогащение. Если эксперимент прошел успешно, то в IP сигнал должен быть гораздо сильнее, чем в IP c неспецифическими IgG. 
+
+Chip-seq мы будем проводить на H1299, а на них экспериментов не делалось, к сожалению.
+
+Поэтому я решил взять 3 клеточные линии: A549, SGBS, IMR90 и отобрать из них самые мощные пики. Итак, посмотрим, что из этого вышло.
+
+
+
+```{r libraries import, echo=F}
+library(ggplot2)
+library(stargazer)
+```
+
+## Импорт данных
+
+Сделаем функцию, которая будет нам данные считывать и сразу фильтровать
+
+```{r import&filtering function}
+read.narrowpeak <- function(filename, filtering=TRUE){
+  raw_peaks <-  read.table(filename, header = F, sep = "\t")
+  attach(raw_peaks)
+  names(raw_peaks) <- c("Chromosome", "Start", "Stop", "Name", "dot",
+                       "display_int", "fold_change", "p-value", "q-value",
+                        "summit_position_to_start")
+  
+  if (filtering == TRUE){
+    dot = display_int <- NULL
+    raw_peaks[grepl(pattern = "chr\w\w?", Chromosome, perl=TRUE)] <- NULL
+    raw_peaks[raw_peaks$Chromosome == "ChrM"] <- NULL
+    droplevels(raw_peaks)
+    }
+  detach(raw_peaks)
+  return(raw_peaks)
+}
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

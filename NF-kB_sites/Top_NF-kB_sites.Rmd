@@ -11,11 +11,11 @@ output: html_document
 
 Chip-seq мы будем проводить на H1299, а на них экспериментов не делалось, к сожалению.
 
-Поэтому я решил взять 3 клеточные линии: A549, SGBS, IMR90 и отобрать из них самые мощные пики. Итак, посмотрим, что из этого вышло.
+Поэтому я решил взять клеточные линии: A549, SGBS, IMR90, HeLa, HUVEC, MCF7 и отобрать из них самые мощные пики. Итак, посмотрим, что из этого вышло.
 
 
 
-```{r libraries import, echo=F}
+```{r libraries import, echo=F, warning=FALSE, message=FALSE}
 library(ggplot2)
 library(stargazer)
 ```
@@ -27,20 +27,65 @@ library(stargazer)
 ```{r import&filtering function}
 read.narrowpeak <- function(filename, filtering=TRUE){
   raw_peaks <-  read.table(filename, header = F, sep = "\t")
-  attach(raw_peaks)
-  names(raw_peaks) <- c("Chromosome", "Start", "Stop", "Name", "dot",
-                       "display_int", "fold_change", "p-value", "q-value",
-                        "summit_position_to_start")
+  names(raw_peaks) <- c("Chromosome", "Start", "Stop", "Peak_name",
+                        "display_int", "dot",
+                        "fold_change", "p-value", "q-value",
+                        "summit_position_from_start")
   
   if (filtering == TRUE){
-    dot = display_int <- NULL
-    raw_peaks[grepl(pattern = "chr\w\w?", Chromosome, perl=TRUE)] <- NULL
+    raw_peaks$dot = raw_peaks$display_int <- NULL
+    #удаляем хромосомы, которые странно называются
+    raw_peaks <- raw_peaks[grep(pattern = "chr\\w\\d?", raw_peaks$Chromosome), ]
     raw_peaks[raw_peaks$Chromosome == "ChrM"] <- NULL
     droplevels(raw_peaks)
     }
-  detach(raw_peaks)
   return(raw_peaks)
 }
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Теперь считаем файлы с пиками с помощью этой чудодейственной функции
+
+```{r file read, warning=FALSE}
+
+A549_peaks <- read.narrowpeak("MACS2_p65_peaks/A549_TNF_vs_bg_peaks.narrowPeak")
+HeLa_peaks <- read.narrowpeak("MACS2_p65_peaks/HELA_TNFvsDMSO_peaks.narrowPeak")
+HUVEC_peaks <- read.narrowpeak("MACS2_p65_peaks/HUVEC_TNFvsASIS_peaks.narrowPeak")
+IMR90_peaks <- read.narrowpeak("MACS2_p65_peaks/IMR90_TNFvsASIS_peaks.narrowPeak")
+MCF7_peaks <- read.narrowpeak("MACS2_p65_peaks/MCF7_TNFvsVeh_peaks.narrowPeak")
+SGBS_peaks <- read.narrowpeak("MACS2_p65_peaks/SGBS_TNFvsVeh_peaks.narrowPeak")
+```
+
+Итак, количество пиков по линиям
+
+* A549 - `r nrow(A549_peaks)` 
+* HeLa - `r nrow(HeLa_peaks)` - очень мало! 
+* HUVEC - `r nrow(HUVEC_peaks)` 
+* IMR90 - `r nrow(IMR90_peaks)` 
+* MCF7 - `r nrow(MCF7_peaks)` - очень мало! 
+* SGBS - `r nrow(SGBS_peaks)` 
+
+Скорее всего, либо ошибка при пик-коллинге, или не прошла активация TNF. 
+На вопрос, где ошибка, нам помогут ответить модельки, которые нам выдавал MACS2.
+
+Картинка показывает насколько пики на + и - цепи смещены относительно друг друга. Если все сработало верно, то должно быть хорошее бимодальное распределение. Величина сдвига должна быть близка к размеру нуклеосомы. 
+
+Клеточная линия  | Величина сдвига | Распределение ридов
+------------- | ------------- | -------------
+A549  | 261 п.н. | `r knitr::include_graphics("Peak_pics/A549_TNF_vs_bg_model-0.png", dpi = 200)`  
+HUVEC | 115 п.н. | `r knitr::include_graphics("Peak_pics/HUVEC_TNFvsASIS_model-0.png", dpi = 200)`
+IMR90 | 141 п.н. | `r knitr::include_graphics("Peak_pics/IMR90_TNFvsASIS_model-0.png", dpi = 200)`  
+SGBS | 161 п.н.|  `r knitr::include_graphics("Peak_pics/SGBS_TNFvsVeh_model-0.png", dpi = 200)`  
+HeLa | 34, 96, 500 п.н. |`r knitr::include_graphics("Peak_pics/HELA_TNFvsDMSO_model-0.png", dpi = 200)`  
+MCF7 | 148 п.н. | `r knitr::include_graphics("Peak_pics/MCF7_TNFvsVeh_model-0.png", dpi = 200)`  
+
+Итак, видим, что в HeLa какие-то проблемы с секвенированием произошли, и/или с экспериментом, поэтому от их использования придется отказаться. 
+MCF7 - выглядит лучше, чем HeLa, но с ними тоже не все хорошо, откажемся от них
+A549 - Вызывает опасения, не очень красивое распределение и великоват сдвиг
+
+
+
+
+
+
+
+

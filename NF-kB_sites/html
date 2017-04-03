@@ -1,0 +1,27 @@
+
+<table style="text-align:center"><tr><td colspan="7" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td>Chromosome</td><td>A549</td><td>HUVEC</td><td>IMR90</td><td>SGBS</td><td>Mean</td></tr>
+<tr><td colspan="7" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">1</td><td>chr1</td><td>1,522</td><td>1,718</td><td>2,561</td><td>5,856</td><td>1,933.667</td></tr>
+<tr><td style="text-align:left">2</td><td>chr2</td><td>1,515</td><td>1,250</td><td>2,796</td><td>5,326</td><td>1,853.667</td></tr>
+<tr><td style="text-align:left">3</td><td>chr3</td><td>1,038</td><td>1,067</td><td>1,994</td><td>4,274</td><td>1,366.333</td></tr>
+<tr><td style="text-align:left">4</td><td>chr4</td><td>650</td><td>526</td><td>1,529</td><td>3,021</td><td>901.667</td></tr>
+<tr><td style="text-align:left">5</td><td>chr5</td><td>999</td><td>882</td><td>1,829</td><td>3,684</td><td>1,236.667</td></tr>
+<tr><td style="text-align:left">6</td><td>chr6</td><td>1,028</td><td>990</td><td>1,965</td><td>3,822</td><td>1,327.667</td></tr>
+<tr><td style="text-align:left">7</td><td>chr7</td><td>961</td><td>722</td><td>1,536</td><td>3,280</td><td>1,073</td></tr>
+<tr><td style="text-align:left">8</td><td>chr8</td><td>880</td><td>679</td><td>1,514</td><td>2,959</td><td>1,024.333</td></tr>
+<tr><td style="text-align:left">9</td><td>chr9</td><td>817</td><td>688</td><td>1,442</td><td>2,791</td><td>982.333</td></tr>
+<tr><td style="text-align:left">10</td><td>chr10</td><td>927</td><td>794</td><td>1,452</td><td>3,143</td><td>1,057.667</td></tr>
+<tr><td style="text-align:left">11</td><td>chr11</td><td>833</td><td>911</td><td>1,434</td><td>3,099</td><td>1,059.333</td></tr>
+<tr><td style="text-align:left">12</td><td>chr12</td><td>976</td><td>817</td><td>1,416</td><td>3,145</td><td>1,069.667</td></tr>
+<tr><td style="text-align:left">13</td><td>chr13</td><td>279</td><td>318</td><td>787</td><td>1,539</td><td>461.333</td></tr>
+<tr><td style="text-align:left">14</td><td>chr14</td><td>594</td><td>556</td><td>833</td><td>1,942</td><td>661</td></tr>
+<tr><td style="text-align:left">15</td><td>chr15</td><td>665</td><td>676</td><td>1,014</td><td>1,998</td><td>785</td></tr>
+<tr><td style="text-align:left">16</td><td>chr16</td><td>521</td><td>658</td><td>794</td><td>1,940</td><td>657.667</td></tr>
+<tr><td style="text-align:left">17</td><td>chr17</td><td>898</td><td>913</td><td>1,027</td><td>2,659</td><td>946</td></tr>
+<tr><td style="text-align:left">18</td><td>chr18</td><td>323</td><td>294</td><td>683</td><td>1,361</td><td>433.333</td></tr>
+<tr><td style="text-align:left">19</td><td>chr19</td><td>535</td><td>723</td><td>386</td><td>1,775</td><td>548</td></tr>
+<tr><td style="text-align:left">20</td><td>chr20</td><td>606</td><td>508</td><td>608</td><td>1,624</td><td>574</td></tr>
+<tr><td style="text-align:left">21</td><td>chr21</td><td>188</td><td>204</td><td>408</td><td>749</td><td>266.667</td></tr>
+<tr><td style="text-align:left">22</td><td>chr22</td><td>319</td><td>391</td><td>443</td><td>1,042</td><td>384.333</td></tr>
+<tr><td style="text-align:left">23</td><td>chrX</td><td>377</td><td>179</td><td>477</td><td>1,465</td><td>344.333</td></tr>
+<tr><td style="text-align:left">24</td><td>chrY</td><td></td><td></td><td>3</td><td>76</td><td>3</td></tr>
+<tr><td colspan="7" style="border-bottom: 1px solid black"></td></tr></table>

@@ -17,7 +17,7 @@ Chip-seq мы будем проводить на H1299, а на них эксп�
 
 ```{r libraries import, echo=F, warning=FALSE, message=FALSE}
 library(ggplot2)
-library(stargazer, quietly = TRUE)
+#library(stargazer, quietly = TRUE)
 ```
 
 ## Импорт данных
@@ -157,29 +157,51 @@ ggplot(all_peaks, aes(Chromosome, fill = Chromosome))+
 
 Бинаризуем пики окошком в 50 п.о.
 
-Надо эту функцию отладить, она не работает
+
 
 ```{r peak binarization}
 bin.peaks <- function(dataframe, window_size = 50, append = TRUE){
-  fun <- function(Start, Stop){
+  #Эта функция выдает номера бинов в диапазоне [START, STOP]
+  fun <- function(Start, Stop){ 
     position <- Start%/%window_size*window_size
-    head(position)
     range <- round(abs(Stop-Start)/window_size, digits = 0) 
-    for (i in range){
-      append(position, position[tail(position, 1)]+window_size)
-    }
-  return(position)}
+    for (i in seq(position, range, by=window_size))
+      {
+      position <- append(position, i)
+      }
+  return(position)
+  }
   
   if (append == TRUE){
     dataframe$peak_bins <- sapply (dataframe,
                                   fun(Start = dataframe$Start, Stop = dataframe$Stop)) 
     return(dataframe)
   }else{
-    bin_vector <- vector(dataframe, fun)
+    bin_vector <-  vector(mode="numeric", length=0)
+    bin_vector <- append(bin_vector, )
+    bin_vector <- sort(bin_vector)
     return(bin_vector)
   }
 }
-bin.peaks(HeLa_peaks, append = FALSE)
+bin.peaks(HeLa_peaks, append = TRUE)
+```
+
+```{r Отладочный чанк}
+fun <- function(Start, Stop){ 
+    window_size = 50
+    position <- Start%/%window_size*window_size
+    #print(position)
+    range <- round(abs(Stop-Start)/window_size, digits = 0) 
+    for (i in seq(position, range, by=window_size))
+      {
+      position <- append(position, i)
+      }
+  return(position)
+}
+
+apply(HeLa_peaks[1,2:3 ], 1, function(x) fun(Start = x[1], Stop = x[2]))
+class(HeLa_peaks$Start)
+
 ```
 
 Между всеми пиками и самыми сильными пиками (fold_change>15)

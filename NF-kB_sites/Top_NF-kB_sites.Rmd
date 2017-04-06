@@ -17,6 +17,8 @@ Chip-seq мы будем проводить на H1299, а на них эксп�
 
 ```{r libraries import, echo=F, warning=FALSE, message=FALSE}
 library(ggplot2)
+library(corrplot)
+library(tidyr)
 #library(stargazer, quietly = TRUE)
 ```
 
@@ -155,54 +157,52 @@ ggplot(all_peaks, aes(Chromosome, fill = Chromosome))+
 
 Ну что, выглядит вполне красиво и логично - у нас есть пики, которые во всех линиях распределены примерно одинаково, значит, с данными все относительно хорошо.
 
-Бинаризуем пики окошком в 50 п.о.
+Чтобы избавиться от шума,бинаризуем пики окошком в 50 п.о., напишем для этого небольшую функцию.
 
-
-
-```{r peak binarization}
-bin.peaks <- function(dataframe, window_size = 50, append = TRUE){
+```{r binarization_function}
+bin.peaks <- function(dataframe, window_size = 50, append = TRUE)
+{
   #Эта функция выдает номера бинов в диапазоне [START, STOP]
-  fun <- function(Start, Stop){ 
-    position <- Start%/%window_size*window_size
-    range <- round(abs(Stop-Start)/window_size, digits = 0) 
-    for (i in seq(position, range, by=window_size))
-      {
-      position <- append(position, i)
-      }
-  return(position)
+  fun <- function(Start, Stop)
+  { 
+    bin_start <- floor(Start/window_size)*window_size
+    bin_stop <- ceiling(Stop/window_size)*window_size - window_size
+    positions <- seq(bin_start, bin_stop, by = window_size)
+  return(positions)
   }
   
   if (append == TRUE){
-    dataframe$peak_bins <- sapply (dataframe,
-                                  fun(Start = dataframe$Start, Stop = dataframe$Stop)) 
+    dataframe$Peak_Bins <- mapply(fun, dataframe$Start, dataframe$Stop)
     return(dataframe)
   }else{
-    bin_vector <-  vector(mode="numeric", length=0)
-    bin_vector <- append(bin_vector, )
+    bin_vector <- unlist(mapply(fun, dataframe$Start, dataframe$Stop))
     bin_vector <- sort(bin_vector)
     return(bin_vector)
   }
 }
-bin.peaks(HeLa_peaks, append = TRUE)
 ```
 
-```{r Отладочный чанк}
-fun <- function(Start, Stop){ 
-    window_size = 50
-    position <- Start%/%window_size*window_size
-    #print(position)
-    range <- round(abs(Stop-Start)/window_size, digits = 0) 
-    for (i in seq(position, range, by=window_size))
-      {
-      position <- append(position, i)
-      }
-  return(position)
-}
+Теперь бинаризуем, и добавим для этого столбец Peak_Bins
+```{r binarization}
+all_peaks <- bin.peaks(all_peaks, window_size = 50)
 
-apply(HeLa_peaks[1,2:3 ], 1, function(x) fun(Start = x[1], Stop = x[2]))
-class(HeLa_peaks$Start)
+#Выделим для каждого бина отдельную строку, чтобы было удобнее. Для этого возьмем функцию unnest из пакетика tidyr
 
+all_bins <- unnest(all_peaks, Peak_Bins)
 ```
+
+Наступает время корреляций! 
+Для начала посмотрим на корреляции всех пиков между различными клеточными линиями, убрав, разумеется, Y-хромосому, иначе сравнивать некорректно.
+
+Вот этот чанк доделать надо плотно
+
+```{r}
+M <- cor(all_bins)
+#M <- cor(all_peaks[all_peaks$Chromosome != "chrY", all_bins])
+corrplot(M, method = "color", type = "lower")
+```
+
+
 
 Между всеми пиками и самыми сильными пиками (fold_change>15)
 

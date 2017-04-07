@@ -187,18 +187,18 @@ bin.peaks <- function(dataframe, window_size = 50, append = TRUE)
 all_peaks <- bin.peaks(all_peaks, window_size = 50)
 
 #Выделим для каждого бина отдельную строку, чтобы было удобнее. Для этого возьмем функцию unnest из пакетика tidyr
-
 all_bins <- unnest(all_peaks, Peak_Bins)
 ```
 
 Наступает время корреляций! 
 Для начала посмотрим на корреляции всех пиков между различными клеточными линиями, убрав, разумеется, Y-хромосому, иначе сравнивать некорректно.
 
-Вот этот чанк доделать надо плотно
 
 ```{r}
-M <- cor(all_bins)
-#M <- cor(all_peaks[all_peaks$Chromosome != "chrY", all_bins])
+#M <- cor(all_bins$)
+aggregate <- aggregate(all_bins, by=list(all_bins$Cell_line, all_bins$Chromosome), FUN=cor)
+
+
 corrplot(M, method = "color", type = "lower")
 ```
 

@@ -19,7 +19,8 @@ Chip-seq мы будем проводить на H1299, а на них эксп�
 library(ggplot2)
 library(corrplot)
 library(tidyr)
-#library(stargazer, quietly = TRUE)
+library(VennDiagram)
+library(stargazer, quietly = TRUE)
 ```
 
 ## Импорт данных
@@ -187,26 +188,190 @@ bin.peaks <- function(dataframe, window_size = 50, append = TRUE)
 all_peaks <- bin.peaks(all_peaks, window_size = 50)
 
 #Выделим для каждого бина отдельную строку, чтобы было удобнее. Для этого возьмем функцию unnest из пакетика tidyr
-
 all_bins <- unnest(all_peaks, Peak_Bins)
 ```
 
 Наступает время корреляций! 
-Для начала посмотрим на корреляции всех пиков между различными клеточными линиями, убрав, разумеется, Y-хромосому, иначе сравнивать некорректно.
+Для начала посмотрим на корреляции всех пиков между различными клеточными линиями, убрав, разумеется, Y-хромосому, иначе сравнивать некорректно, так как у нас есть женские линии.
+При недостатке пиков будем добавлять нули, чтобы не обрезать информативные пики в более длинных датасетах 
 
-Вот этот чанк доделать надо плотно
 
 ```{r}
-M <- cor(all_bins)
-#M <- cor(all_peaks[all_peaks$Chromosome != "chrY", all_bins])
-corrplot(M, method = "color", type = "lower")
+A549 <- all_bins[all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY", "Peak_Bins" ]
+HUVEC <- all_bins[all_bins$Cell_line =="HUVEC" & all_bins$Chromosome !="chrY", "Peak_Bins" ]
+IMR90 <- all_bins[all_bins$Cell_line =="IMR90" & all_bins$Chromosome !="chrY", "Peak_Bins" ]
+SGBS <- all_bins[all_bins$Cell_line =="SGBS" & all_bins$Chromosome !="chrY", "Peak_Bins" ]
+cor_table <- cbind("A549" = A549,
+                   "HUVEC" = HUVEC,
+                   "IMR90" = IMR90,
+                   "SGBS" = SGBS)
+
+M <- cor(cor_table, method = "pearson")
+#cor.test (HUVEC, sample(A549, length(HUVEC)))
+corrplot(M, method = "number", type = "lower")
+```
+
+Теперь построим корреляционную матрицу между не самыми мощными пиками fold_change =< 15. Что я думаю, что они должны лучше коррелировать
+
+```{r}
+A549 <- all_bins[all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY" 
+                 & all_bins$fold_change <= 15, "Peak_Bins" ]
+
+HUVEC <- all_bins[all_bins$Cell_line =="HUVEC" & all_bins$Chromosome !="chrY" 
+                  & all_bins$fold_change <= 15, "Peak_Bins" ]
+IMR90 <- all_bins[all_bins$Cell_line =="IMR90" & all_bins$Chromosome !="chrY"
+                  & all_bins$fold_change <= 15, "Peak_Bins" ]
+SGBS <- all_bins[all_bins$Cell_line =="SGBS" & all_bins$Chromosome !="chrY"
+                 & all_bins$fold_change <= 15, "Peak_Bins" ]
+
+cor_table <- cbind("A549" = A549,
+                   "HUVEC" = HUVEC,
+                   "IMR90" = IMR90,
+                   "SGBS" = SGBS)
+
+M <- cor(cor_table, method = "pearson")
+corrplot(M, method = "number", type = "lower")
+
+```
+
+И что, видим то же самое, никаких принципиальных изменений
+
+Теперь попробуем с самыми мощными
+
+```{r}
+A549 <- all_bins[all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY" 
+                 & all_bins$fold_change > 15, "Peak_Bins" ]
+
+HUVEC <- all_bins[all_bins$Cell_line =="HUVEC" & all_bins$Chromosome !="chrY" 
+                  & all_bins$fold_change > 15, "Peak_Bins" ]
+IMR90 <- all_bins[all_bins$Cell_line =="IMR90" & all_bins$Chromosome !="chrY"
+                  & all_bins$fold_change > 15, "Peak_Bins" ]
+SGBS <- all_bins[all_bins$Cell_line =="SGBS" & all_bins$Chromosome !="chrY"
+                 & all_bins$fold_change > 15, "Peak_Bins" ]
+
+cor_table <- cbind("A549" = A549,
+                   "HUVEC" = HUVEC,
+                   "IMR90" = IMR90,
+                   "SGBS" = SGBS)
+
+M <- cor(cor_table, method = "pearson")
+#cor.test (HUVEC, sample(A549, length(HUVEC)))
+corrplot(M, method = "number", type = "lower")
+```
+
+Ну вообще совсем ничего, то есть корреляцию делают только маленькие пики. 
+А теперь построим картинку с диаграммой Венна, чтобы посмотреть, какие пики у нас везде есть. 
+
+```{r}
+
+#Сделаем список, VennDiagram принимает только списки
+
+bins_plot <- list(A549 = all_bins[all_bins$Cell_line =="A549", "Peak_Bins"],
+                  HUVEC = all_bins[all_bins$Cell_line =="HUVEC", "Peak_Bins"],
+                  IMR90 = all_bins[all_bins$Cell_line =="IMR90", "Peak_Bins"],
+                  SGBS = all_bins[all_bins$Cell_line =="SGBS", "Peak_Bins"])
+
+bin_plot <- venn.diagram(bins_plot, NULL, cex = 2, cat.fontface=4, 
+                          category.names=c("A549", "HUVEC", "IMR90", "SGBS"), 
+                          main="Пересечение пиков")
+grid.draw(bin_plot)
+
+```
+
+```{r}
+common_bins_1 <- intersect(all_bins[all_bins$Cell_line =="A549", "Peak_Bins"], 
+                  all_bins[all_bins$Cell_line =="HUVEC", "Peak_Bins"])
+                  
+common_bins_2 <-  intersect(all_bins[all_bins$Cell_line =="IMR90", "Peak_Bins"],
+                  all_bins[all_bins$Cell_line =="SGBS", "Peak_Bins"])
+
+common_bins <- intersect(common_bins_1, common_bins_2)
+
+common_bins_1 = common_bins_2 <- NULL
+```
+
+Уху! Что же мы видим, у нас есть `r length(common_bins)`  общих бинов, которые есть везде, во всех клеточных линиях. 
+Отберем их для начала. 
+
+Ну-ка, посмотрим на них, построим диаграммку их распределения по геному. 
+
+```{r common_peaks analysis, echo=FALSE}
+
+merged_bins <- all_bins[all_bins$Peak_Bins %in% common_bins, ]
+peak_lengths <- aggregate(merged_bins$Peak_Bins,
+                          by = list(merged_bins$Peak_name, merged_bins$Cell_line),
+                          FUN = function(x) max(x)-min(x)+50)
+
+names(peak_lengths) <- c("Peak_name", "Cell_line", "Length")
+
+peak_lengths$Position <- aggregate(merged_bins$Peak_Bins,
+                          by = list(merged_bins$Peak_name),
+                          FUN = mean)[,2]
+
+peak_lengths$Fold_change <- aggregate(merged_bins$fold_change,
+                          by = list(merged_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+ggplot(peak_lengths, aes(x = Position, y = Fold_change))+
+ geom_point(colour = "blue", aes(size = Length), alpha = 0.5) +
+  labs(title = "Fold change peak distribution",
+       x = "Location",
+       y = "Fold_change")+
+  theme_bw()+
+  facet_wrap(~ Cell_line)
+
+ggplot(peak_lengths[peak_lengths$Fold_change > 25,], 
+       aes(x = Position, y = Fold_change))+
+ geom_point(colour = "blue", aes(size = Length), alpha = 0.5) +
+  labs(title = "Fold change peak distribution",
+       x = "Location",
+       y = "Fold_change")+
+  theme_bw()+
+  facet_wrap(~ Cell_line)
+
+ggplot(peak_lengths, aes(x = Cell_line, y = Fold_change))+
+ geom_boxplot() +
+  labs(title = "Fold change peak distribution",
+              y = "Fold change")+
+  theme_bw()
+
+```
+
+Что мы видим: 
+Общие для этих клеточных линий пики примерно одинаковой высоты, только у нас есть SGBS, где пики несколько выше. 
+
+Однако, между ними везде достоверная разница.
+
+Теперь наконец-то притянем аннотацию
+Для этого используем пакетик ChIPseeker
+
+
+```{r bin annotation}
+library(ChIPseeker, quietly = T)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene, quietly = T)
+library(clusterProfiler, quietly = T)
+
+
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+peakAnno <- annotatePeak(peak_lengths, tssRegion=c(-3000, 3000), 
+                         TxDb=txdb, annoDb="org.Hs.eg.db")
+
+getPromoters(txdb)
+
+```
+
+Или наоборот, притянем аннотацию ручками
+
+```{r}
+raw_gff <- read.table("/home/nickolay/Human_genome/Genprime_v24/gencode.v24.annotation.gff3", stringsAsFactors=F, sep="\t")
+raw_gff[,c(2,6,8)] <- NULL
+raw_gff$V9 <- strsplit(raw_gff$V9, ";")
+head (raw_gff$V9)
 ```
 
 
 
-Между всеми пиками и самыми сильными пиками (fold_change>15)
-
-И теперь глянем, какие пики встречаются везде, притянем к ним аннотацию и увидим названия генов. - Дальше выбираем самые мощные из них, подбираем праймеры и все!!
+притянем к ним аннотацию и увидим названия генов. - Дальше выбираем самые мощные из них, подбираем праймеры и все!!
 
 
 

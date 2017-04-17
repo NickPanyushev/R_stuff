@@ -238,6 +238,7 @@ corrplot(M, method = "number", type = "lower")
 
 Теперь попробуем с самыми мощными
 
+<<<<<<< HEAD
 ```{r}
 A549 <- all_bins[all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY" 
                  & all_bins$fold_change > 15, "Peak_Bins" ]
@@ -276,6 +277,15 @@ bin_plot <- venn.diagram(bins_plot, NULL, cex = 2, cat.fontface=4,
                           main="Пересечение пиков")
 grid.draw(bin_plot)
 
+=======
+
+```{r}
+#M <- cor(all_bins$)
+aggregate <- aggregate(all_bins, by=list(all_bins$Cell_line, all_bins$Chromosome), FUN=cor)
+
+
+corrplot(M, method = "color", type = "lower")
+>>>>>>> 48ee437ec8494492da3d9ad0d5f82b2fcba609a3
 ```
 
 ```{r}

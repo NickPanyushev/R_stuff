@@ -20,7 +20,8 @@ library(ggplot2)
 library(corrplot)
 library(tidyr)
 library(VennDiagram)
-library(stargazer, quietly = TRUE)
+#library(stargazer)
+library(data.table)
 ```
 
 ## Импорт данных
@@ -52,6 +53,7 @@ read.narrowpeak <- function(filename, filtering=TRUE){
                                     "chr16", "chr17", "chr18", "chr19", "chr20",
                                     "chr21", "chr22", "chrX", "chrY"))
     droplevels(raw_peaks)
+    raw_peaks <- as.data.table(raw_peaks)
     }
   return(raw_peaks)
 }
@@ -103,7 +105,7 @@ A549_peaks$Cell_line <- "A549"
 HUVEC_peaks$Cell_line <- "HUVEC"
 IMR90_peaks$Cell_line <- "IMR90"
 SGBS_peaks$Cell_line <- "SGBS"
-all_peaks <- rbind.data.frame(A549_peaks, HUVEC_peaks, IMR90_peaks, SGBS_peaks)
+all_peaks <- rbindlist(list(A549_peaks, HUVEC_peaks, IMR90_peaks, SGBS_peaks))
 ```
 
 Теперь проанализируем fold_change, он должен давать нормальное распределение, что было бы вполне логично, и оно должно быть примерно одинаковым в разных линиях
@@ -136,6 +138,7 @@ chroms[24,1] <- "chrY"
 chroms$IMR90 <- chrom_peaks[chrom_peaks$Cell_line == "IMR90", 3]
 chroms$SGBS <- chrom_peaks[chrom_peaks$Cell_line == "SGBS", 3]
 print(chroms)
+
 ```
 Видно, что A549 и HUVEC очень похожи по количеству пиков.
 
@@ -189,6 +192,7 @@ all_peaks <- bin.peaks(all_peaks, window_size = 50)
 
 #Выделим для каждого бина отдельную строку, чтобы было удобнее. Для этого возьмем функцию unnest из пакетика tidyr
 all_bins <- unnest(all_peaks, Peak_Bins)
+all_bins <- as.data.table(all_bins)
 ```
 
 Наступает время корреляций! 
@@ -209,6 +213,7 @@ cor_table <- cbind("A549" = A549,
 M <- cor(cor_table, method = "pearson")
 #cor.test (HUVEC, sample(A549, length(HUVEC)))
 corrplot(M, method = "number", type = "lower")
+remove(M)
 ```
 
 Теперь построим корреляционную матрицу между не самыми мощными пиками fold_change =< 15. Что я думаю, что они должны лучше коррелировать
@@ -231,14 +236,13 @@ cor_table <- cbind("A549" = A549,
 
 M <- cor(cor_table, method = "pearson")
 corrplot(M, method = "number", type = "lower")
-
+remove(M)
 ```
 
 И что, видим то же самое, никаких принципиальных изменений
 
 Теперь попробуем с самыми мощными
 
-<<<<<<< HEAD
 ```{r}
 A549 <- all_bins[all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY" 
                  & all_bins$fold_change > 15, "Peak_Bins" ]
@@ -256,8 +260,8 @@ cor_table <- cbind("A549" = A549,
                    "SGBS" = SGBS)
 
 M <- cor(cor_table, method = "pearson")
-#cor.test (HUVEC, sample(A549, length(HUVEC)))
 corrplot(M, method = "number", type = "lower")
+remove(M)
 ```
 
 Ну вообще совсем ничего, то есть корреляцию делают только маленькие пики. 
@@ -272,32 +276,45 @@ bins_plot <- list(A549 = all_bins[all_bins$Cell_line =="A549", "Peak_Bins"],
                   IMR90 = all_bins[all_bins$Cell_line =="IMR90", "Peak_Bins"],
                   SGBS = all_bins[all_bins$Cell_line =="SGBS", "Peak_Bins"])
 
-bin_plot <- venn.diagram(bins_plot, NULL, cex = 2, cat.fontface=4, 
-                          category.names=c("A549", "HUVEC", "IMR90", "SGBS"), 
+#bin_plot <- venn.diagram(bins_plot, NULL, cex = 2, cat.fontface=4, 
+ #                         category.names=c("A549", "HUVEC", "IMR90", "SGBS"), 
+  #                        main="Пересечение пиков")
+
+bin_plot <- venn.diagram(bins_plot, NULL,
+  col = "transparent",
+	fill = c("cornflowerblue", "green", "yellow", "darkorchid1"),
+	alpha = 0.50,
+	label.col = c("orange", "white", "darkorchid4", "white", 
+	"white", "white", "white", "white", "darkblue", "white", 
+	"white", "white", "white", "darkgreen", "white"),
+	cex = 1.5,
+	fontfamily = "serif",
+	fontface = "bold",
+	cat.col = c("darkblue", "darkgreen", "orange", "darkorchid4"),
+	cat.cex = 1.5,
+	cat.pos = 0,
+	cat.dist = 0.07,
+	cat.fontfamily = "serif",
+	rotation.degree = 270,
+	margin = 0.2,
+  category.names=c("A549", "HUVEC", "IMR90", "SGBS"), 
                           main="Пересечение пиков")
+
 grid.draw(bin_plot)
 
-=======
-
-```{r}
-#M <- cor(all_bins$)
-aggregate <- aggregate(all_bins, by=list(all_bins$Cell_line, all_bins$Chromosome), FUN=cor)
-
-
-corrplot(M, method = "color", type = "lower")
->>>>>>> 48ee437ec8494492da3d9ad0d5f82b2fcba609a3
 ```
 
 ```{r}
-common_bins_1 <- intersect(all_bins[all_bins$Cell_line =="A549", "Peak_Bins"], 
+common_bins_1 <- fintersect(all_bins[all_bins$Cell_line =="A549", "Peak_Bins"], 
                   all_bins[all_bins$Cell_line =="HUVEC", "Peak_Bins"])
                   
-common_bins_2 <-  intersect(all_bins[all_bins$Cell_line =="IMR90", "Peak_Bins"],
+common_bins_2 <-  fintersect(all_bins[all_bins$Cell_line =="IMR90", "Peak_Bins"],
                   all_bins[all_bins$Cell_line =="SGBS", "Peak_Bins"])
 
-common_bins <- intersect(common_bins_1, common_bins_2)
+common_bins <- fintersect(common_bins_1, common_bins_2)
+common_bins <- common_bins$Peak_Bins
 
-common_bins_1 = common_bins_2 <- NULL
+remove(common_bins_1,common_bins_2)
 ```
 
 Уху! Что же мы видим, у нас есть `r length(common_bins)`  общих бинов, которые есть везде, во всех клеточных линиях. 
@@ -305,14 +322,17 @@ common_bins_1 = common_bins_2 <- NULL
 
 Ну-ка, посмотрим на них, построим диаграммку их распределения по геному. 
 
-```{r common_peaks analysis, echo=FALSE}
+```{r common_peaks analysis, echo=FALSE, eval=F}
 
 merged_bins <- all_bins[all_bins$Peak_Bins %in% common_bins, ]
+
+#Посчитали длину каждого пересечения
 peak_lengths <- aggregate(merged_bins$Peak_Bins,
                           by = list(merged_bins$Peak_name, merged_bins$Cell_line),
                           FUN = function(x) max(x)-min(x)+50)
 
 names(peak_lengths) <- c("Peak_name", "Cell_line", "Length")
+
 
 peak_lengths$Position <- aggregate(merged_bins$Peak_Bins,
                           by = list(merged_bins$Peak_name),
@@ -321,6 +341,43 @@ peak_lengths$Position <- aggregate(merged_bins$Peak_Bins,
 peak_lengths$Fold_change <- aggregate(merged_bins$fold_change,
                           by = list(merged_bins$Peak_name),
                           FUN = function(x) x[1])[,2]
+
+#сделаем новый датафрейм, в котором у нас будут записаны общие пики, а потом запишем его в .bed файл
+
+common_peaks <- aggregate(merged_bins$Peak_Bins,
+                          by = list(merged_bins$Peak_name, merged_bins$Cell_line),
+                          FUN = min)
+
+names(common_peaks) <- c("Peak_name", "Cell_line", "Start")
+
+common_peaks$Stop <- aggregate(merged_bins$Peak_Bins,
+                          by = list(merged_bins$Peak_name),
+                          FUN = function(x) max(x)+50)[,2]
+
+common_peaks$Chromosome <- aggregate(merged_bins$Chromosome,
+                          by = list(merged_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks$Fold_change <- aggregate(merged_bins$fold_change,
+                          by = list(merged_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks$'p-value' <- aggregate(merged_bins$`p-value`,
+                          by = list(merged_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks$'q-value' <- aggregate(merged_bins$`q-value`,
+                          by = list(merged_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+#Переставим в правильном порядке столбцы, чтобы bedtools съел
+
+common_peaks <- common_peaks[,c("Chromosome", "Start", "Stop", "Peak_name", 
+                             "Fold_change", "p-value", "q-value", "Cell_line")]
+# Запишем в файл
+
+fwrite(common_peaks, "Annotation/peaks.bed", sep = "\t", col.names = FALSE)
+
 
 ggplot(peak_lengths, aes(x = Position, y = Fold_change))+
  geom_point(colour = "blue", aes(size = Length), alpha = 0.5) +
@@ -345,6 +402,8 @@ ggplot(peak_lengths, aes(x = Cell_line, y = Fold_change))+
               y = "Fold change")+
   theme_bw()
 
+#Выбросим положения пиков и их длину, они нам больше не нужны.
+remove(peak_lengths)
 ```
 
 Что мы видим: 
@@ -353,35 +412,100 @@ ggplot(peak_lengths, aes(x = Cell_line, y = Fold_change))+
 Однако, между ними везде достоверная разница.
 
 Теперь наконец-то притянем аннотацию
-Для этого используем пакетик ChIPseeker
 
+Или наоборот, притянем аннотацию ручками из GFF-файла и сохраним ее в отдельном файле
+Для этих операций используем library(data.table)
 
-```{r bin annotation}
-library(ChIPseeker, quietly = T)
-library(TxDb.Hsapiens.UCSC.hg38.knownGene, quietly = T)
-library(clusterProfiler, quietly = T)
+```{r Получение аннотации}
+#Uncomment if you want to make new annotaton from the GFF3
+#raw_gff <- fread( "sed '/#/d' /home/nickolay/Human_genome/Genprime_v24/gencode.v24.annotation.gff3")
+#raw_gff[,c(2,6,8)] <- NULL
 
+#raw_gff$V9 <- strsplit(raw_gff$V9, ";")
+#raw_gff$ID <- sapply(raw_gff$V9,function(x) x[1])
+#raw_gff$ID <- gsub("ID=\\w*:?E", "E", raw_gff$ID)
 
-txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
-peakAnno <- annotatePeak(peak_lengths, tssRegion=c(-3000, 3000), 
-                         TxDb=txdb, annoDb="org.Hs.eg.db")
+#annotation_v24 <- raw_gff[,c(1:5, 7)]
+#rownames(annotation_v24) <- NULL
+#annotation_v24$V1 <- NULL
+#names(annotation_v24) <- c("Chromosome", "Type", "Start", "Stop", "Strand", "Ensemble_ID")
 
-getPromoters(txdb)
+#fwrite(annotation_v24, file = "Annotation/Gencode_v24.bed", sep = "\t")
 
+annotation_v24 <- fread("Annotation/Gencode_v24.bed")
+
+#Теперь вытащим только транскрипты
+transcripts <- subset(annotation_v24, annotation_v24$Type == "transcript")
+transcripts$Type <- NULL
+fwrite(transcripts, "Annotation/transcripts.bed", sep = "\t", col.names = FALSE)
 ```
 
-Или наоборот, притянем аннотацию ручками
+Не будем изобретать велосипед, а сделаем скрипт, который с помощью bedtools найдет нам ближайшие гены.
+
+```{r, engine= 'bash'}
+cd ~/R_stuff/NF-kB_sites/Annotation
+#Отсортируем файл с транскриптами и с пиками
+sortBed -i transcripts.bed > sorted_transcripts.bed
+sortBed -i peaks.bed > sorted_peaks.bed
+
+#А теперь пошли фичи искать
+closestBed -D b -k 2 -a sorted_peaks.bed -b sorted_transcripts.bed > closest_transcripts.bed
+```
+
+Окей, нашли ближайшие транскрипты, отфильруем их
 
 ```{r}
-raw_gff <- read.table("/home/nickolay/Human_genome/Genprime_v24/gencode.v24.annotation.gff3", stringsAsFactors=F, sep="\t")
-raw_gff[,c(2,6,8)] <- NULL
-raw_gff$V9 <- strsplit(raw_gff$V9, ";")
-head (raw_gff$V9)
+features <- fread("Annotation/closest_transcripts.bed")
+names(features) <- c("Chromosome", "peak_Start", "peak_Stop", "Peak_name", 
+                             "Fold_change", "p-value", "q-value", "Cell_line",
+                     "Chr", "transcript_Start", "transcript_Stop", "Strand", 
+                     "Ensemble_ID", "distance")
+features$Chr <- NULL
+# Убрали пики, которые лежат очень далеко в пустоте, т.е. от них до гена более 3000 нуклеотидов
+
+features <- subset(features, features$distance<3000 & features$distance > - 3000)
+
+#Удалим хвостики у названий транскриптов
+features$Ensemble_ID <- gsub("\\.\\d+", "", features$Ensemble_ID)
 ```
 
+Теперь попробуем проаннотировать гены по GO
+
+```{r common peaks annotation}
+library(biomaRt)
+
+# define biomart object
+attr <- listAttributes(mart)
+mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
+
+# query biomart
+BM_out <- getBM(attributes = c("ensembl_transcript_id", "uniprotswissprot",
+                                "hgnc_symbol", "transcript_biotype",
+                                "go_id", "name_1006", 
+                                "namespace_1003"),
+                 filters = "ensembl_transcript_id",
+                values = features$Ensemble_ID, 
+                mart = mart,
+                uniqueRows = TRUE)
+```
+Теперь, когда у нас есть огромная аннотация, надо ее расчистить
+
+```{r}
+#Удалим неинформативные GO
+BM_out <- BM_out[BM_out$name_1006 != "molecular_function" &
+                  BM_out$name_1006 != "cellular_component" &
+                   BM_out$name_1006 != "biological_process" ,]
+
+#Теперь сагрегируем по namespace
+GO_data <- data.table()
+GO_data <- aggregate(BM_out$name_1006,
+                          by = list(BM_out$namespace_1003, BM_out$ensembl_transcript_id),
+                          FUN = as.vector)
 
 
-притянем к ним аннотацию и увидим названия генов. - Дальше выбираем самые мощные из них, подбираем праймеры и все!!
+
+
+```
 
 
 

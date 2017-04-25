@@ -21,6 +21,7 @@ library(corrplot)
 library(tidyr)
 library(VennDiagram)
 #library(stargazer)
+library(dplyr)
 library(data.table)
 ```
 
@@ -155,7 +156,17 @@ ggplot(all_peaks, aes(Chromosome, fill = Chromosome))+
   labs(title = "Peak location distribution",
        x = "Genome location",
        y = "Peak number")+
-  theme_bw()+
+   theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        panel.background = element_rect(fill = "white", 
+            colour = NA), panel.border = element_rect(fill = NA, 
+            colour = "grey20"), panel.grid.major = element_line(colour = "grey92"), 
+            panel.grid.minor = element_line(colour = "grey92", 
+                size = 0.25), strip.background = element_rect(fill = "grey85", 
+                colour = "grey20"), legend.key = element_rect(fill = "white", 
+                colour = NA), complete = TRUE)+
+  #theme_bw()+
   facet_wrap(~ Cell_line)
 ```
 
@@ -201,10 +212,15 @@ all_bins <- as.data.table(all_bins)
 
 
 ```{r}
-A549 <- all_bins[all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY", "Peak_Bins" ]
-HUVEC <- all_bins[all_bins$Cell_line =="HUVEC" & all_bins$Chromosome !="chrY", "Peak_Bins" ]
-IMR90 <- all_bins[all_bins$Cell_line =="IMR90" & all_bins$Chromosome !="chrY", "Peak_Bins" ]
-SGBS <- all_bins[all_bins$Cell_line =="SGBS" & all_bins$Chromosome !="chrY", "Peak_Bins" ]
+
+A549 <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY")
+
+HUVEC <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="HUVEC" & all_bins$Chromosome !="chrY")
+
+IMR90 <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="IMR90" & all_bins$Chromosome !="chrY")
+
+SGBS <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="SGBS" & all_bins$Chromosome !="chrY")
+
 cor_table <- cbind("A549" = A549,
                    "HUVEC" = HUVEC,
                    "IMR90" = IMR90,
@@ -219,15 +235,15 @@ remove(M)
 Теперь построим корреляционную матрицу между не самыми мощными пиками fold_change =< 15. Что я думаю, что они должны лучше коррелировать
 
 ```{r}
-A549 <- all_bins[all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY" 
-                 & all_bins$fold_change <= 15, "Peak_Bins" ]
 
-HUVEC <- all_bins[all_bins$Cell_line =="HUVEC" & all_bins$Chromosome !="chrY" 
-                  & all_bins$fold_change <= 15, "Peak_Bins" ]
-IMR90 <- all_bins[all_bins$Cell_line =="IMR90" & all_bins$Chromosome !="chrY"
-                  & all_bins$fold_change <= 15, "Peak_Bins" ]
-SGBS <- all_bins[all_bins$Cell_line =="SGBS" & all_bins$Chromosome !="chrY"
-                 & all_bins$fold_change <= 15, "Peak_Bins" ]
+A549 <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY" & all_bins$fold_change <= 15)
+
+HUVEC <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="HUVEC" & all_bins$Chromosome !="chrY" & all_bins$fold_change <= 15)
+
+IMR90 <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="IMR90" & all_bins$Chromosome !="chrY" & all_bins$fold_change <= 15)
+
+SGBS <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="SGBS" & all_bins$Chromosome !="chrY" & all_bins$fold_change <= 15)
+
 
 cor_table <- cbind("A549" = A549,
                    "HUVEC" = HUVEC,
@@ -244,15 +260,13 @@ remove(M)
 Теперь попробуем с самыми мощными
 
 ```{r}
-A549 <- all_bins[all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY" 
-                 & all_bins$fold_change > 15, "Peak_Bins" ]
+A549 <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="A549" & all_bins$Chromosome !="chrY" & all_bins$fold_change > 15)
 
-HUVEC <- all_bins[all_bins$Cell_line =="HUVEC" & all_bins$Chromosome !="chrY" 
-                  & all_bins$fold_change > 15, "Peak_Bins" ]
-IMR90 <- all_bins[all_bins$Cell_line =="IMR90" & all_bins$Chromosome !="chrY"
-                  & all_bins$fold_change > 15, "Peak_Bins" ]
-SGBS <- all_bins[all_bins$Cell_line =="SGBS" & all_bins$Chromosome !="chrY"
-                 & all_bins$fold_change > 15, "Peak_Bins" ]
+HUVEC <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="HUVEC" & all_bins$Chromosome !="chrY" & all_bins$fold_change > 15)
+
+IMR90 <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="IMR90" & all_bins$Chromosome !="chrY" & all_bins$fold_change > 15)
+
+SGBS <- subset(all_bins$Peak_Bins, all_bins$Cell_line =="SGBS" & all_bins$Chromosome !="chrY" & all_bins$fold_change > 15)
 
 cor_table <- cbind("A549" = A549,
                    "HUVEC" = HUVEC,
@@ -271,37 +285,40 @@ remove(M)
 
 #Сделаем список, VennDiagram принимает только списки
 
-bins_plot <- list(A549 = all_bins[all_bins$Cell_line =="A549", "Peak_Bins"],
-                  HUVEC = all_bins[all_bins$Cell_line =="HUVEC", "Peak_Bins"],
-                  IMR90 = all_bins[all_bins$Cell_line =="IMR90", "Peak_Bins"],
-                  SGBS = all_bins[all_bins$Cell_line =="SGBS", "Peak_Bins"])
+bins_plot <- list(A549 = subset(all_bins$Peak_Bins, all_bins$Cell_line == "A549"),
+                  HUVEC = subset(all_bins$Peak_Bins, all_bins$Cell_line == "HUVEC"),
+                  IMR90 = subset(all_bins$Peak_Bins, all_bins$Cell_line == "IMR90"),
+                  SGBS = subset(all_bins$Peak_Bins, all_bins$Cell_line == "SGBS"))
 
-#bin_plot <- venn.diagram(bins_plot, NULL, cex = 2, cat.fontface=4, 
- #                         category.names=c("A549", "HUVEC", "IMR90", "SGBS"), 
-  #                        main="Пересечение пиков")
-
-bin_plot <- venn.diagram(bins_plot, NULL,
+bin_plot1 <- venn.diagram(bins_plot, NULL,
   col = "transparent",
 	fill = c("cornflowerblue", "green", "yellow", "darkorchid1"),
 	alpha = 0.50,
-	label.col = c("orange", "white", "darkorchid4", "white", 
-	"white", "white", "white", "white", "darkblue", "white", 
-	"white", "white", "white", "darkgreen", "white"),
+	#label.col = c("orange", "white", "darkorchid4", "white", 
+	#"white", "white", "white", "white", "darkblue", "white", 
+	#"white", "white", "white", "darkgreen", "white"),
 	cex = 1.5,
-	fontfamily = "serif",
-	fontface = "bold",
-	cat.col = c("darkblue", "darkgreen", "orange", "darkorchid4"),
-	cat.cex = 1.5,
-	cat.pos = 0,
-	cat.dist = 0.07,
-	cat.fontfamily = "serif",
-	rotation.degree = 270,
-	margin = 0.2,
-  category.names=c("A549", "HUVEC", "IMR90", "SGBS"), 
+  print.mode = "percent",
+  cat.col = c("darkblue", "darkgreen", "orange", "darkorchid4"),
+	category.names=c("A549", "HUVEC", "IMR90", "SGBS"), 
                           main="Пересечение пиков")
 
-grid.draw(bin_plot)
+bin_plot2 <- venn.diagram(bins_plot, NULL,
+  col = "transparent",
+	fill = c("cornflowerblue", "green", "yellow", "darkorchid1"),
+	alpha = 0.50,
+	#label.col = c("orange", "white", "darkorchid4", "white", 
+	#"white", "white", "white", "white", "darkblue", "white", 
+	#"white", "white", "white", "darkgreen", "white"),
+	cex = 1.5,
+  print.mode = "raw",
+  cat.col = c("darkblue", "darkgreen", "orange", "darkorchid4"),
+	category.names=c("A549", "HUVEC", "IMR90", "SGBS"), 
+                          main="Пересечение пиков")
 
+grid.draw(bin_plot1)
+
+grid.draw(bin_plot2)
 ```
 
 ```{r}
@@ -475,18 +492,18 @@ features$Ensemble_ID <- gsub("\\.\\d+", "", features$Ensemble_ID)
 library(biomaRt)
 
 # define biomart object
-attr <- listAttributes(mart)
 mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
 
 # query biomart
-BM_out <- getBM(attributes = c("ensembl_transcript_id", "uniprotswissprot",
-                                "hgnc_symbol", "transcript_biotype",
-                                "go_id", "name_1006", 
+BM_out <- getBM(attributes = c("chromosome_name","ensembl_transcript_id", 
+                               "uniprotswissprot", "hgnc_symbol",
+                               "transcript_biotype", "name_1006", 
                                 "namespace_1003"),
                  filters = "ensembl_transcript_id",
                 values = features$Ensemble_ID, 
                 mart = mart,
                 uniqueRows = TRUE)
+
 ```
 Теперь, когда у нас есть огромная аннотация, надо ее расчистить
 
@@ -496,19 +513,102 @@ BM_out <- BM_out[BM_out$name_1006 != "molecular_function" &
                   BM_out$name_1006 != "cellular_component" &
                    BM_out$name_1006 != "biological_process" ,]
 
-#Теперь сагрегируем по namespace
-GO_data <- data.table()
-GO_data <- aggregate(BM_out$name_1006,
-                          by = list(BM_out$namespace_1003, BM_out$ensembl_transcript_id),
-                          FUN = as.vector)
+GO_data <-BM_out %>% group_by(namespace_1003, ensembl_transcript_id)
+names(GO_data) <- c("Chromosome", "Ensemble_ID", "Uniprot_ID", "Gene_symbol", "Biotype",  "GO_name", "Namespace")
+```
+Славно, теперь давай прихуярим высоту пиков
 
+```{r}
+#Сделаем маленький датасет со всем необходимым
+features <- features[ , c("Ensemble_ID", "distance", "peak_Start", "peak_Stop","Cell_line", "Fold_change", "p-value", "q-value")]
 
+final_peaks <- merge(GO_data, features)
+fwrite(final_peaks, "final_peaks.txt")
+```
 
+Вот и славно,все вроде заджойнилось
+Теперь давай-ка глянем на функции, которые у нас вылезли по GO:
+```{r}
+mf_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "molecular_function"))
+
+cc_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "cellular_component"))
+
+bp_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "biological_process"))
+
+head(sort(mf_table, decreasing = T))
+head(sort(bp_table, decreasing = T))
+head(sort(cc_table, decreasing = T))
 
 ```
 
+Что теперь надо построить: 
+
+1. Какие функции обогащены в самых высоких пиках (Хи-квадрат)
+2. Какие пики самые достоверные по q-value во всех линиях
+
+5. Насколько похожи функции в топовых пиках в разных клеточных линиях(ранжированный список)
+6. Взять 10 NF-kB зависимых генов и посмотреть, где они лежат в рейтинге
+7. Средние высоты пиков для каждой из top 10 функций
 
 
+Посмотрим, на то, как распределены гены относительно TSS
+```{r}
+
+ggplot(final_peaks[final_peaks$distance!=0,], aes(distance, ..count..))+
+  geom_density(aes(fill=Cell_line), alpha = 0.5) +
+  labs(title = "Peak position distribution",
+       x = "Position",
+       y = "Peak number")+
+    scale_x_continuous(breaks = seq(-3000, 3000, 500))+
+  theme_bw()
+
+```
+Прикольно, что одинаково распределены!
+
+
+Какие гены активируются во всех пиках (biotype-boxplot)(Доделать подписи)
+```{r}
+ggplot(final_peaks, aes(Biotype, Fold_change))+
+  geom_boxplot(aes(fill=Cell_line), alpha = 0.5) +
+  labs(title = "Peak type",
+       x = "Biotype",
+       y = "Fold_change")+
+  scale_colour_manual(breaks = c("Nonsense-mediated decay", "non-stop decay", "Protein coding", "TCR's")) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+
+Теперь можно и взглянуть на обогащение терминов в разных клеточных линиях
+Для этого возьмем топ 10% пиков
+
+```{r}
+
+top_mf_table_A549 <- table(subset(final_peaks$GO_name, 
+                         final_peaks$`q-value` > quantile
+                         (final_peaks$`q-value`, probs=0.90),
+                         final_peaks$Cell_line == "A549",
+                         final_peaks$Namespace == "molecular_function"))
+
+top_mf_table_HUVEC <- table(subset(final_peaks$GO_name, 
+                         final_peaks$Fold_change > quantile
+                         (final_peaks$Fold_change, probs=0.90),
+                         final_peaks$Cell_line == "HUVEC",
+                         final_peaks$Namespace == "molecular_function"))
+
+
+head(sort(top_mf_table_HUVEC, decreasing = T))
+head(sort(cc_table, decreasing = T))
+
+
+
+
+cc_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "cellular_component"))
+
+bp_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "biological_process"))
+
+head(sort(mf_table, decreasing = T))
+head(sort(bp_table, decreasing = T))
+head(sort(cc_table, decreasing = T))
+```
 
 
 

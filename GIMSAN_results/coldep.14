@@ -1,0 +1,101 @@
+Compiled on Aug 20 2017 18:23:05
+
+ChangeLog
+20080911. Added StDev mode 
+20080608. Output with summary of pairs with significant dependency 
+
+/home/npanyushev/gimsan_cmdline/column_dependency_app/column_dependency.out -fsa /home/npanyushev/gimsan_cmdline/20170820_common_bins/statsig//width014.kmers 
+FASTA Filename: /home/npanyushev/gimsan_cmdline/20170820_common_bins/statsig//width014.kmers
+Number of sequences in FASTA: 39
+Minimum sequence length in FASTA: 28
+Maximum sequence length in FASTA: 28
+
+SiteLoc Filename: (null)
+Number of sites: 39
+
+Random seed: 1503266946
+Motif span: 14
+Alpha (significance level): 0.050000
+Beta (binomial confidence interval level): 0.950000
+Stopping mode: alpha-mode
+Initial number of permutations per column pair: 1000
+Max number of permutations per column pair: 1000000
+
+Column information content lower bound: 0.25
+Column information content upper bound: 1.75
+
+==========================================================================================================
+
+Hypergeometric p-values for statistically significant pairs (0 pairs)
+
+==========================================================================================================
+
+Number of columns analyzed: 7 (out of 14)
+Number of column-pairs: 21
+Bonferroni corrected alpha level: 0.002381
+Lowest point-estimated p-value: 6.50e-03
+
+Column dependency p-values:
+Column-pair ( 1, 2) has estimated p-value 0.046000 [0.034548,0.060927] with ent=0.138 bits and nPerms=1000
+Column-pair ( 1, 6) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.000 bits and nPerms=1000
+Column-pair ( 1, 7) has estimated p-value 0.215000 [0.190630,0.241551] with ent=0.038 bits and nPerms=1000
+Column-pair ( 1, 8) has estimated p-value 0.723000 [0.694437,0.749857] with ent=0.020 bits and nPerms=1000
+Column-pair ( 1, 9) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.001 bits and nPerms=1000
+Column-pair ( 1,14) has estimated p-value 0.853000 [0.829661,0.873637] with ent=0.016 bits and nPerms=1000
+Column-pair ( 2, 6) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.017 bits and nPerms=1000
+Column-pair ( 2, 7) has estimated p-value 0.137000 [0.117028,0.159750] with ent=0.107 bits and nPerms=1000
+Column-pair ( 2, 8) has estimated p-value 0.657000 [0.627021,0.685777] with ent=0.070 bits and nPerms=1000
+Column-pair ( 2, 9) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.001 bits and nPerms=1000
+Column-pair ( 2,14) has estimated p-value 0.944000 [0.927877,0.956725] with ent=0.036 bits and nPerms=1000
+Column-pair ( 6, 7) has estimated p-value 0.583000 [0.552178,0.613187] with ent=0.019 bits and nPerms=1000
+Column-pair ( 6, 8) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.008 bits and nPerms=1000
+Column-pair ( 6, 9) has estimated p-value 0.328000 [0.299601,0.357716] with ent=0.028 bits and nPerms=1000
+Column-pair ( 6,14) has estimated p-value 0.006500 [0.003682,0.011210] with ent=0.230 bits and nPerms=2000
+Column-pair ( 7, 8) has estimated p-value 0.053000 [0.040643,0.068779] with ent=0.105 bits and nPerms=1000
+Column-pair ( 7, 9) has estimated p-value 0.210000 [0.185865,0.236355] with ent=0.038 bits and nPerms=1000
+Column-pair ( 7,14) has estimated p-value 0.362000 [0.332790,0.392266] with ent=0.073 bits and nPerms=1000
+Column-pair ( 8, 9) has estimated p-value 0.400000 [0.370072,0.430693] with ent=0.060 bits and nPerms=1000
+Column-pair ( 8,14) has estimated p-value 0.121000 [0.102172,0.142729] with ent=0.199 bits and nPerms=1000
+Column-pair ( 9,14) has estimated p-value 0.921000 [0.902548,0.936230] with ent=0.009 bits and nPerms=1000
+
+Input set of 39 k-mers (k=14):
+CTGGAAATCCCCTC
+TTGGAAATCCCCCA
+CTGGAATTCCCCTC
+TGGGAATGCCCCAG
+TGGGAAAGTCCCAG
+TGGGAATTCCCCCC
+CAGGAATGTCCCCC
+TAGGAATTCCCCTC
+CAGGAATCTCCCTG
+CTGGAGTTCCCCTA
+TTGGAATTCCCCAT
+TGGGAGTTTCCCTA
+TGGGAAATTCCCCC
+CTGGAAATCCCCAC
+TTGGAAAGTCCCCG
+TGGGAATTCCCCTG
+CTGGAATTCCCCAG
+TGGGAATTTCCCTA
+CTGGAATTTCCCTC
+CGGGAAAGTCCCCG
+CGGGAAATTCCCCA
+TGGGAAACCCCCTC
+CGGGAGTTTCCCAT
+TGGGAAATCCCCAC
+TGGGAAATTCCCTC
+CGGGGATTCCCCAG
+CGGGAATTCCCCCA
+TTGGAAAGTCCCTG
+CTGGAAATTCCCAG
+CAGGAATTCCCCTA
+CTGGAAATTCCCAC
+CTGGAATTTCCCTG
+TTGGAGAGTCCCCA
+TGGGAAAGCCCCTG
+CTGGAATTCCCCAG
+CTGGAATTCCCCAG
+TGGGAAATCCCCGC
+CTGGAAAGCCCCGG
+CTGGAAAGTCCCTG
+

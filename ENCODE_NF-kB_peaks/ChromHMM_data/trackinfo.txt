@@ -1,0 +1,19 @@
+browser db hg19
+
+browser pix 800
+browser hide nextExonArrows
+browser hide nextItemArrows
+
+track type=bigBed name='ChromHMM GM12878 25state' description='ChromHMM GM12878 14-track concatenated chromatin segmentation' visibility=full itemRgb=on bigDataUrl=http://www.broadinstitute.org/~jernst/ROUND8_ChromHMM/browserexpanded_ChromHMM_GM12878_concatenate_25.bb
+
+track type=bigBed name='ChromHMM H1 25state' description='ChromHMM H1-track concatenated chromatin segmentation' visibility=full itemRgb=on bigDataUrl=http://www.broadinstitute.org/~jernst/ROUND8_ChromHMM/browserexpanded_ChromHMM_H1_concatenate_25.bb
+
+track type=bigBed name='ChromHMM HELA 25state' description='ChromHMM HELA 14-track concatenated chromatin segmentation' visibility=full itemRgb=on bigDataUrl=http://www.broadinstitute.org/~jernst/ROUND8_ChromHMM/browserexpanded_ChromHMM_HELA_concatenate_25.bb
+
+track type=bigBed name='ChromHMM HEPG2 25state' description='ChromHMM HEPG2 14-track concatenated chromatin segmentation' visibility=full itemRgb=on bigDataUrl=http://www.broadinstitute.org/~jernst/ROUND8_ChromHMM/browserexpanded_ChromHMM_HEPG2_concatenate_25.bb
+
+track type=bigBed name='ChromHMM HUVEC 25state' description='ChromHMM HUVEC 14-track concatenated chromatin segmentation' visibility=full itemRgb=on bigDataUrl=http://www.broadinstitute.org/~jernst/ROUND8_ChromHMM/browserexpanded_ChromHMM_HUVEC_concatenate_25.bb
+
+track type=bigBed name='ChromHMM K562 25state' description='ChromHMM K562 14-track concatenated chromatin segmentation' visibility=full itemRgb=on bigDataUrl=http://www.broadinstitute.org/~jernst/ROUND8_ChromHMM/browserexpanded_ChromHMM_K562_concatenate_25.bb
+
+

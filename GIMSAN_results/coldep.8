@@ -1,0 +1,56 @@
+Compiled on Aug 20 2017 18:23:05
+
+ChangeLog
+20080911. Added StDev mode 
+20080608. Output with summary of pairs with significant dependency 
+
+/home/npanyushev/gimsan_cmdline/column_dependency_app/column_dependency.out -fsa /home/npanyushev/gimsan_cmdline/20170820_common_bins/statsig//width008.kmers 
+FASTA Filename: /home/npanyushev/gimsan_cmdline/20170820_common_bins/statsig//width008.kmers
+Number of sequences in FASTA: 12
+Minimum sequence length in FASTA: 16
+Maximum sequence length in FASTA: 16
+
+SiteLoc Filename: (null)
+Number of sites: 12
+
+Random seed: 1503266946
+Motif span: 8
+Alpha (significance level): 0.050000
+Beta (binomial confidence interval level): 0.950000
+Stopping mode: alpha-mode
+Initial number of permutations per column pair: 1000
+Max number of permutations per column pair: 1000000
+
+Column information content lower bound: 0.25
+Column information content upper bound: 1.75
+
+==========================================================================================================
+
+Hypergeometric p-values for statistically significant pairs (0 pairs)
+
+==========================================================================================================
+
+Number of columns analyzed: 3 (out of 8)
+Number of column-pairs: 3
+Bonferroni corrected alpha level: 0.016667
+Lowest point-estimated p-value: 1.00e+00
+
+Column dependency p-values:
+Column-pair ( 2, 3) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.089 bits and nPerms=1000
+Column-pair ( 2, 4) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.069 bits and nPerms=1000
+Column-pair ( 3, 4) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.021 bits and nPerms=1000
+
+Input set of 12 k-mers (k=8):
+AAAAAGAA
+AAAAAGAA
+AAGGAGAA
+AAAAAGAA
+AAAGAGAA
+AAGAAGAA
+AAAAAGAA
+AAAGAGAA
+AAGGAGAA
+AAGAAGAA
+AAGGAGAA
+ATGAAGAA
+

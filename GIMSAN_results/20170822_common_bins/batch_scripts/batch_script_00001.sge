@@ -1,0 +1,69 @@
+#!/bin/bash
+#$ -S /bin/bash
+
+export GIMSAN=/home/npanyushev/gimsan_cmdline;
+
+cd /home/npanyushev/gimsan_cmdline
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=0 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid0=$!
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=1 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid1=$!
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=2 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid2=$!
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=3 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid3=$!
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=4 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid4=$!
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=5 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid5=$!
+wait $pid0;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=6 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid6=$!
+wait $pid1;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=7 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid7=$!
+wait $pid2;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=8 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid8=$!
+wait $pid3;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=9 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid9=$!
+wait $pid4;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=10 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid10=$!
+wait $pid5;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=11 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid11=$!
+wait $pid6;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=12 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid12=$!
+wait $pid7;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=13 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid13=$!
+wait $pid8;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=14 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid14=$!
+wait $pid9;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=15 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid15=$!
+wait $pid10;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=16 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid16=$!
+wait $pid11;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=17 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid17=$!
+wait $pid12;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=18 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid18=$!
+wait $pid13;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=19 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid19=$!
+wait $pid14;
+/home/npanyushev/gimsan_cmdline/gimsan_submit_job.pl --iter=20 --f=../common_bins.fa --w=25,50,75 --proc=6 --N=20170822_common_bins   1>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stdout 2>>/home/npanyushev/gimsan_cmdline/20170822_common_bins//tmp//tmp.stderr &
+pid20=$!
+wait $pid20;
+wait $pid19;
+wait $pid18;
+wait $pid17;
+wait $pid16;
+wait $pid15;

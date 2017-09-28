@@ -1,0 +1,1755 @@
+Compiled on Aug 20 2017 17:44:35
+
+ChangeLog
+20080911. Added StDev mode 
+20080608. Output with summary of pairs with significant dependency 
+
+/home/nickolay/R_stuff/gimsan_cmdline/column_dependency_app/column_dependency.out -fsa /home/nickolay/R_stuff/GIMSAN_results/20170822_common_bins/statsig//width075.kmers 
+FASTA Filename: /home/nickolay/R_stuff/GIMSAN_results/20170822_common_bins/statsig//width075.kmers
+Number of sequences in FASTA: 3
+Minimum sequence length in FASTA: 150
+Maximum sequence length in FASTA: 150
+
+SiteLoc Filename: (null)
+Number of sites: 3
+
+Random seed: 1503416465
+Motif span: 75
+Alpha (significance level): 0.050000
+Beta (binomial confidence interval level): 0.950000
+Stopping mode: alpha-mode
+Initial number of permutations per column pair: 1000
+Max number of permutations per column pair: 1000000
+
+Column information content lower bound: 0.25
+Column information content upper bound: 1.75
+
+==========================================================================================================
+
+Hypergeometric p-values for statistically significant pairs (0 pairs)
+
+==========================================================================================================
+
+Number of columns analyzed: 59 (out of 75)
+Number of column-pairs: 1711
+Bonferroni corrected alpha level: 2.9223e-05
+Lowest point-estimated p-value: 2.78e-01
+
+Column dependency p-values:
+Column-pair ( 1, 2) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1, 3) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1, 4) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1, 5) has estimated p-value 0.315000 [0.286955,0.344461] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1, 8) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1, 9) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,10) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,13) has estimated p-value 0.366000 [0.336705,0.396321] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,14) has estimated p-value 0.324000 [0.295707,0.353640] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,17) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,18) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,20) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,21) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,22) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,27) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,31) has estimated p-value 0.355000 [0.325943,0.385166] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,32) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,33) has estimated p-value 0.349000 [0.320080,0.379075] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,36) has estimated p-value 0.351000 [0.322034,0.381106] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,37) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,39) has estimated p-value 0.324000 [0.295707,0.353640] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,46) has estimated p-value 0.344000 [0.315198,0.373995] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,61) has estimated p-value 0.355000 [0.325943,0.385166] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,62) has estimated p-value 0.324000 [0.295707,0.353640] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,64) has estimated p-value 0.356000 [0.326921,0.386181] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,65) has estimated p-value 0.342000 [0.313247,0.371963] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,68) has estimated p-value 0.339000 [0.310320,0.368912] with ent=0.918 bits and nPerms=1000
+Column-pair ( 1,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 1,75) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2, 3) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2, 4) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2, 5) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2, 8) has estimated p-value 0.289000 [0.261743,0.317872] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2, 9) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,10) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,13) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,14) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,17) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,18) has estimated p-value 0.324000 [0.295707,0.353640] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,20) has estimated p-value 0.317000 [0.288899,0.346502] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,21) has estimated p-value 0.328000 [0.299601,0.357716] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,22) has estimated p-value 0.357000 [0.327899,0.387196] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,42) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,43) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,45) has estimated p-value 0.327000 [0.298627,0.356697] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,54) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,56) has estimated p-value 0.361000 [0.331811,0.391253] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,57) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,59) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,60) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,63) has estimated p-value 0.335000 [0.306420,0.364843] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,66) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,69) has estimated p-value 0.344000 [0.315198,0.373995] with ent=0.918 bits and nPerms=1000
+Column-pair ( 2,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 2,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3, 4) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3, 5) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3, 8) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3, 9) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,10) has estimated p-value 0.313000 [0.285012,0.342419] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,13) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,14) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,17) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,18) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,20) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,21) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,22) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,23) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,28) has estimated p-value 0.342000 [0.313247,0.371963] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,30) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,40) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,48) has estimated p-value 0.349000 [0.320080,0.379075] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,50) has estimated p-value 0.358000 [0.328877,0.388210] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,51) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 3,71) has estimated p-value 0.346000 [0.317151,0.376028] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,73) has estimated p-value 0.343000 [0.314223,0.372979] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,74) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair ( 3,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 4, 5) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4, 8) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4, 9) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,10) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,13) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,14) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,17) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,18) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair ( 4,20) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,21) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,22) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair ( 4,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair ( 4,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair ( 4,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair ( 4,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair ( 4,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair ( 4,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair ( 4,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair ( 4,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 4,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5, 8) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5, 9) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,10) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,13) has estimated p-value 0.340000 [0.311296,0.369929] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,14) has estimated p-value 0.331000 [0.302522,0.360771] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,17) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,18) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,20) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,21) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,22) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,27) has estimated p-value 0.339000 [0.310320,0.368912] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,31) has estimated p-value 0.303000 [0.275305,0.332202] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,32) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,33) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,36) has estimated p-value 0.339000 [0.310320,0.368912] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,37) has estimated p-value 0.327000 [0.298627,0.356697] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,39) has estimated p-value 0.333000 [0.304471,0.362807] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,46) has estimated p-value 0.328000 [0.299601,0.357716] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,61) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,62) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,64) has estimated p-value 0.348000 [0.319104,0.378060] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,65) has estimated p-value 0.317000 [0.288899,0.346502] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,68) has estimated p-value 0.306000 [0.278216,0.335269] with ent=0.918 bits and nPerms=1000
+Column-pair ( 5,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 5,75) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8, 9) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,10) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,13) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,14) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,17) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,18) has estimated p-value 0.368000 [0.338664,0.398347] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,20) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,21) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,22) has estimated p-value 0.364000 [0.334747,0.394294] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,42) has estimated p-value 0.354000 [0.324966,0.384152] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,43) has estimated p-value 0.325000 [0.296680,0.354659] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,45) has estimated p-value 0.313000 [0.285012,0.342419] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,54) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,56) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,57) has estimated p-value 0.339000 [0.310320,0.368912] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,59) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,60) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,63) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,66) has estimated p-value 0.349000 [0.320080,0.379075] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,69) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair ( 8,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 8,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,10) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,13) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,14) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,17) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,18) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,20) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,21) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,22) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,23) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,28) has estimated p-value 0.352000 [0.323011,0.382122] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,30) has estimated p-value 0.340000 [0.311296,0.369929] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,40) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,48) has estimated p-value 0.325000 [0.296680,0.354659] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,50) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,51) has estimated p-value 0.327000 [0.298627,0.356697] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair ( 9,71) has estimated p-value 0.331000 [0.302522,0.360771] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,73) has estimated p-value 0.342000 [0.313247,0.371963] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,74) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair ( 9,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,13) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,14) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,17) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,18) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (10,20) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,21) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,22) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,23) has estimated p-value 0.298000 [0.270458,0.327088] with ent=0.918 bits and nPerms=1000
+Column-pair (10,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (10,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,28) has estimated p-value 0.316000 [0.287927,0.345481] with ent=0.918 bits and nPerms=1000
+Column-pair (10,30) has estimated p-value 0.310000 [0.282098,0.339356] with ent=0.918 bits and nPerms=1000
+Column-pair (10,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (10,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,40) has estimated p-value 0.331000 [0.302522,0.360771] with ent=0.918 bits and nPerms=1000
+Column-pair (10,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (10,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (10,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,48) has estimated p-value 0.349000 [0.320080,0.379075] with ent=0.918 bits and nPerms=1000
+Column-pair (10,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (10,50) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (10,51) has estimated p-value 0.353000 [0.323988,0.383137] with ent=0.918 bits and nPerms=1000
+Column-pair (10,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (10,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (10,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (10,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (10,71) has estimated p-value 0.326000 [0.297654,0.355678] with ent=0.918 bits and nPerms=1000
+Column-pair (10,73) has estimated p-value 0.328000 [0.299601,0.357716] with ent=0.918 bits and nPerms=1000
+Column-pair (10,74) has estimated p-value 0.315000 [0.286955,0.344461] with ent=0.918 bits and nPerms=1000
+Column-pair (10,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,14) has estimated p-value 0.357000 [0.327899,0.387196] with ent=0.918 bits and nPerms=1000
+Column-pair (13,17) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (13,18) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (13,20) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,21) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,22) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (13,27) has estimated p-value 0.321000 [0.292788,0.350582] with ent=0.918 bits and nPerms=1000
+Column-pair (13,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,31) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair (13,32) has estimated p-value 0.310000 [0.282098,0.339356] with ent=0.918 bits and nPerms=1000
+Column-pair (13,33) has estimated p-value 0.346000 [0.317151,0.376028] with ent=0.918 bits and nPerms=1000
+Column-pair (13,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (13,36) has estimated p-value 0.305000 [0.277246,0.334247] with ent=0.918 bits and nPerms=1000
+Column-pair (13,37) has estimated p-value 0.346000 [0.317151,0.376028] with ent=0.918 bits and nPerms=1000
+Column-pair (13,39) has estimated p-value 0.358000 [0.328877,0.388210] with ent=0.918 bits and nPerms=1000
+Column-pair (13,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (13,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (13,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,46) has estimated p-value 0.348000 [0.319104,0.378060] with ent=0.918 bits and nPerms=1000
+Column-pair (13,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (13,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (13,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (13,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,61) has estimated p-value 0.357000 [0.327899,0.387196] with ent=0.918 bits and nPerms=1000
+Column-pair (13,62) has estimated p-value 0.343000 [0.314223,0.372979] with ent=0.918 bits and nPerms=1000
+Column-pair (13,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,64) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair (13,65) has estimated p-value 0.309000 [0.281128,0.338334] with ent=0.918 bits and nPerms=1000
+Column-pair (13,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (13,68) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (13,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (13,75) has estimated p-value 0.313000 [0.285012,0.342419] with ent=0.918 bits and nPerms=1000
+Column-pair (14,17) has estimated p-value 0.351000 [0.322034,0.381106] with ent=0.918 bits and nPerms=1000
+Column-pair (14,18) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (14,20) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,21) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,22) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (14,27) has estimated p-value 0.350000 [0.321057,0.380091] with ent=0.918 bits and nPerms=1000
+Column-pair (14,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,31) has estimated p-value 0.316000 [0.287927,0.345481] with ent=0.918 bits and nPerms=1000
+Column-pair (14,32) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair (14,33) has estimated p-value 0.344000 [0.315198,0.373995] with ent=0.918 bits and nPerms=1000
+Column-pair (14,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (14,36) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (14,37) has estimated p-value 0.317000 [0.288899,0.346502] with ent=0.918 bits and nPerms=1000
+Column-pair (14,39) has estimated p-value 0.327000 [0.298627,0.356697] with ent=0.918 bits and nPerms=1000
+Column-pair (14,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (14,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (14,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,46) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (14,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (14,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (14,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (14,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,61) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (14,62) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (14,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,64) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (14,65) has estimated p-value 0.341000 [0.312271,0.370946] with ent=0.918 bits and nPerms=1000
+Column-pair (14,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (14,68) has estimated p-value 0.361000 [0.331811,0.391253] with ent=0.918 bits and nPerms=1000
+Column-pair (14,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (14,75) has estimated p-value 0.357000 [0.327899,0.387196] with ent=0.918 bits and nPerms=1000
+Column-pair (17,18) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (17,20) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,21) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,22) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (17,27) has estimated p-value 0.278000 [0.251109,0.306590] with ent=0.918 bits and nPerms=1000
+Column-pair (17,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,31) has estimated p-value 0.335000 [0.306420,0.364843] with ent=0.918 bits and nPerms=1000
+Column-pair (17,32) has estimated p-value 0.324000 [0.295707,0.353640] with ent=0.918 bits and nPerms=1000
+Column-pair (17,33) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair (17,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (17,36) has estimated p-value 0.359000 [0.329855,0.389224] with ent=0.918 bits and nPerms=1000
+Column-pair (17,37) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (17,39) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair (17,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (17,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (17,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,46) has estimated p-value 0.342000 [0.313247,0.371963] with ent=0.918 bits and nPerms=1000
+Column-pair (17,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (17,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (17,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (17,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,61) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (17,62) has estimated p-value 0.331000 [0.302522,0.360771] with ent=0.918 bits and nPerms=1000
+Column-pair (17,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,64) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair (17,65) has estimated p-value 0.328000 [0.299601,0.357716] with ent=0.918 bits and nPerms=1000
+Column-pair (17,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (17,68) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair (17,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (17,75) has estimated p-value 0.342000 [0.313247,0.371963] with ent=0.918 bits and nPerms=1000
+Column-pair (18,19) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (18,20) has estimated p-value 0.342000 [0.313247,0.371963] with ent=0.918 bits and nPerms=1000
+Column-pair (18,21) has estimated p-value 0.340000 [0.311296,0.369929] with ent=0.918 bits and nPerms=1000
+Column-pair (18,22) has estimated p-value 0.321000 [0.292788,0.350582] with ent=0.918 bits and nPerms=1000
+Column-pair (18,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (18,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (18,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (18,42) has estimated p-value 0.335000 [0.306420,0.364843] with ent=0.918 bits and nPerms=1000
+Column-pair (18,43) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (18,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (18,45) has estimated p-value 0.338000 [0.309345,0.367895] with ent=0.918 bits and nPerms=1000
+Column-pair (18,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (18,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (18,54) has estimated p-value 0.355000 [0.325943,0.385166] with ent=0.918 bits and nPerms=1000
+Column-pair (18,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (18,56) has estimated p-value 0.353000 [0.323988,0.383137] with ent=0.918 bits and nPerms=1000
+Column-pair (18,57) has estimated p-value 0.348000 [0.319104,0.378060] with ent=0.918 bits and nPerms=1000
+Column-pair (18,59) has estimated p-value 0.338000 [0.309345,0.367895] with ent=0.918 bits and nPerms=1000
+Column-pair (18,60) has estimated p-value 0.320000 [0.291816,0.349562] with ent=0.918 bits and nPerms=1000
+Column-pair (18,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,63) has estimated p-value 0.341000 [0.312271,0.370946] with ent=0.918 bits and nPerms=1000
+Column-pair (18,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,66) has estimated p-value 0.307000 [0.279186,0.336291] with ent=0.918 bits and nPerms=1000
+Column-pair (18,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (18,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,69) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (18,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (18,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (19,20) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,21) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,22) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (19,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (19,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (19,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (19,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (19,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (19,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (19,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (19,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (19,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (20,21) has estimated p-value 0.335000 [0.306420,0.364843] with ent=0.918 bits and nPerms=1000
+Column-pair (20,22) has estimated p-value 0.343000 [0.314223,0.372979] with ent=0.918 bits and nPerms=1000
+Column-pair (20,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (20,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (20,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (20,42) has estimated p-value 0.317000 [0.288899,0.346502] with ent=0.918 bits and nPerms=1000
+Column-pair (20,43) has estimated p-value 0.362000 [0.332790,0.392266] with ent=0.918 bits and nPerms=1000
+Column-pair (20,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (20,45) has estimated p-value 0.341000 [0.312271,0.370946] with ent=0.918 bits and nPerms=1000
+Column-pair (20,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (20,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (20,54) has estimated p-value 0.317000 [0.288899,0.346502] with ent=0.918 bits and nPerms=1000
+Column-pair (20,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (20,56) has estimated p-value 0.315000 [0.286955,0.344461] with ent=0.918 bits and nPerms=1000
+Column-pair (20,57) has estimated p-value 0.319000 [0.290843,0.348542] with ent=0.918 bits and nPerms=1000
+Column-pair (20,59) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (20,60) has estimated p-value 0.344000 [0.315198,0.373995] with ent=0.918 bits and nPerms=1000
+Column-pair (20,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,63) has estimated p-value 0.346000 [0.317151,0.376028] with ent=0.918 bits and nPerms=1000
+Column-pair (20,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,66) has estimated p-value 0.320000 [0.291816,0.349562] with ent=0.918 bits and nPerms=1000
+Column-pair (20,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (20,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,69) has estimated p-value 0.300000 [0.272397,0.329134] with ent=0.918 bits and nPerms=1000
+Column-pair (20,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (20,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,22) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair (21,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (21,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (21,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (21,42) has estimated p-value 0.362000 [0.332790,0.392266] with ent=0.918 bits and nPerms=1000
+Column-pair (21,43) has estimated p-value 0.325000 [0.296680,0.354659] with ent=0.918 bits and nPerms=1000
+Column-pair (21,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (21,45) has estimated p-value 0.362000 [0.332790,0.392266] with ent=0.918 bits and nPerms=1000
+Column-pair (21,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (21,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (21,54) has estimated p-value 0.365000 [0.335726,0.395307] with ent=0.918 bits and nPerms=1000
+Column-pair (21,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (21,56) has estimated p-value 0.319000 [0.290843,0.348542] with ent=0.918 bits and nPerms=1000
+Column-pair (21,57) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (21,59) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair (21,60) has estimated p-value 0.335000 [0.306420,0.364843] with ent=0.918 bits and nPerms=1000
+Column-pair (21,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,63) has estimated p-value 0.326000 [0.297654,0.355678] with ent=0.918 bits and nPerms=1000
+Column-pair (21,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,66) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair (21,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (21,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,69) has estimated p-value 0.361000 [0.331811,0.391253] with ent=0.918 bits and nPerms=1000
+Column-pair (21,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (21,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,23) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (22,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (22,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (22,42) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair (22,43) has estimated p-value 0.348000 [0.319104,0.378060] with ent=0.918 bits and nPerms=1000
+Column-pair (22,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (22,45) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (22,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (22,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (22,54) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair (22,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (22,56) has estimated p-value 0.361000 [0.331811,0.391253] with ent=0.918 bits and nPerms=1000
+Column-pair (22,57) has estimated p-value 0.327000 [0.298627,0.356697] with ent=0.918 bits and nPerms=1000
+Column-pair (22,59) has estimated p-value 0.311000 [0.283069,0.340377] with ent=0.918 bits and nPerms=1000
+Column-pair (22,60) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair (22,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,63) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair (22,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,66) has estimated p-value 0.327000 [0.298627,0.356697] with ent=0.918 bits and nPerms=1000
+Column-pair (22,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (22,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,69) has estimated p-value 0.321000 [0.292788,0.350582] with ent=0.918 bits and nPerms=1000
+Column-pair (22,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (22,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,26) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (23,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,28) has estimated p-value 0.331000 [0.302522,0.360771] with ent=0.918 bits and nPerms=1000
+Column-pair (23,30) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (23,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (23,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,40) has estimated p-value 0.335000 [0.306420,0.364843] with ent=0.918 bits and nPerms=1000
+Column-pair (23,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (23,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (23,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,48) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (23,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (23,50) has estimated p-value 0.320000 [0.291816,0.349562] with ent=0.918 bits and nPerms=1000
+Column-pair (23,51) has estimated p-value 0.333000 [0.304471,0.362807] with ent=0.918 bits and nPerms=1000
+Column-pair (23,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (23,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (23,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (23,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (23,71) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (23,73) has estimated p-value 0.320000 [0.291816,0.349562] with ent=0.918 bits and nPerms=1000
+Column-pair (23,74) has estimated p-value 0.356000 [0.326921,0.386181] with ent=0.918 bits and nPerms=1000
+Column-pair (23,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (26,27) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (26,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (26,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (26,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (26,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (26,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (26,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (26,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (26,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (27,28) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,30) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,31) has estimated p-value 0.352000 [0.323011,0.382122] with ent=0.918 bits and nPerms=1000
+Column-pair (27,32) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair (27,33) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (27,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (27,36) has estimated p-value 0.353000 [0.323988,0.383137] with ent=0.918 bits and nPerms=1000
+Column-pair (27,37) has estimated p-value 0.335000 [0.306420,0.364843] with ent=0.918 bits and nPerms=1000
+Column-pair (27,39) has estimated p-value 0.335000 [0.306420,0.364843] with ent=0.918 bits and nPerms=1000
+Column-pair (27,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (27,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (27,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,46) has estimated p-value 0.340000 [0.311296,0.369929] with ent=0.918 bits and nPerms=1000
+Column-pair (27,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (27,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (27,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (27,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,61) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (27,62) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair (27,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,64) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (27,65) has estimated p-value 0.313000 [0.285012,0.342419] with ent=0.918 bits and nPerms=1000
+Column-pair (27,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (27,68) has estimated p-value 0.354000 [0.324966,0.384152] with ent=0.918 bits and nPerms=1000
+Column-pair (27,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (27,75) has estimated p-value 0.344000 [0.315198,0.373995] with ent=0.918 bits and nPerms=1000
+Column-pair (28,30) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair (28,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (28,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,40) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair (28,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (28,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (28,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,48) has estimated p-value 0.343000 [0.314223,0.372979] with ent=0.918 bits and nPerms=1000
+Column-pair (28,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (28,50) has estimated p-value 0.321000 [0.292788,0.350582] with ent=0.918 bits and nPerms=1000
+Column-pair (28,51) has estimated p-value 0.343000 [0.314223,0.372979] with ent=0.918 bits and nPerms=1000
+Column-pair (28,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (28,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (28,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (28,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (28,71) has estimated p-value 0.346000 [0.317151,0.376028] with ent=0.918 bits and nPerms=1000
+Column-pair (28,73) has estimated p-value 0.319000 [0.290843,0.348542] with ent=0.918 bits and nPerms=1000
+Column-pair (28,74) has estimated p-value 0.351000 [0.322034,0.381106] with ent=0.918 bits and nPerms=1000
+Column-pair (28,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,31) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,32) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,33) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (30,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,40) has estimated p-value 0.339000 [0.310320,0.368912] with ent=0.918 bits and nPerms=1000
+Column-pair (30,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (30,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (30,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,48) has estimated p-value 0.352000 [0.323011,0.382122] with ent=0.918 bits and nPerms=1000
+Column-pair (30,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (30,50) has estimated p-value 0.338000 [0.309345,0.367895] with ent=0.918 bits and nPerms=1000
+Column-pair (30,51) has estimated p-value 0.321000 [0.292788,0.350582] with ent=0.918 bits and nPerms=1000
+Column-pair (30,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (30,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (30,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (30,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (30,71) has estimated p-value 0.313000 [0.285012,0.342419] with ent=0.918 bits and nPerms=1000
+Column-pair (30,73) has estimated p-value 0.366000 [0.336705,0.396321] with ent=0.918 bits and nPerms=1000
+Column-pair (30,74) has estimated p-value 0.324000 [0.295707,0.353640] with ent=0.918 bits and nPerms=1000
+Column-pair (30,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,32) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (31,33) has estimated p-value 0.315000 [0.286955,0.344461] with ent=0.918 bits and nPerms=1000
+Column-pair (31,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (31,36) has estimated p-value 0.338000 [0.309345,0.367895] with ent=0.918 bits and nPerms=1000
+Column-pair (31,37) has estimated p-value 0.339000 [0.310320,0.368912] with ent=0.918 bits and nPerms=1000
+Column-pair (31,39) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair (31,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (31,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (31,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,46) has estimated p-value 0.339000 [0.310320,0.368912] with ent=0.918 bits and nPerms=1000
+Column-pair (31,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (31,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (31,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (31,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,61) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair (31,62) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (31,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,64) has estimated p-value 0.317000 [0.288899,0.346502] with ent=0.918 bits and nPerms=1000
+Column-pair (31,65) has estimated p-value 0.338000 [0.309345,0.367895] with ent=0.918 bits and nPerms=1000
+Column-pair (31,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (31,68) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair (31,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (31,75) has estimated p-value 0.326000 [0.297654,0.355678] with ent=0.918 bits and nPerms=1000
+Column-pair (32,33) has estimated p-value 0.314000 [0.285984,0.343440] with ent=0.918 bits and nPerms=1000
+Column-pair (32,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (32,36) has estimated p-value 0.339000 [0.310320,0.368912] with ent=0.918 bits and nPerms=1000
+Column-pair (32,37) has estimated p-value 0.343000 [0.314223,0.372979] with ent=0.918 bits and nPerms=1000
+Column-pair (32,39) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (32,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (32,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (32,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,46) has estimated p-value 0.301000 [0.273366,0.330157] with ent=0.918 bits and nPerms=1000
+Column-pair (32,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (32,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (32,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (32,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,61) has estimated p-value 0.309000 [0.281128,0.338334] with ent=0.918 bits and nPerms=1000
+Column-pair (32,62) has estimated p-value 0.355000 [0.325943,0.385166] with ent=0.918 bits and nPerms=1000
+Column-pair (32,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,64) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair (32,65) has estimated p-value 0.338000 [0.309345,0.367895] with ent=0.918 bits and nPerms=1000
+Column-pair (32,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (32,68) has estimated p-value 0.347000 [0.318127,0.377044] with ent=0.918 bits and nPerms=1000
+Column-pair (32,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (32,75) has estimated p-value 0.343000 [0.314223,0.372979] with ent=0.918 bits and nPerms=1000
+Column-pair (33,34) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (33,36) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (33,37) has estimated p-value 0.359000 [0.329855,0.389224] with ent=0.918 bits and nPerms=1000
+Column-pair (33,39) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair (33,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (33,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (33,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,46) has estimated p-value 0.316000 [0.287927,0.345481] with ent=0.918 bits and nPerms=1000
+Column-pair (33,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (33,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (33,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (33,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,61) has estimated p-value 0.329000 [0.300574,0.358734] with ent=0.918 bits and nPerms=1000
+Column-pair (33,62) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair (33,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,64) has estimated p-value 0.321000 [0.292788,0.350582] with ent=0.918 bits and nPerms=1000
+Column-pair (33,65) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair (33,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (33,68) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair (33,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (33,75) has estimated p-value 0.325000 [0.296680,0.354659] with ent=0.918 bits and nPerms=1000
+Column-pair (34,36) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,37) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,39) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (34,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (34,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (34,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (34,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (34,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (34,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (34,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (36,37) has estimated p-value 0.326000 [0.297654,0.355678] with ent=0.918 bits and nPerms=1000
+Column-pair (36,39) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair (36,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (36,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (36,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,46) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (36,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (36,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (36,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (36,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,61) has estimated p-value 0.320000 [0.291816,0.349562] with ent=0.918 bits and nPerms=1000
+Column-pair (36,62) has estimated p-value 0.321000 [0.292788,0.350582] with ent=0.918 bits and nPerms=1000
+Column-pair (36,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,64) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair (36,65) has estimated p-value 0.343000 [0.314223,0.372979] with ent=0.918 bits and nPerms=1000
+Column-pair (36,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (36,68) has estimated p-value 0.313000 [0.285012,0.342419] with ent=0.918 bits and nPerms=1000
+Column-pair (36,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (36,75) has estimated p-value 0.316000 [0.287927,0.345481] with ent=0.918 bits and nPerms=1000
+Column-pair (37,39) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (37,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (37,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (37,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,46) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (37,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (37,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (37,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (37,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,61) has estimated p-value 0.292000 [0.264646,0.320945] with ent=0.918 bits and nPerms=1000
+Column-pair (37,62) has estimated p-value 0.333000 [0.304471,0.362807] with ent=0.918 bits and nPerms=1000
+Column-pair (37,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,64) has estimated p-value 0.333000 [0.304471,0.362807] with ent=0.918 bits and nPerms=1000
+Column-pair (37,65) has estimated p-value 0.335000 [0.306420,0.364843] with ent=0.918 bits and nPerms=1000
+Column-pair (37,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (37,68) has estimated p-value 0.328000 [0.299601,0.357716] with ent=0.918 bits and nPerms=1000
+Column-pair (37,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (37,75) has estimated p-value 0.344000 [0.315198,0.373995] with ent=0.918 bits and nPerms=1000
+Column-pair (39,40) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (39,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (39,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,46) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (39,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (39,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (39,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (39,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,61) has estimated p-value 0.346000 [0.317151,0.376028] with ent=0.918 bits and nPerms=1000
+Column-pair (39,62) has estimated p-value 0.332000 [0.303497,0.361789] with ent=0.918 bits and nPerms=1000
+Column-pair (39,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,64) has estimated p-value 0.325000 [0.296680,0.354659] with ent=0.918 bits and nPerms=1000
+Column-pair (39,65) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (39,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (39,68) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (39,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (39,75) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (40,41) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (40,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (40,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,48) has estimated p-value 0.351000 [0.322034,0.381106] with ent=0.918 bits and nPerms=1000
+Column-pair (40,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (40,50) has estimated p-value 0.316000 [0.287927,0.345481] with ent=0.918 bits and nPerms=1000
+Column-pair (40,51) has estimated p-value 0.346000 [0.317151,0.376028] with ent=0.918 bits and nPerms=1000
+Column-pair (40,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (40,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (40,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (40,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (40,71) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair (40,73) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair (40,74) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (40,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (41,42) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,43) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (41,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (41,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (41,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (41,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (41,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (41,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (42,43) has estimated p-value 0.347000 [0.318127,0.377044] with ent=0.918 bits and nPerms=1000
+Column-pair (42,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (42,45) has estimated p-value 0.331000 [0.302522,0.360771] with ent=0.918 bits and nPerms=1000
+Column-pair (42,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (42,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (42,54) has estimated p-value 0.313000 [0.285012,0.342419] with ent=0.918 bits and nPerms=1000
+Column-pair (42,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (42,56) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (42,57) has estimated p-value 0.342000 [0.313247,0.371963] with ent=0.918 bits and nPerms=1000
+Column-pair (42,59) has estimated p-value 0.319000 [0.290843,0.348542] with ent=0.918 bits and nPerms=1000
+Column-pair (42,60) has estimated p-value 0.341000 [0.312271,0.370946] with ent=0.918 bits and nPerms=1000
+Column-pair (42,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,63) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (42,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,66) has estimated p-value 0.363000 [0.333768,0.393280] with ent=0.918 bits and nPerms=1000
+Column-pair (42,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (42,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,69) has estimated p-value 0.353000 [0.323988,0.383137] with ent=0.918 bits and nPerms=1000
+Column-pair (42,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (42,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,44) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (43,45) has estimated p-value 0.333000 [0.304471,0.362807] with ent=0.918 bits and nPerms=1000
+Column-pair (43,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (43,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (43,54) has estimated p-value 0.316000 [0.287927,0.345481] with ent=0.918 bits and nPerms=1000
+Column-pair (43,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (43,56) has estimated p-value 0.360000 [0.330833,0.390239] with ent=0.918 bits and nPerms=1000
+Column-pair (43,57) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair (43,59) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair (43,60) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair (43,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,63) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair (43,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,66) has estimated p-value 0.340000 [0.311296,0.369929] with ent=0.918 bits and nPerms=1000
+Column-pair (43,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (43,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,69) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (43,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (43,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (44,45) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (44,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (44,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (44,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (44,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (44,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (45,46) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (45,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (45,54) has estimated p-value 0.319000 [0.290843,0.348542] with ent=0.918 bits and nPerms=1000
+Column-pair (45,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (45,56) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair (45,57) has estimated p-value 0.328000 [0.299601,0.357716] with ent=0.918 bits and nPerms=1000
+Column-pair (45,59) has estimated p-value 0.331000 [0.302522,0.360771] with ent=0.918 bits and nPerms=1000
+Column-pair (45,60) has estimated p-value 0.318000 [0.289871,0.347522] with ent=0.918 bits and nPerms=1000
+Column-pair (45,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,63) has estimated p-value 0.340000 [0.311296,0.369929] with ent=0.918 bits and nPerms=1000
+Column-pair (45,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,66) has estimated p-value 0.321000 [0.292788,0.350582] with ent=0.918 bits and nPerms=1000
+Column-pair (45,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (45,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,69) has estimated p-value 0.328000 [0.299601,0.357716] with ent=0.918 bits and nPerms=1000
+Column-pair (45,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (45,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,48) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (46,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (46,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (46,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,61) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (46,62) has estimated p-value 0.326000 [0.297654,0.355678] with ent=0.918 bits and nPerms=1000
+Column-pair (46,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,64) has estimated p-value 0.328000 [0.299601,0.357716] with ent=0.918 bits and nPerms=1000
+Column-pair (46,65) has estimated p-value 0.333000 [0.304471,0.362807] with ent=0.918 bits and nPerms=1000
+Column-pair (46,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (46,68) has estimated p-value 0.347000 [0.318127,0.377044] with ent=0.918 bits and nPerms=1000
+Column-pair (46,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (46,75) has estimated p-value 0.310000 [0.282098,0.339356] with ent=0.918 bits and nPerms=1000
+Column-pair (48,49) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (48,50) has estimated p-value 0.358000 [0.328877,0.388210] with ent=0.918 bits and nPerms=1000
+Column-pair (48,51) has estimated p-value 0.341000 [0.312271,0.370946] with ent=0.918 bits and nPerms=1000
+Column-pair (48,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (48,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (48,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (48,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (48,71) has estimated p-value 0.317000 [0.288899,0.346502] with ent=0.918 bits and nPerms=1000
+Column-pair (48,73) has estimated p-value 0.327000 [0.298627,0.356697] with ent=0.918 bits and nPerms=1000
+Column-pair (48,74) has estimated p-value 0.326000 [0.297654,0.355678] with ent=0.918 bits and nPerms=1000
+Column-pair (48,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (49,50) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,51) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (49,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (49,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (49,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (49,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (50,51) has estimated p-value 0.343000 [0.314223,0.372979] with ent=0.918 bits and nPerms=1000
+Column-pair (50,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (50,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (50,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (50,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (50,71) has estimated p-value 0.337000 [0.308370,0.366878] with ent=0.918 bits and nPerms=1000
+Column-pair (50,73) has estimated p-value 0.324000 [0.295707,0.353640] with ent=0.918 bits and nPerms=1000
+Column-pair (50,74) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (50,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,53) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (51,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (51,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (51,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (51,71) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (51,73) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (51,74) has estimated p-value 0.321000 [0.292788,0.350582] with ent=0.918 bits and nPerms=1000
+Column-pair (51,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (53,54) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (53,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (53,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (53,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (54,55) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (54,56) has estimated p-value 0.299000 [0.271427,0.328111] with ent=0.918 bits and nPerms=1000
+Column-pair (54,57) has estimated p-value 0.327000 [0.298627,0.356697] with ent=0.918 bits and nPerms=1000
+Column-pair (54,59) has estimated p-value 0.344000 [0.315198,0.373995] with ent=0.918 bits and nPerms=1000
+Column-pair (54,60) has estimated p-value 0.363000 [0.333768,0.393280] with ent=0.918 bits and nPerms=1000
+Column-pair (54,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (54,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (54,63) has estimated p-value 0.307000 [0.279186,0.336291] with ent=0.918 bits and nPerms=1000
+Column-pair (54,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (54,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (54,66) has estimated p-value 0.350000 [0.321057,0.380091] with ent=0.918 bits and nPerms=1000
+Column-pair (54,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (54,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (54,69) has estimated p-value 0.315000 [0.286955,0.344461] with ent=0.918 bits and nPerms=1000
+Column-pair (54,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (54,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (54,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (54,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (55,56) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,57) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,59) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,60) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=1.585 bits and nPerms=1000
+Column-pair (55,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (55,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (56,57) has estimated p-value 0.324000 [0.295707,0.353640] with ent=0.918 bits and nPerms=1000
+Column-pair (56,59) has estimated p-value 0.341000 [0.312271,0.370946] with ent=0.918 bits and nPerms=1000
+Column-pair (56,60) has estimated p-value 0.321000 [0.292788,0.350582] with ent=0.918 bits and nPerms=1000
+Column-pair (56,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (56,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (56,63) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (56,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (56,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (56,66) has estimated p-value 0.346000 [0.317151,0.376028] with ent=0.918 bits and nPerms=1000
+Column-pair (56,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (56,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (56,69) has estimated p-value 0.334000 [0.305445,0.363825] with ent=0.918 bits and nPerms=1000
+Column-pair (56,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (56,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (56,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (56,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (57,59) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair (57,60) has estimated p-value 0.327000 [0.298627,0.356697] with ent=0.918 bits and nPerms=1000
+Column-pair (57,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (57,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (57,63) has estimated p-value 0.319000 [0.290843,0.348542] with ent=0.918 bits and nPerms=1000
+Column-pair (57,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (57,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (57,66) has estimated p-value 0.322000 [0.293761,0.351601] with ent=0.918 bits and nPerms=1000
+Column-pair (57,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (57,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (57,69) has estimated p-value 0.338000 [0.309345,0.367895] with ent=0.918 bits and nPerms=1000
+Column-pair (57,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (57,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (57,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (57,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (59,60) has estimated p-value 0.356000 [0.326921,0.386181] with ent=0.918 bits and nPerms=1000
+Column-pair (59,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (59,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (59,63) has estimated p-value 0.339000 [0.310320,0.368912] with ent=0.918 bits and nPerms=1000
+Column-pair (59,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (59,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (59,66) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (59,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (59,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (59,69) has estimated p-value 0.359000 [0.329855,0.389224] with ent=0.918 bits and nPerms=1000
+Column-pair (59,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (59,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (59,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (59,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (60,61) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (60,62) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (60,63) has estimated p-value 0.368000 [0.338664,0.398347] with ent=0.918 bits and nPerms=1000
+Column-pair (60,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (60,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (60,66) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (60,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (60,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (60,69) has estimated p-value 0.350000 [0.321057,0.380091] with ent=0.918 bits and nPerms=1000
+Column-pair (60,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (60,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (60,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (60,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (61,62) has estimated p-value 0.350000 [0.321057,0.380091] with ent=0.918 bits and nPerms=1000
+Column-pair (61,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (61,64) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair (61,65) has estimated p-value 0.336000 [0.307395,0.365860] with ent=0.918 bits and nPerms=1000
+Column-pair (61,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (61,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (61,68) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair (61,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (61,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (61,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (61,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (61,75) has estimated p-value 0.345000 [0.316175,0.375012] with ent=0.918 bits and nPerms=1000
+Column-pair (62,63) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (62,64) has estimated p-value 0.373000 [0.343562,0.403410] with ent=0.918 bits and nPerms=1000
+Column-pair (62,65) has estimated p-value 0.341000 [0.312271,0.370946] with ent=0.918 bits and nPerms=1000
+Column-pair (62,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (62,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (62,68) has estimated p-value 0.346000 [0.317151,0.376028] with ent=0.918 bits and nPerms=1000
+Column-pair (62,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (62,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (62,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (62,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (62,75) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (63,64) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (63,65) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (63,66) has estimated p-value 0.342000 [0.313247,0.371963] with ent=0.918 bits and nPerms=1000
+Column-pair (63,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (63,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (63,69) has estimated p-value 0.330000 [0.301548,0.359753] with ent=0.918 bits and nPerms=1000
+Column-pair (63,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (63,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (63,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (63,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (64,65) has estimated p-value 0.328000 [0.299601,0.357716] with ent=0.918 bits and nPerms=1000
+Column-pair (64,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (64,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (64,68) has estimated p-value 0.324000 [0.295707,0.353640] with ent=0.918 bits and nPerms=1000
+Column-pair (64,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (64,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (64,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (64,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (64,75) has estimated p-value 0.319000 [0.290843,0.348542] with ent=0.918 bits and nPerms=1000
+Column-pair (65,66) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (65,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (65,68) has estimated p-value 0.371000 [0.341602,0.401385] with ent=0.918 bits and nPerms=1000
+Column-pair (65,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (65,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (65,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (65,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (65,75) has estimated p-value 0.327000 [0.298627,0.356697] with ent=0.918 bits and nPerms=1000
+Column-pair (66,67) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (66,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (66,69) has estimated p-value 0.349000 [0.320080,0.379075] with ent=0.918 bits and nPerms=1000
+Column-pair (66,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (66,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (66,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (66,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (67,68) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (67,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (67,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (67,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (67,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (67,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.918 bits and nPerms=1000
+Column-pair (68,69) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (68,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (68,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (68,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (68,75) has estimated p-value 0.323000 [0.294734,0.352621] with ent=0.918 bits and nPerms=1000
+Column-pair (69,71) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (69,73) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (69,74) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (69,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (71,73) has estimated p-value 0.339000 [0.310320,0.368912] with ent=0.918 bits and nPerms=1000
+Column-pair (71,74) has estimated p-value 0.324000 [0.295707,0.353640] with ent=0.918 bits and nPerms=1000
+Column-pair (71,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (73,74) has estimated p-value 0.347000 [0.318127,0.377044] with ent=0.918 bits and nPerms=1000
+Column-pair (73,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+Column-pair (74,75) has estimated p-value 1.000000 [0.995383,1.000000] with ent=0.252 bits and nPerms=1000
+
+Input set of 3 k-mers (k=75):
+AACGACCTTTCCCTGGCCACCAGGCAAACTGCATGAAAGCGAGCGGGCGTTGCCGCTGGCGCCCACGCTGGGTTT
+CTCTCCCCTTCCTGGGGTCTAGGGCTGACTTGCCGGCACCACCACTGCCTTGGGTTGGAATGTACTCTGGGGTTC
+CAGCCCCTGGCCTGGGGCGCCACGCGGTCCTGCAGGCACGCAGGGTGGAAAGTCCCTGGCTGCACCTTTGAGAGC
+

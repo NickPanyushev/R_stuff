@@ -1,0 +1,69 @@
+#!/bin/bash
+#$ -S /bin/bash
+
+export GIMSAN=/home/nickolay/R_stuff/gimsan_cmdline;
+
+cd /home/nickolay/R_stuff/gimsan_cmdline
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=0 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid0=$!
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=1 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid1=$!
+wait $pid0;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=2 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid2=$!
+wait $pid1;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=3 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid3=$!
+wait $pid2;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=4 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid4=$!
+wait $pid3;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=5 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid5=$!
+wait $pid4;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=6 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid6=$!
+wait $pid5;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=7 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid7=$!
+wait $pid6;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=8 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid8=$!
+wait $pid7;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=9 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid9=$!
+wait $pid8;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=10 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid10=$!
+wait $pid9;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=11 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid11=$!
+wait $pid10;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=12 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid12=$!
+wait $pid11;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=13 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid13=$!
+wait $pid12;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=14 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid14=$!
+wait $pid13;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=15 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid15=$!
+wait $pid14;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=16 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid16=$!
+wait $pid15;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=17 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid17=$!
+wait $pid16;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=18 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid18=$!
+wait $pid17;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=19 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid19=$!
+wait $pid18;
+/home/nickolay/R_stuff/gimsan_cmdline/gimsan_submit_job.pl --iter=20 --f=../ENCODE_NF-kB_peaks/common_bins.fa --w=8,14,20 --N=20170820_common_bins   1>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stdout 2>>/home/nickolay/R_stuff/gimsan_cmdline/20170820_common_bins//tmp//tmp.stderr &
+pid20=$!
+wait $pid20;
+wait $pid19;

@@ -1,0 +1,30 @@
+dataset.o: dataset.c dataset.h stdinc.h symbols.h
+em_alg.o: em_alg.c em_alg.h profile.h stdinc.h dataset.h symbols.h \
+ gibbs_util.h random.h mt19937ar.h markov_score.h markov.h transprob.h \
+ zoops.h
+entsamp.o: entsamp.c entsamp.h gibbs_util.h stdinc.h profile.h dataset.h \
+ symbols.h random.h mt19937ar.h markov_score.h markov.h transprob.h \
+ zoops.h psprior.hpp
+entsamp_ilr.o: entsamp_ilr.c entsamp_ilr.h entsamp.h gibbs_util.h \
+ stdinc.h profile.h dataset.h symbols.h random.h mt19937ar.h \
+ markov_score.h markov.h transprob.h zoops.h em_alg.h
+gibbs_util.o: gibbs_util.c gibbs_util.h stdinc.h profile.h dataset.h \
+ symbols.h random.h mt19937ar.h markov_score.h markov.h transprob.h \
+ zoops.h
+main_entsamp_ilr.o: main_entsamp_ilr.c entsamp_ilr.h entsamp.h \
+ gibbs_util.h stdinc.h profile.h dataset.h symbols.h random.h mt19937ar.h \
+ markov_score.h markov.h transprob.h zoops.h em_alg.h print_results.h
+main_rand.o: main_rand.c random.h mt19937ar.h
+markov.o: markov.c markov.h stdinc.h dataset.h symbols.h transprob.h
+markov_score.o: markov_score.c markov_score.h markov.h stdinc.h dataset.h \
+ symbols.h transprob.h zoops.h
+mt19937ar.o: mt19937ar.c mt19937ar.h
+print_results.o: print_results.c print_results.h gibbs_util.h stdinc.h \
+ profile.h dataset.h symbols.h random.h mt19937ar.h markov_score.h \
+ markov.h transprob.h zoops.h
+profile.o: profile.c profile.h stdinc.h dataset.h symbols.h
+symbols.o: symbols.c symbols.h stdinc.h
+transprob.o: transprob.c transprob.h stdinc.h
+zoops.o: zoops.c zoops.h stdinc.h
+psprior.o: psprior.cpp psprior.hpp stdinc.h markov.h dataset.h symbols.h \
+ transprob.h

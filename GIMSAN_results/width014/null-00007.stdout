@@ -1,0 +1,267 @@
+Compiled on Aug 20 2017 18:23:04
+
+ChangeLog
+Version 2.2.0
+20100609. PSP mode
+20100527. Allow for multiple consecutive > in the header
+20081128. ZOOPS mode is allow to have sequences that are shorter than span
+20081115. Modified the chooseBestSite routine to use P(Y_i > 0)
+20080807. Code cleanup for GIMSAN
+20080625. Output of background model frequency
+20080625. Out of range sequence are counted toward char 'X'
+20080408. Increased span-capacity and fixed bug where span may be larger than minimum seqlen.
+
+/home/npanyushev/gimsan_cmdline/gibbsmarkov/gibbsmarkov.out /home/npanyushev/gimsan_cmdline/20170820_common_bins//nullset/null-00007.fa -l 14 -gibbsamp -best_clr -cput 300 -L 200 -ds -zoops 0.200000 -markov 5 -p 0.05 -em 0 
+
+Filename: /home/npanyushev/gimsan_cmdline/20170820_common_bins//nullset/null-00007.fa
+Number of sequences: 83
+Total residues: 15650
+Average sequence length: 188.6
+Minimum sequence length: 100
+Maximum sequence length: 400
+Include reverse-complement: yes
+Span: 14
+Random seed: 1503244729
+
+Number of motifs to be printed: 1
+
+Stopping criterion: CPU-time
+CPU time in seconds: 300
+
+Rapid convergence: on
+Iterations plateau (-L): 200
+Number of trial iterations: 5
+Phase-shift frequency (-ps): 0.40
+
+Occurrences per sequence: Bayesian ZOOPS
+Bayesian ZOOPS pseudoweight: 0.20
+
+Pseudo-weight (-p): 0.05
+Sampling Technique: Gibbs Sampler
+
+Order of Markov background (-markov): 5
+Markov background model: GibbsMarkov
+Background dimension: Aggregate
+Background file (-bfile): /home/npanyushev/gimsan_cmdline/20170820_common_bins//nullset/null-00007.fa
+Position-specific prior file (-psp): none
+
+Scoring scheme: CLR
+EM iterations (-em): 0
+
+Input FASTA freq of A: 0.2208
+Input FASTA freq of C: 0.2792
+Input FASTA freq of G: 0.2792
+Input FASTA freq of T: 0.2208
+
+Background model freq of A: 0.2208
+Background model freq of C: 0.2792
+Background model freq of G: 0.2792
+Background model freq of T: 0.2208
+
+
+All of the following scores are computed after EM (if applicable).
+Log Markovian-ILR generated from sites without pseudocount: 70.93
+Log Markovian-CLR generated from sites without pseudocount: 50.35
+Log(CLR) normalized by number of sequences: 0.6066
+Score for ranking runs: 50.35
+
+Motif profile generated from sites:
+Pos  [ 0]  [ 1]  [ 2]  [ 3]  [ 4]  [ 5]  [ 6]  [ 7]  [ 8]  [ 9]  [10]  [11]  [12]  [13] 
+A    0.13  0.00  0.00  0.00  0.53  0.00  0.07  0.00  0.20  0.73  0.13  0.00  0.20  0.87 
+C    0.33  0.67  0.07  0.80  0.40  0.60  0.93  0.00  0.07  0.20  0.13  0.47  0.73  0.13 
+G    0.53  0.33  0.00  0.20  0.00  0.00  0.00  0.00  0.73  0.07  0.73  0.00  0.07  0.00 
+T    0.00  0.00  0.93  0.00  0.07  0.40  0.00  1.00  0.00  0.00  0.00  0.53  0.00  0.00 
+
+Flanking regions:
+Pos  [-5]  [-4]  [-3]  [-2]  [-1]   ||   [14]  [15]  [16]  [17]  [18] 
+A    0.27  0.27  0.40  0.33  0.20   ||   0.13  0.07  0.13  0.27  0.20 
+C    0.13  0.27  0.33  0.20  0.20   ||   0.47  0.33  0.40  0.27  0.40 
+G    0.27  0.27  0.13  0.27  0.20   ||   0.13  0.33  0.33  0.40  0.07 
+T    0.27  0.13  0.13  0.20  0.40   ||   0.27  0.27  0.13  0.07  0.33 
+X    0.07  0.07  0.00  0.00  0.00   ||   0.00  0.00  0.00  0.00  0.00 
+
+Motif span: 14
+Motif weight/width: 14
+Consensus motif: GCTCACCTGAGTCA
+Number of predicted sites: 15 (18.07%)
+
+Sequence range is from 0 to (number of sequences - 1).
+Motif sites are in range 1 to length or -1 to -length.
+Sequence   0: motif site   none  (  none)
+Sequence   1: motif site   none  (  none)
+Sequence   2: motif site   none  (  none)
+Sequence   3: motif site   none  (  none)
+Sequence   4: motif site   none  (  none)
+Sequence   5: motif site   none  (  none)
+Sequence   6: motif site   none  (  none)
+Sequence   7: motif site   none  (  none)
+Sequence   8: motif site    121  (  -134)
+Sequence   9: motif site   none  (  none)
+Sequence  10: motif site   none  (  none)
+Sequence  11: motif site   none  (  none)
+Sequence  12: motif site    -36  (    23)
+Sequence  13: motif site    371  (  -384)
+Sequence  14: motif site   none  (  none)
+Sequence  15: motif site   none  (  none)
+Sequence  16: motif site   none  (  none)
+Sequence  17: motif site   none  (  none)
+Sequence  18: motif site   none  (  none)
+Sequence  19: motif site    176  (  -189)
+Sequence  20: motif site   none  (  none)
+Sequence  21: motif site   none  (  none)
+Sequence  22: motif site   -142  (   129)
+Sequence  23: motif site   none  (  none)
+Sequence  24: motif site     51  (   -64)
+Sequence  25: motif site   none  (  none)
+Sequence  26: motif site     26  (   -39)
+Sequence  27: motif site   none  (  none)
+Sequence  28: motif site   none  (  none)
+Sequence  29: motif site   none  (  none)
+Sequence  30: motif site   none  (  none)
+Sequence  31: motif site    123  (  -136)
+Sequence  32: motif site   none  (  none)
+Sequence  33: motif site   none  (  none)
+Sequence  34: motif site   none  (  none)
+Sequence  35: motif site     97  (  -110)
+Sequence  36: motif site   none  (  none)
+Sequence  37: motif site     17  (   -30)
+Sequence  38: motif site   none  (  none)
+Sequence  39: motif site     98  (  -111)
+Sequence  40: motif site   none  (  none)
+Sequence  41: motif site     81  (   -94)
+Sequence  42: motif site   none  (  none)
+Sequence  43: motif site   none  (  none)
+Sequence  44: motif site   none  (  none)
+Sequence  45: motif site   -247  (   234)
+Sequence  46: motif site     81  (   -94)
+Sequence  47: motif site   none  (  none)
+Sequence  48: motif site   none  (  none)
+Sequence  49: motif site   none  (  none)
+Sequence  50: motif site   none  (  none)
+Sequence  51: motif site    -80  (    67)
+Sequence  52: motif site   none  (  none)
+Sequence  53: motif site   none  (  none)
+Sequence  54: motif site   none  (  none)
+Sequence  55: motif site   none  (  none)
+Sequence  56: motif site   none  (  none)
+Sequence  57: motif site   none  (  none)
+Sequence  58: motif site   none  (  none)
+Sequence  59: motif site   none  (  none)
+Sequence  60: motif site   none  (  none)
+Sequence  61: motif site   none  (  none)
+Sequence  62: motif site   none  (  none)
+Sequence  63: motif site   none  (  none)
+Sequence  64: motif site   none  (  none)
+Sequence  65: motif site   none  (  none)
+Sequence  66: motif site   none  (  none)
+Sequence  67: motif site   none  (  none)
+Sequence  68: motif site   none  (  none)
+Sequence  69: motif site   none  (  none)
+Sequence  70: motif site   none  (  none)
+Sequence  71: motif site   none  (  none)
+Sequence  72: motif site   none  (  none)
+Sequence  73: motif site   none  (  none)
+Sequence  74: motif site   none  (  none)
+Sequence  75: motif site   none  (  none)
+Sequence  76: motif site   none  (  none)
+Sequence  77: motif site   none  (  none)
+Sequence  78: motif site   none  (  none)
+Sequence  79: motif site   none  (  none)
+Sequence  80: motif site   none  (  none)
+Sequence  81: motif site   none  (  none)
+Sequence  82: motif site   none  (  none)
+
+Alignments and FASTA-headers:
+  8   gaacc    121 GCTCATCTGACTAA 134    cccag  (+) Score=   5.301  >id=0007-0008 tag=[chr1:235011850-235012200] markov-order=3
+ 12   cggtg     36 GCTCCCCTAGGCCA 23     ccggc  (-) Score=   4.776  >id=0007-0012 tag=[chr11:442100-442250] markov-order=3
+ 13   aataa    371 CGTGACCTGAGTAA 384    cttgt  (+) Score=   5.840  >id=0007-0013 tag=[chr11:34234100-34234500] markov-order=3
+ 19   aatga    176 CGTCCCCTGAGTCA 189    cagta  (+) Score=   3.543  >id=0007-0019 tag=[chr12:11746150-11746350] markov-order=3
+ 22   taggt    142 GGTCCTCTGAGCCC 129    cggct  (-) Score=   3.605  >id=0007-0022 tag=[chr12:104671750-104671950] markov-order=3
+ 24   ttaat     51 GCTGTCCTGCATCA 64     gtgcc  (+) Score=   2.902  >id=0007-0024 tag=[chr12:111404600-111404800] markov-order=3
+ 26   agcgt     26 ACTCACCTCCGCCC 39     ctcat  (+) Score=   3.550  >id=0007-0026 tag=[chr14:35404850-35404950] markov-order=3
+ 31   tcctc    123 ACTCATCTGAACCA 136    cctgc  (+) Score=   5.358  >id=0007-0031 tag=[chr15:73988100-73988300] markov-order=3
+ 35   gcacc     97 CCTGCCCTGAGCCA 110    tgcgc  (+) Score=   6.777  >id=0007-0035 tag=[chr17:21287900-21288050] markov-order=3
+ 37   ggagg     17 GCTCATCTAAGCGA 30     tgcca  (+) Score=   5.295  >id=0007-0037 tag=[chr19:1183950-1184100] markov-order=3
+ 39   gcaat     98 GGTCACCTGAGCCA 111    gcagt  (+) Score=   6.133  >id=0007-0039 tag=[chr19:4831750-4831950] markov-order=3
+ 41   ccaag     81 CCTCATATAACTCA 94     tgggc  (+) Score=   2.818  >id=0007-0041 tag=[chr19:42121850-42122000] markov-order=3
+ 45     ctt    247 GCTCCTCTGCGTCA 234    tcccc  (-) Score=   6.827  >id=0007-0045 tag=[chr19:49897750-49898000] markov-order=3
+ 46   tgcca     81 CGCCACCTGAGTCA 94     ataaa  (+) Score=   2.585  >id=0007-0046 tag=[chr2:28681300-28681500] markov-order=3
+ 51   atcat     80 GCTCCCCTGAGTAA 67     agcat  (-) Score=   5.620  >id=0007-0051 tag=[chr2:218896600-218896750] markov-order=3
+
+FASTA-header of sequences with zero occurrences:
+  0  >id=0007-0000 tag=[chr1:1064250-1064400] markov-order=3
+  1  >id=0007-0001 tag=[chr1:1215200-1215400] markov-order=3
+  2  >id=0007-0002 tag=[chr1:31956100-31956250] markov-order=3
+  3  >id=0007-0003 tag=[chr1:33342450-33342650] markov-order=3
+  4  >id=0007-0004 tag=[chr1:37477300-37477600] markov-order=3
+  5  >id=0007-0005 tag=[chr1:183180900-183181100] markov-order=3
+  6  >id=0007-0006 tag=[chr1:183318500-183318750] markov-order=3
+  7  >id=0007-0007 tag=[chr1:234987700-234987900] markov-order=3
+  9  >id=0007-0009 tag=[chr10:79331800-79332000] markov-order=3
+ 10  >id=0007-0010 tag=[chr10:102394300-102394600] markov-order=3
+ 11  >id=0007-0011 tag=[chr10:102395200-102395450] markov-order=3
+ 14  >id=0007-0014 tag=[chr11:44569300-44569400] markov-order=3
+ 15  >id=0007-0015 tag=[chr11:58577550-58577750] markov-order=3
+ 16  >id=0007-0016 tag=[chr11:62004600-62004750] markov-order=3
+ 17  >id=0007-0017 tag=[chr11:96156250-96156450] markov-order=3
+ 18  >id=0007-0018 tag=[chr11:102317150-102317400] markov-order=3
+ 20  >id=0007-0020 tag=[chr12:45727550-45727750] markov-order=3
+ 21  >id=0007-0021 tag=[chr12:89960300-89960450] markov-order=3
+ 23  >id=0007-0023 tag=[chr12:104930750-104930900] markov-order=3
+ 25  >id=0007-0025 tag=[chr14:35156150-35156300] markov-order=3
+ 27  >id=0007-0027 tag=[chr14:68795700-68795900] markov-order=3
+ 28  >id=0007-0028 tag=[chr14:76961850-76962000] markov-order=3
+ 29  >id=0007-0029 tag=[chr14:77034000-77034150] markov-order=3
+ 30  >id=0007-0030 tag=[chr14:93959450-93959600] markov-order=3
+ 32  >id=0007-0032 tag=[chr17:7687450-7687650] markov-order=3
+ 33  >id=0007-0033 tag=[chr17:7842600-7842800] markov-order=3
+ 34  >id=0007-0034 tag=[chr17:9389150-9389400] markov-order=3
+ 36  >id=0007-0036 tag=[chr17:72422750-72423000] markov-order=3
+ 38  >id=0007-0038 tag=[chr19:4229150-4229400] markov-order=3
+ 40  >id=0007-0040 tag=[chr19:38899800-38900000] markov-order=3
+ 42  >id=0007-0042 tag=[chr19:44753400-44753600] markov-order=3
+ 43  >id=0007-0043 tag=[chr19:45642500-45642650] markov-order=3
+ 44  >id=0007-0044 tag=[chr19:49678400-49678550] markov-order=3
+ 47  >id=0007-0047 tag=[chr2:55133950-55134150] markov-order=3
+ 48  >id=0007-0048 tag=[chr2:64204300-64204450] markov-order=3
+ 49  >id=0007-0049 tag=[chr2:68467450-68467550] markov-order=3
+ 50  >id=0007-0050 tag=[chr2:207529550-207529750] markov-order=3
+ 52  >id=0007-0052 tag=[chr20:49812550-49812700] markov-order=3
+ 53  >id=0007-0053 tag=[chr20:58306900-58307050] markov-order=3
+ 54  >id=0007-0054 tag=[chr21:33383100-33383350] markov-order=3
+ 55  >id=0007-0055 tag=[chr22:17781750-17781950] markov-order=3
+ 56  >id=0007-0056 tag=[chr22:35630050-35630200] markov-order=3
+ 57  >id=0007-0057 tag=[chr3:101827650-101827900] markov-order=3
+ 58  >id=0007-0058 tag=[chr3:109082000-109082200] markov-order=3
+ 59  >id=0007-0059 tag=[chr3:119323150-119323300] markov-order=3
+ 60  >id=0007-0060 tag=[chr3:149225300-149225500] markov-order=3
+ 61  >id=0007-0061 tag=[chr4:39044450-39044600] markov-order=3
+ 62  >id=0007-0062 tag=[chr4:102501200-102501450] markov-order=3
+ 63  >id=0007-0063 tag=[chr5:119397750-119397900] markov-order=3
+ 64  >id=0007-0064 tag=[chr5:134554850-134555050] markov-order=3
+ 65  >id=0007-0065 tag=[chr5:144189900-144190050] markov-order=3
+ 66  >id=0007-0066 tag=[chr5:151094150-151094300] markov-order=3
+ 67  >id=0007-0067 tag=[chr5:160467700-160467900] markov-order=3
+ 68  >id=0007-0068 tag=[chr5:160468050-160468200] markov-order=3
+ 69  >id=0007-0069 tag=[chr5:179819100-179819200] markov-order=3
+ 70  >id=0007-0070 tag=[chr6:3209550-3209700] markov-order=3
+ 71  >id=0007-0071 tag=[chr6:12013150-12013350] markov-order=3
+ 72  >id=0007-0072 tag=[chr6:17705950-17706150] markov-order=3
+ 73  >id=0007-0073 tag=[chr6:44735650-44735750] markov-order=3
+ 74  >id=0007-0074 tag=[chr6:137873500-137873700] markov-order=3
+ 75  >id=0007-0075 tag=[chr7:26156450-26156600] markov-order=3
+ 76  >id=0007-0076 tag=[chr7:106425050-106425250] markov-order=3
+ 77  >id=0007-0077 tag=[chr7:155815350-155815550] markov-order=3
+ 78  >id=0007-0078 tag=[chr8:23074750-23074950] markov-order=3
+ 79  >id=0007-0079 tag=[chr9:93134550-93134700] markov-order=3
+ 80  >id=0007-0080 tag=[chr9:131729450-131729700] markov-order=3
+ 81  >id=0007-0081 tag=[chr9:136882600-136882750] markov-order=3
+ 82  >id=0007-0082 tag=[chr9:136902500-136902650] markov-order=3
+
+Average number of iterations per run: 381.27
+Number of runs: 1683
+Preprocessing CPU time (in seconds): 0.01
+Sampling-step CPU time (in seconds): 295.13
+Postprocessing CPU time (in seconds): 0.00
+Total elapsed CPU time (in seconds): 295.14
+

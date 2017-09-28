@@ -1,0 +1,267 @@
+Compiled on Aug 20 2017 18:23:04
+
+ChangeLog
+Version 2.2.0
+20100609. PSP mode
+20100527. Allow for multiple consecutive > in the header
+20081128. ZOOPS mode is allow to have sequences that are shorter than span
+20081115. Modified the chooseBestSite routine to use P(Y_i > 0)
+20080807. Code cleanup for GIMSAN
+20080625. Output of background model frequency
+20080625. Out of range sequence are counted toward char 'X'
+20080408. Increased span-capacity and fixed bug where span may be larger than minimum seqlen.
+
+/home/npanyushev/gimsan_cmdline/gibbsmarkov/gibbsmarkov.out /home/npanyushev/common_bins.fa -l 14 -gibbsamp -best_clr -cput 300 -L 200 -ds -zoops 0.200000 -markov 5 -p 0.05 -em 0 
+
+Filename: /home/npanyushev/common_bins.fa
+Number of sequences: 83
+Total residues: 15650
+Average sequence length: 188.6
+Minimum sequence length: 100
+Maximum sequence length: 400
+Include reverse-complement: yes
+Span: 14
+Random seed: 1503243841
+
+Number of motifs to be printed: 1
+
+Stopping criterion: CPU-time
+CPU time in seconds: 300
+
+Rapid convergence: on
+Iterations plateau (-L): 200
+Number of trial iterations: 5
+Phase-shift frequency (-ps): 0.40
+
+Occurrences per sequence: Bayesian ZOOPS
+Bayesian ZOOPS pseudoweight: 0.20
+
+Pseudo-weight (-p): 0.05
+Sampling Technique: Gibbs Sampler
+
+Order of Markov background (-markov): 5
+Markov background model: GibbsMarkov
+Background dimension: Aggregate
+Background file (-bfile): /home/npanyushev/common_bins.fa
+Position-specific prior file (-psp): none
+
+Scoring scheme: CLR
+EM iterations (-em): 0
+
+Input FASTA freq of A: 0.2181
+Input FASTA freq of C: 0.2819
+Input FASTA freq of G: 0.2819
+Input FASTA freq of T: 0.2181
+
+Background model freq of A: 0.2181
+Background model freq of C: 0.2819
+Background model freq of G: 0.2819
+Background model freq of T: 0.2181
+
+
+All of the following scores are computed after EM (if applicable).
+Log Markovian-ILR generated from sites without pseudocount: 101.39
+Log Markovian-CLR generated from sites without pseudocount: 66.62
+Log(CLR) normalized by number of sequences: 0.8027
+Score for ranking runs: 66.62
+
+Motif profile generated from sites:
+Pos  [ 0]  [ 1]  [ 2]  [ 3]  [ 4]  [ 5]  [ 6]  [ 7]  [ 8]  [ 9]  [10]  [11]  [12]  [13] 
+A    0.00  0.10  0.00  0.00  0.97  0.90  0.49  0.00  0.00  0.00  0.00  0.00  0.31  0.21 
+C    0.54  0.00  0.00  0.00  0.00  0.00  0.00  0.05  0.54  1.00  1.00  1.00  0.23  0.33 
+G    0.00  0.44  1.00  1.00  0.03  0.10  0.00  0.26  0.00  0.00  0.00  0.00  0.05  0.41 
+T    0.46  0.46  0.00  0.00  0.00  0.00  0.51  0.69  0.46  0.00  0.00  0.00  0.41  0.05 
+
+Flanking regions:
+Pos  [-5]  [-4]  [-3]  [-2]  [-1]   ||   [14]  [15]  [16]  [17]  [18] 
+A    0.15  0.28  0.28  0.15  0.08   ||   0.31  0.10  0.21  0.13  0.18 
+C    0.36  0.31  0.31  0.36  0.23   ||   0.26  0.26  0.31  0.41  0.28 
+G    0.28  0.28  0.18  0.28  0.36   ||   0.21  0.41  0.28  0.26  0.36 
+T    0.21  0.13  0.23  0.21  0.33   ||   0.23  0.23  0.21  0.21  0.18 
+X    0.00  0.00  0.00  0.00  0.00   ||   0.00  0.00  0.00  0.00  0.00 
+
+Motif span: 14
+Motif weight/width: 14
+Consensus motif: CNGGAATTCCCCNN
+Number of predicted sites: 39 (46.99%)
+
+Sequence range is from 0 to (number of sequences - 1).
+Motif sites are in range 1 to length or -1 to -length.
+Sequence   0: motif site   none  (  none)
+Sequence   1: motif site     59  (   -72)
+Sequence   2: motif site   none  (  none)
+Sequence   3: motif site   -119  (   106)
+Sequence   4: motif site   -138  (   125)
+Sequence   5: motif site    105  (  -118)
+Sequence   6: motif site   none  (  none)
+Sequence   7: motif site   none  (  none)
+Sequence   8: motif site   none  (  none)
+Sequence   9: motif site    106  (  -119)
+Sequence  10: motif site    170  (  -183)
+Sequence  11: motif site    137  (  -150)
+Sequence  12: motif site    -76  (    63)
+Sequence  13: motif site   -339  (   326)
+Sequence  14: motif site   none  (  none)
+Sequence  15: motif site   none  (  none)
+Sequence  16: motif site   none  (  none)
+Sequence  17: motif site   none  (  none)
+Sequence  18: motif site    197  (  -210)
+Sequence  19: motif site     70  (   -83)
+Sequence  20: motif site   none  (  none)
+Sequence  21: motif site     39  (   -52)
+Sequence  22: motif site   none  (  none)
+Sequence  23: motif site    -53  (    40)
+Sequence  24: motif site     65  (   -78)
+Sequence  25: motif site   none  (  none)
+Sequence  26: motif site   none  (  none)
+Sequence  27: motif site   -113  (   100)
+Sequence  28: motif site   none  (  none)
+Sequence  29: motif site   none  (  none)
+Sequence  30: motif site    -79  (    66)
+Sequence  31: motif site    101  (  -114)
+Sequence  32: motif site   none  (  none)
+Sequence  33: motif site   none  (  none)
+Sequence  34: motif site    110  (  -123)
+Sequence  35: motif site   none  (  none)
+Sequence  36: motif site   none  (  none)
+Sequence  37: motif site    -81  (    68)
+Sequence  38: motif site   none  (  none)
+Sequence  39: motif site     71  (   -84)
+Sequence  40: motif site   -152  (   139)
+Sequence  41: motif site   none  (  none)
+Sequence  42: motif site   none  (  none)
+Sequence  43: motif site   none  (  none)
+Sequence  44: motif site     75  (   -88)
+Sequence  45: motif site   -126  (   113)
+Sequence  46: motif site    103  (  -116)
+Sequence  47: motif site   none  (  none)
+Sequence  48: motif site    -70  (    57)
+Sequence  49: motif site    -73  (    60)
+Sequence  50: motif site     94  (  -107)
+Sequence  51: motif site    -75  (    62)
+Sequence  52: motif site   none  (  none)
+Sequence  53: motif site   none  (  none)
+Sequence  54: motif site   none  (  none)
+Sequence  55: motif site   none  (  none)
+Sequence  56: motif site   none  (  none)
+Sequence  57: motif site   -128  (   115)
+Sequence  58: motif site   none  (  none)
+Sequence  59: motif site   none  (  none)
+Sequence  60: motif site   none  (  none)
+Sequence  61: motif site     52  (   -65)
+Sequence  62: motif site   -121  (   108)
+Sequence  63: motif site   -117  (   104)
+Sequence  64: motif site   none  (  none)
+Sequence  65: motif site   none  (  none)
+Sequence  66: motif site   none  (  none)
+Sequence  67: motif site   none  (  none)
+Sequence  68: motif site   none  (  none)
+Sequence  69: motif site   none  (  none)
+Sequence  70: motif site     55  (   -68)
+Sequence  71: motif site   none  (  none)
+Sequence  72: motif site     76  (   -89)
+Sequence  73: motif site   none  (  none)
+Sequence  74: motif site    -70  (    57)
+Sequence  75: motif site     71  (   -84)
+Sequence  76: motif site   none  (  none)
+Sequence  77: motif site    120  (  -133)
+Sequence  78: motif site   none  (  none)
+Sequence  79: motif site   none  (  none)
+Sequence  80: motif site    102  (  -115)
+Sequence  81: motif site   none  (  none)
+Sequence  82: motif site     98  (  -111)
+
+Alignments and FASTA-headers:
+  1   agggg     59 CTGGAAATCCCCTC 72     ctccc  (+) Score=   0.695  >chr1:1215200-1215400
+  3   gctgt    119 TTGGAAATCCCCCA 106    ctgct  (-) Score=   1.712  >chr1:33342450-33342650
+  4   tgagg    138 CTGGAATTCCCCTC 125    ctgcc  (-) Score=   1.978  >chr1:37477300-37477600
+  5   cccgg    105 TGGGAATGCCCCAG 118    tcctt  (+) Score=   6.071  >chr1:183180900-183181100
+  9   gctgg    106 TGGGAAAGTCCCAG 119    gcatg  (+) Score=   2.437  >chr10:79331800-79332000
+ 10   cgtca    170 TGGGAATTCCCCCC 183    tccgg  (+) Score=   1.343  >chr10:102394300-102394600
+ 11   gacag    137 CAGGAATGTCCCCC 150    caaaa  (+) Score=   3.224  >chr10:102395200-102395450
+ 12   cagcc     76 TAGGAATTCCCCTC 63     tggcc  (-) Score=   3.795  >chr11:442100-442250
+ 13   taacc    339 CAGGAATCTCCCTG 326    atggg  (-) Score=   2.408  >chr11:34234100-34234500
+ 18   taccg    197 CTGGAGTTCCCCTA 210    agtcc  (+) Score=   3.952  >chr11:102317150-102317400
+ 19   gtctc     70 TTGGAATTCCCCAT 83     tgtga  (+) Score=   3.348  >chr12:11746150-11746350
+ 21   agtaa     39 TGGGAGTTTCCCTA 52     ggggt  (+) Score=   4.768  >chr12:89960300-89960450
+ 23   ggtct     53 TGGGAAATTCCCCC 40     ttgtt  (-) Score=   1.061  >chr12:104930750-104930900
+ 24   ggagt     65 CTGGAAATCCCCAC 78     cttct  (+) Score=   4.101  >chr12:111404600-111404800
+ 27   caccc    113 TTGGAAAGTCCCCG 100    aaatg  (-) Score=   4.373  >chr14:68795700-68795900
+ 30   tctgt     79 TGGGAATTCCCCTG 66     cttgg  (-) Score=   0.803  >chr14:93959450-93959600
+ 31   tgagc    101 CTGGAATTCCCCAG 114    caggt  (+) Score=   1.765  >chr15:73988100-73988300
+ 34   caagg    110 TGGGAATTTCCCTA 123    accac  (+) Score=   1.731  >chr17:9389150-9389400
+ 37   cttct     81 CTGGAATTTCCCTC 68     ggggc  (-) Score=   2.683  >chr19:1183950-1184100
+ 39   agcac     71 CGGGAAAGTCCCCG 84     ggtcg  (+) Score=   3.269  >chr19:4831750-4831950
+ 40   ccctg    152 CGGGAAATTCCCCA 139    ccacg  (-) Score=   2.088  >chr19:38899800-38900000
+ 44   ccgag     75 TGGGAAACCCCCTC 88     agcac  (+) Score=   1.131  >chr19:49678400-49678550
+ 45   tactg    126 CGGGAGTTTCCCAT 113    cttcc  (-) Score=   1.859  >chr19:49897750-49898000
+ 46   gtgtg    103 TGGGAAATCCCCAC 116    gcccc  (+) Score=   2.405  >chr2:28681300-28681500
+ 48   taatt     70 TGGGAAATTCCCTC 57     agagg  (-) Score=   2.892  >chr2:64204300-64204450
+ 49   gcaac     73 CGGGGATTCCCCAG 60     tctcg  (-) Score=   2.411  >chr2:68467450-68467550
+ 50   cccct     94 CGGGAATTCCCCCA 107    ctggg  (+) Score=   1.804  >chr2:207529550-207529750
+ 51   ccctg     75 TTGGAAAGTCCCTG 62     tgcct  (-) Score=   5.888  >chr2:218896600-218896750
+ 57   gcaca    128 CTGGAAATTCCCAG 115    accaa  (-) Score=   2.498  >chr3:101827650-101827900
+ 61   acccc     52 CAGGAATTCCCCTA 65     acccc  (+) Score=   0.706  >chr4:39044450-39044600
+ 62   cctgg    121 CTGGAAATTCCCAC 108    tgacg  (-) Score=   1.500  >chr4:102501200-102501450
+ 63   cattt    117 CTGGAATTTCCCTG 104    agata  (-) Score=   4.002  >chr5:119397750-119397900
+ 70   gtact     55 TTGGAGAGTCCCCA 68     gagtg  (+) Score=   2.975  >chr6:3209550-3209700
+ 72   ctgcc     76 TGGGAAAGCCCCTG 89     accca  (+) Score=   2.396  >chr6:17705950-17706150
+ 74   aacat     70 CTGGAATTCCCCAG 57     tgcta  (-) Score=   2.274  >chr6:137873500-137873700
+ 75   tgact     71 CTGGAATTCCCCAG 84     ggctg  (+) Score=   1.877  >chr7:26156450-26156600
+ 77   cggtt    120 TGGGAAATCCCCGC 133    agtcc  (+) Score=   2.128  >chr7:155815350-155815550
+ 80   agagg    102 CTGGAAAGCCCCGG 115    gggaa  (+) Score=   0.658  >chr9:131729450-131729700
+ 82   gagct     98 CTGGAAAGTCCCTG 111    agagg  (+) Score=   2.757  >chr9:136902500-136902650
+
+FASTA-header of sequences with zero occurrences:
+  0  >chr1:1064250-1064400
+  2  >chr1:31956100-31956250
+  6  >chr1:183318500-183318750
+  7  >chr1:234987700-234987900
+  8  >chr1:235011850-235012200
+ 14  >chr11:44569300-44569400
+ 15  >chr11:58577550-58577750
+ 16  >chr11:62004600-62004750
+ 17  >chr11:96156250-96156450
+ 20  >chr12:45727550-45727750
+ 22  >chr12:104671750-104671950
+ 25  >chr14:35156150-35156300
+ 26  >chr14:35404850-35404950
+ 28  >chr14:76961850-76962000
+ 29  >chr14:77034000-77034150
+ 32  >chr17:7687450-7687650
+ 33  >chr17:7842600-7842800
+ 35  >chr17:21287900-21288050
+ 36  >chr17:72422750-72423000
+ 38  >chr19:4229150-4229400
+ 41  >chr19:42121850-42122000
+ 42  >chr19:44753400-44753600
+ 43  >chr19:45642500-45642650
+ 47  >chr2:55133950-55134150
+ 52  >chr20:49812550-49812700
+ 53  >chr20:58306900-58307050
+ 54  >chr21:33383100-33383350
+ 55  >chr22:17781750-17781950
+ 56  >chr22:35630050-35630200
+ 58  >chr3:109082000-109082200
+ 59  >chr3:119323150-119323300
+ 60  >chr3:149225300-149225500
+ 64  >chr5:134554850-134555050
+ 65  >chr5:144189900-144190050
+ 66  >chr5:151094150-151094300
+ 67  >chr5:160467700-160467900
+ 68  >chr5:160468050-160468200
+ 69  >chr5:179819100-179819200
+ 71  >chr6:12013150-12013350
+ 73  >chr6:44735650-44735750
+ 76  >chr7:106425050-106425250
+ 78  >chr8:23074750-23074950
+ 79  >chr9:93134550-93134700
+ 81  >chr9:136882600-136882750
+
+Average number of iterations per run: 394.74
+Number of runs: 1527
+Preprocessing CPU time (in seconds): 0.01
+Sampling-step CPU time (in seconds): 295.19
+Postprocessing CPU time (in seconds): 0.00
+Total elapsed CPU time (in seconds): 295.20
+

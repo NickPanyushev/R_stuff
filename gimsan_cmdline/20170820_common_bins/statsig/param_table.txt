@@ -1,0 +1,8 @@
+	<tr><td><b>Input file</b></td> <td>common_bins.fa</td></tr>
+	<tr><td><b>Size of null set</b></td> <td>20</td></tr>
+	<tr><td><b>Occurrences per sequence</b></td> <td>ZOOPS (prior-weight = 0.2)</td></tr>
+	<tr><td><b>Process run time limit</b></td> <td>-cput 300</td></tr>
+	<tr><td><b>Convergence rate</b></td> <td>200</td></tr>
+	<tr><td><b>Double-strand</b></td> <td>yes</td></tr>
+	<tr><td><b>Order of Markov background</b></td> <td>5</td></tr>
+	<tr><td><b>Genomic file</b></td> <td>input FASTA file</td></tr>

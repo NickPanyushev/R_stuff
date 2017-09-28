@@ -1,0 +1,959 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+---)`
+title: "ENCODE_NF-kB"
+author: "Панюшев Николай"
+date: '15 мая 2017 г '
+output: html_document
+---
+
+## Цель и задачи этого маленького проектика
+
+Вышло вполне интересно и занимательно анализировать пики чипсека для 4 клеточных линий, пришло время расширяться!
+
+Попробуем проанализировать пики для ENCODE cell lines!
+
+Итак, поехали!
+
+```{r libraries import, echo=F, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(corrplot)
+library(tidyr)
+library(VennDiagram)
+#library(stargazer)
+
+library(dplyr)
+library(data.table)
+library(compiler)
+```
+
+## Импорт и контроль качества данных
+
+Импортируем функцию по обработке файлов из предыдущего проекта
+
+```{r import&filtering function}
+source("~/R_stuff/Functions.R")
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/")
+```
+
+Теперь считаем файлы с пиками с помощью этой чудодейственной функции
+
+```{r file read, warning=FALSE}
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/Raw_files/")
+GM10847_peaks <- read.narrowpeak("GM10847_p65vsInput_TNFa_peaks.narrowPeak")
+GM12878_peaks <- read.narrowpeak("GM12878_p65vsInput_TNFa_peaks.narrowPeak")
+GM12891_peaks <- read.narrowpeak("GM12891_p65vsInput_TNFa_peaks.narrowPeak")
+GM12892_peaks <- read.narrowpeak("GM12892_p65vsInput_TNFa_peaks.narrowPeak")
+GM15510_peaks <- read.narrowpeak("GM15510_p65vsInput_TNFa_peaks.narrowPeak")
+GM18505_peaks <- read.narrowpeak("GM18505_p65vsInput_TNFa_peaks.narrowPeak")
+GM18526_peaks <- read.narrowpeak("GM18526_p65vsInput_TNFa_peaks.narrowPeak")
+GM18951_peaks <- read.narrowpeak("GM18951_p65vsInput_TNFa_peaks.narrowPeak")
+GM19099_peaks <- read.narrowpeak("GM19099_p65vsInput_TNFa_peaks.narrowPeak")
+Beas_peaks <- read.narrowpeak("Beas_TNFvsInput_peaks.narrowPeak")
+AC16_peaks <- read.narrowpeak("AC16_TNFvsAsis_peaks.narrowPeak")
+```
+
+Итак, количество пиков по линиям
+
+*GM10847 - `r nrow(GM10847_peaks)`
+*GM12878 - `r nrow(GM12878_peaks)`
+*GM12891 - `r nrow(GM12891_peaks)`
+*GM12892 - `r nrow(GM12892_peaks)`
+*GM15510 - `r nrow(GM15510_peaks)`
+*GM18505 - `r nrow(GM18505_peaks)`
+*GM18526 - `r nrow(GM18526_peaks)`
+*GM18951 - `r nrow(GM18951_peaks)`
+*GM19099 - `r nrow(GM19099_peaks)`
+*BEAS - `r nrow(Beas_peaks)`
+*AC16 - `r nrow(AC16_peaks)`
+
+Выглядит несколько подозрительно, очень большой разброс! 
+
+Поглядим на графики
+
+Клеточная линия  | Количество пиков | Распределение ридов
+------------- | ------------- | -------------
+GM10847 | `r nrow(GM10847_peaks)`| `r knitr::include_graphics("Peak_pics/GM10847_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM12878 | `r nrow(GM12878_peaks)`|`r knitr::include_graphics("Peak_pics/GM12878_p65vsInput_TNFa_model-0.png", dpi = 200)`
+GM12891 | `r nrow(GM12891_peaks)`|`r knitr::include_graphics("Peak_pics/GM12891_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM12892 | `r nrow(GM12892_peaks)`|`r knitr::include_graphics("Peak_pics/GM12892_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM15510 | `r nrow(GM15510_peaks)`|`r knitr::include_graphics("Peak_pics/GM15510_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM18505 | `r nrow(GM18505_peaks)`|`r knitr::include_graphics("Peak_pics/GM18505_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM18951 | `r nrow(GM18951_peaks)`| `r knitr::include_graphics("Peak_pics/GM18951_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM19099 | `r nrow(GM19099_peaks)`| `r knitr::include_graphics("Peak_pics/GM19099_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+BEAS | `r nrow(Beas_peaks)`| `r knitr::include_graphics("Peak_pics/Beas_TNFvsInput_model-0.png", dpi = 200)`  
+AC16 | `r nrow(AC16_peaks)`| `r knitr::include_graphics("Peak_pics/AC16_TNFvsAsis_model-0.png", dpi = 200)`  
+
+Ну в принципе, везде нормально c небольшими допущениями
+
+А все остальные сложим в одну data.table
+И добавим туда наши линии из предыдущего проекта.
+```{r merge peaks}
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/Raw_files/")
+
+A549_peaks <- read.narrowpeak("A549_TNF_vs_bg_peaks.narrowPeak")
+HUVEC_peaks <- read.narrowpeak("HUVEC_TNFvsASIS_peaks.narrowPeak")
+IMR90_peaks <- read.narrowpeak("IMR90_TNFvsASIS_peaks.narrowPeak")
+SGBS_peaks <- read.narrowpeak("SGBS_TNFvsVeh_peaks.narrowPeak")
+
+AC16_peaks$Cell_line <- "AC16"
+A549_peaks$Cell_line <- "A549"
+Beas_peaks$Cell_line <- "Beas"
+HUVEC_peaks$Cell_line <- "HUVEC"
+IMR90_peaks$Cell_line <- "IMR90"
+SGBS_peaks$Cell_line <- "SGBS"
+
+rm(GM18526_peaks)
+
+GM10847_peaks$Cell_line <- "GM10847"
+GM12878_peaks$Cell_line <- "GM12878"
+GM12891_peaks$Cell_line <- "GM12891"
+GM12892_peaks$Cell_line <- "GM12892"
+GM15510_peaks$Cell_line <- "GM15510"
+GM18505_peaks$Cell_line <- "GM18505"
+GM18951_peaks$Cell_line <- "GM18951"
+GM19099_peaks$Cell_line <- "GM19099"
+
+all_peaks <- rbindlist(list(GM10847_peaks, GM12878_peaks, GM12891_peaks, 
+                            GM12892_peaks, GM15510_peaks, GM18505_peaks,
+                            GM18951_peaks, GM19099_peaks, A549_peaks,
+                            HUVEC_peaks, IMR90_peaks, SGBS_peaks,
+                            Beas_peaks, AC16_peaks))
+
+rm(GM10847_peaks, GM12878_peaks, GM12891_peaks, 
+                            GM12892_peaks, GM15510_peaks, GM18505_peaks,
+                            GM18951_peaks, GM19099_peaks, A549_peaks,
+                            HUVEC_peaks, IMR90_peaks, SGBS_peaks,
+                            Beas_peaks, AC16_peaks)
+```
+
+Позабавимся гистограммками!
+
+Гистограммка по fold_change дает странные результаты, но вполне объяснимые
+```{r fold_change analysis, echo=FALSE}
+ggplot(all_peaks, aes(fold_change, ..count.., fill = Chromosome))+
+  geom_density(aes(fill=Chromosome), alpha = 0.5) +
+  labs(title = "Fold change peak distribution",
+       x = "Fold change",
+       y = "Peak number")+
+  theme_bw()+
+  facet_wrap(~ Cell_line)
+```
+
+Сделаем диаграммку с распределением длин пиков
+
+```{r peak_length analysis, echo=FALSE}
+ggplot(all_peaks, aes(Cell_line, Stop-Start))+
+  geom_boxplot()+
+  labs(title = "Peak length distribution",
+       x = "Cell line",
+       y = "Peak length")+
+  theme_bw()
+```
+
+Ну что, картинка длин пиков говорит нам, что все на самом деле в порядке, пики длиной нуклеотидов в 250, просто есть большой разброс по их количеству. И встречаются пики очень длинные для некоторых линий
+
+Ну что же, прикольно.
+Теперь бинаризуем пики окошком в 50 нуклетоидов
+
+```{r peak_binarization}
+all_peaks <- bin.peaks(all_peaks, window_size = 50)
+#Выделим для каждого бина отдельную строку, чтобы было удобнее. Для этого возьмем функцию unnest из пакетика tidyr
+all_bins <- unnest(all_peaks, Peak_Bins)
+all_bins <- as.data.table(all_bins)
+```
+
+## Пересечения бинов
+
+Посмотрим, есть ли пересечения бинов
+
+```{r}
+#Немного говнокода, но мы переживем, зато не надо ничего руками делать
+all_intersect <- Reduce(intersect, all_bins[, .(list(unique(Peak_Bins))), Cell_line]$V1)
+```
+Итого,количество общих бинов `r length(all_intersect)` 
+
+Теперь отберем только общие бины, остальные нас уже не интересуют
+```{r}
+common_bins <- all_bins[all_bins$Peak_Bins %in% all_intersect, ]
+```
+
+
+## Аннтотация общих бинов
+
+Глянем, как они распределены общие бины по хромосомам
+
+```{r genome location}
+ggplot(common_bins, aes(Chromosome, fill = Chromosome))+
+  geom_histogram(aes(fill=Chromosome), alpha = 0.5, stat = "count") +
+  labs(title = "Common bin location distribution",
+       x = "Genome location",
+       y = "Peak number")+
+   theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        panel.background = element_rect(fill = "white", 
+            colour = NA), panel.border = element_rect(fill = NA, 
+            colour = "grey20"), panel.grid.major = element_line(colour = "grey92"), 
+            panel.grid.minor = element_line(colour = "grey92", 
+                size = 0.25), strip.background = element_rect(fill = "grey85", 
+                colour = "grey20"), legend.key = element_rect(fill = "white", 
+                colour = NA), complete = TRUE)
+
+```
+
+Выглядит прикольно, видим, что у нас больше всего общих бинов на 1 и на 18 хромосоме.
+
+Интересно, что же там такое?
+
+Подготовим из переменной с бинами полноценный .bed файл
+```{r}
+#Теперь переведем бины обратно в пики
+common_peaks <- aggregate(common_bins$Peak_Bins,
+                          by = list(common_bins$Peak_name, common_bins$Cell_line),
+                          FUN = min)
+
+names(common_peaks) <- c("Peak_name", "Cell_line", "Start")
+
+common_peaks$Stop <- aggregate(common_bins$Peak_Bins,
+                          by = list(common_bins$Peak_name,common_bins$Cell_line),
+                          FUN = function(x) max(x)+50)[,3]
+
+common_peaks$Chromosome <- aggregate(common_bins$Chromosome,
+                          by = list(common_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks$Fold_change <- aggregate(common_bins$fold_change,
+                          by = list(common_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks$'p-value' <- aggregate(common_bins$`p-value`,
+                          by = list(common_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks$'q-value' <- aggregate(common_bins$`q-value`,
+                          by = list(common_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+
+#Переставим в правильном порядке столбцы, чтобы bedtools съел
+common_peaks <- common_peaks[,c("Chromosome", "Start", "Stop", "Peak_name", 
+                             "Fold_change", "p-value", "q-value", "Cell_line")]
+
+# Проверим, нет ли косяков в .bed файле и запишем в файл
+stopifnot(sum(common_peaks$Start > common_peaks$Stop) == 0)
+fwrite(common_peaks, "peaks.bed", sep = "\t", col.names = FALSE)
+```
+
+Удалим ненужную переменную
+```{r}
+rm(all_intersect)
+```
+
+Сделаем бокс-плот, который покажет, как распределены общие пики по fold_change и по q-value в этих клеточных линиях
+
+```{r}
+#fold_change для начала
+ggplot(common_peaks, aes(Cell_line, Fold_change))+
+  geom_boxplot()+
+  labs(title = "Common Peak distribution",
+       x = "Cell line",
+       y = "Fold change")+
+  theme_bw()
+```
+```{r}
+#Теперь q-value
+ggplot(common_peaks, aes(Cell_line, common_peaks$`q-value`))+
+  geom_boxplot()+
+  labs(title = "Common Peak distribution",
+       x = "Cell line",
+       y = "Fold change")+
+  theme_bw()
+```
+Картинки примерно повторяют друг друга, видим, что самые качественные пики находятся в AC16, GM18505, HUVEC, IMR90
+
+Проаннотируем, как в прошлый раз:
+Используем ту же аннотацию, которую распарсили
+
+```{r Получение аннотации}
+annotation_v24 <- fread("/home/nickolay/R_stuff/NF-kB_sites/Annotation/Gencode_v24.bed")
+
+#Теперь вытащим только транскрипты
+transcripts <- subset(annotation_v24, annotation_v24$Type == "transcript")
+transcripts$Type <- NULL
+fwrite(transcripts, "transcripts.bed", sep = "\t", col.names = FALSE)
+```
+
+Не будем изобретать велосипед, а сделаем скрипт, который с помощью bedtools найдет нам ближайшие гены.
+
+```{r, engine= 'bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/
+#Отсортируем файл с транскриптами и с пиками
+sortBed -i transcripts.bed > sorted_transcripts.bed
+sortBed -i peaks.bed > sorted_peaks.bed
+
+#А теперь пошли фичи искать
+closestBed -D b -k 2 -a sorted_peaks.bed -b sorted_transcripts.bed > closest_transcripts.bed
+```
+
+Окей, нашли ближайшие транскрипты, отфильруем их
+
+```{r}
+features <- fread("closest_transcripts.bed")
+names(features) <- c("Chromosome", "peak_Start", "peak_Stop", "Peak_name", 
+                             "Fold_change", "p-value", "q-value", "Cell_line",
+                     "Chr", "transcript_Start", "transcript_Stop", "Strand", 
+                     "Ensemble_ID", "distance")
+features$Chr <- NULL
+# Убрали пики, которые лежат очень далеко в пустоте, т.е. от них до гена более 3000 нуклеотидов
+
+features <- subset(features, features$distance<3000 & features$distance > - 3000)
+
+#Удалим хвостики у названий транскриптов
+features$Ensemble_ID <- gsub("\\.\\d+", "", features$Ensemble_ID)
+```
+
+Теперь попробуем проаннотировать гены по GO
+
+```{r common peaks annotation}
+library(biomaRt)
+
+# define biomart object
+mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
+
+# query biomart
+BM_out <- getBM(attributes = c("chromosome_name","ensembl_transcript_id", 
+                               "uniprotswissprot", "hgnc_symbol",
+                               "transcript_biotype", "name_1006", 
+                                "namespace_1003"),
+                 filters = "ensembl_transcript_id",
+                values = features$Ensemble_ID, 
+                mart = mart,
+                uniqueRows = TRUE)
+rm(mart)
+```
+Теперь, когда у нас есть огромная аннотация, надо ее расчистить
+```{r}
+#Удалим неинформативные GO
+BM_out <- BM_out[BM_out$name_1006 != "molecular_function" &
+                  BM_out$name_1006 != "cellular_component" &
+                   BM_out$name_1006 != "biological_process" ,]
+
+GO_data <- BM_out %>% group_by(namespace_1003, ensembl_transcript_id)
+names(GO_data) <- c("Chromosome", "Ensemble_ID", "Uniprot_ID", "Gene_symbol", "Biotype",  "GO_name", "Namespace")
+rm(BM_out)
+```
+Славно, теперь давай докинем высоту пиков в разных линиях
+
+```{r}
+#Сделаем маленький датасет со всем необходимым
+features <- features[ , c("Ensemble_ID", "distance", "peak_Start", "peak_Stop","Cell_line", "Fold_change", "p-value", "q-value")]
+
+final_peaks <- merge(GO_data, features)
+fwrite(final_peaks, "final_peaks.txt")
+rm(features, GO_data)
+```
+Так, теперь посмотрим на те гены, около которых лежат общие бины
+
+Не будем учитывать ничего, просто посмотрим, какие есть
+```{r}
+final_genes <- unique(final_peaks[final_peaks$Biotype == "protein_coding","Gene_symbol"])
+write.csv(final_genes, file = "final_genes.csv", quote = F, row.names = F, col.names = F)
+```
+
+Всего генов вышло - `r length(final_genes)`
+
+
+Вот и славно,все вроде заджойнилось
+Теперь давай-ка глянем на функции, которые у нас вылезли по GO:
+```{r}
+mf_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "molecular_function"))
+
+cc_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "cellular_component"))
+
+bp_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "biological_process"))
+
+head(sort(mf_table, decreasing = T))
+head(sort(bp_table, decreasing = T))
+head(sort(cc_table, decreasing = T))
+rm(mf_table, cc_table, bp_table)
+```
+
+Panther reactome pathways нам говорит, что с p-value 4.78E-02 обогащен apoptosis pathway 
+Это немного странно, надо разбираться.
+
+
+Посмотрим, на то, как распределены гены относительно TSS
+```{r}
+ggplot(final_peaks, aes(distance, ..count..))+
+  geom_density(aes(fill=Cell_line), alpha = 0.5) +
+  labs(title = "Peak position distribution",
+       x = "Position",
+       y = "Peak number")+
+    scale_x_continuous(breaks = seq(-3000, 3000, 500))+
+  theme_bw()
+
+
+
+ggplot(final_peaks[final_peaks$distance!=0,], aes(distance, ..count..))+
+  geom_density(aes(fill=Cell_line), alpha = 0.5) +
+  labs(title = "Peak position distribution",
+       x = "Position",
+       y = "Peak number")+
+    scale_x_continuous(breaks = seq(-3000, 3000, 500))+
+  theme_bw()
+
+```
+Интересный график, понимать буквально я, его, конечно не буду
+
+## Кластеризация
+
+Теперь попробуем раскластерить линии по всем бинам
+```{r}
+#Для того, чтобы все получилось, нужно сделать правильную матричку
+ncells <- length(unique(all_bins$Cell_line))
+nbins <- max(all_bins[,.N, by=Cell_line]$N)
+bins <- matrix(data=NA, nrow = ncells,
+               ncol = nbins,
+               dimnames =list(unique(all_bins$Cell_line)))
+rm(nbins)
+
+#Теперь мы ее заполним
+for (i in unique(all_bins$Cell_line)){
+  length = length(all_bins[Cell_line == i, Peak_Bins])
+  bins[i, 1:length] <- all_bins[Cell_line == i, Peak_Bins]
+}
+
+
+#Теперь можно приступать к кластеризации
+distance <- dist(bins, method = "euclidean") # distance matrix
+fit <- hclust(distance, method="ward")
+plot(fit) # display dendogram
+
+rm(fit, distance, bins)
+gc()
+```
+
+Ну-ка, интересненько!
+Что мы имеем - 3 кластера, достаточно четко очерченных
+Давай разбираться, что к чему
+
+Итак, первый кластер
+
+Клеточная линия  | Количество бинов | Происхождение | 
+------------- | ------------- | -------------
+GM10847 | `r nrow(all_bins[Cell_line =="GM10847", ])`| B-lymphoblastoid, female, caucasian, EBV-transformed   
+GM12892 | `r nrow(all_bins[Cell_line =="GM12892", ])`| B-lymphoblastoid, female, caucasian, EBV-transformed
+GM18951 | `r nrow(all_bins[Cell_line =="GM18951", ])`| B-lymphoblastoid, female, japanese, EBV-transformed
+SGBS | `r nrow(all_bins[Cell_line =="SGBS", ])`| Preadipocytes, primary
+
+Второй кластер
+
+Клеточная линия  | Количество бинов | Происхождение | 
+------------- | ------------- | -------------
+GM12891 | `r nrow(all_bins[Cell_line =="GM12891", ])` | B-lymphoblastoid, male, caucasian, EBV-transformed
+GM19099 | `r nrow(all_bins[Cell_line =="GM19099", ])` | B-lymphoblastoid, female, Yoruba, EBV-transformed
+GM12878 | `r nrow(all_bins[Cell_line =="GM12878", ])` | B-lymphoblastoid, female, caucasian, EBV-transformed 
+HUVEC | `r nrow(all_bins[Cell_line =="HUVEC", ])` |  endothelium, newborn, primary
+
+Третий кластер
+
+Клеточная линия  | Количество бинов | Происхождение | 
+------------- | ------------- | -------------
+A549 | `r nrow(all_bins[Cell_line =="A549", ])` | lung adenocarcinoma, male, caucasian
+IMR90 | `r nrow(all_bins[Cell_line =="IMR90", ])` | lung fibroblast, female, caucasian
+GM15510 | `r nrow(all_bins[Cell_line =="GM15510", ])`| B-lymphoblastoid, ?, ?, EBV-transformed 
+GM18505 | `r nrow(all_bins[Cell_line =="GM18505", ])`|  B-lymphoblastoid, female, Yoruba, EBV-transformed
+
+Не очень понятно, что происходит. Но можно с уверенностью сказать, что не число бинов играет решающую роль.
+Прикольно, что IMR90 и A549 лежат рядом, что как бы намекает, что это связано с происхождением клеток. 
+
+## График по сочетаниям
+
+Теперь построим график, который нам скажет, хватит ли, или надобно еще добавить линий
+
+```{r}
+if (!file.exists("combinations.tsv")){
+  
+#Скрипт может отожрать очень много оперативы, поставим ограничение по памяти в 10гб
+ulimit::memory_limit(10000)
+
+#Сделаем лист с векторами, содержащими бины
+#Имя каждого элемента - имя линии
+bin_vecs <- list()
+for (i in unique(all_bins$Cell_line)){
+  bin_vecs[[i]] <- all_bins[Cell_line == i, Peak_Bins]
+}
+
+#Сделали функцию, которая перебирает все сочетания клеточных линий, заменяет имена линий бинами, и сразу их пересекает
+#На вход она берет количество линий и выдает вектор с количеством общих бинов
+common_bin_number <- function(x){
+  temp <- combn(unique(all_bins$Cell_line), x, 
+                FUN = function(x) bin_vecs[x],
+                simplify = F)
+  temp <- sapply(temp, function(x) length(Reduce(intersect, x)))
+  return(temp)
+}
+common_bin_number <- cmpfun(common_bin_number) # Ускорим эту функцию с помощью bytecode compilation
+
+#Сделаем датафрейм с именами линий в сочетании в каждой ячейке
+#Имя каждого столбца - количество линий в сочетании
+
+comb_df <- matrix(data=NA,
+                  nrow = choose(ncells, ncells %/% 2),     
+                  ncol = ncells,
+                  dimnames = list(NULL, seq(from = 1, to = ncells)))
+comb_df <- as.data.table(comb_df)
+
+#Заполним датафрейм сочетаниями
+#Лучше заменить for на foreach и распараллелить
+
+for (i in 1:ncells){
+  comb_df[[i]][1:choose(ncells, i)] <- common_bin_number(as.numeric(i))
+}
+rm(i)
+#Теперь переформуем в 2-столбчатый датасет
+comb_df <- as.data.table(t(comb_df))
+comb_df$Line_number <- c(1:ncells)
+
+comb_df <- melt(comb_df, id="Line_number")
+comb_df$Bin_numbers <- comb_df$value
+comb_df$variable <- NULL
+comb_df$value <- NULL
+comb_df <- comb_df[!is.na(comb_df$Bin_numbers)]
+
+#Запишем в файл 
+fwrite(comb_df, file = "combinations.tsv", sep = "\t")
+rm(bin_vecs)
+}else{
+  comb_df <- fread("combinations.tsv", "\t")
+}
+```
+
+Теперь, после стольких мучений - давай график строить
+
+```{r, echo=F}
+#Построим графичек
+ggplot(comb_df, aes(x = Line_number, y = Bin_numbers))+
+  geom_jitter(alpha = 0.5, color = "red", size = 1.5, na.rm = T)+
+  #geom_smooth(method = "nls", formula = Bin_numbers ~ a+Line_number/b*Line_number,  se = FALSE, fullrange = TRUE)+
+  labs(title = "Common bin number",
+       x = "Number of lines",
+       y = "Common peak number")+
+  ylim(0, 2e+05)+
+theme_bw()
+```
+```{r}
+comb_df[, mean(Bin_numbers), by = Line_number] 
+```
+Всего вышло `r min(comb_df$Bin_numbers)` общих бинов
+
+##Роль общих бинов в геноме.
+ENCODE consortium сделал карту всех регуляторных элементов генома, исходя из своих данных. 
+Сейчас мы глянем, куда что ложится.
+
+Для этого скачал с ENSEMBL через web Biomart 	
+Данные Human Regulatory Evidence (GRCh38.p10):
+Regulatory features
+Regulatory evidence
+TF binding motifs
+Other regulatory motifs
+miRNA target regions
+
+```{r}
+#Импортируем их как таблицу
+reg_features <- fread("ENSEMBL_data/reg_features.txt")
+miRNA_targets <- fread("ENSEMBL_data/miRNA_targets.txt")
+other_regions <- fread("ENSEMBL_data/other_regions.txt")
+TF_motifs <- fread("ENSEMBL_data/bind_motifs.txt")
+reg_evidence <- fread("ENSEMBL_data/reg_evidence.txt") #Может быть битым
+
+#Приведем все эти файлы к единому виду
+names(reg_features) <- c("Chromosome", "Start", "Stop", "Feature")
+reg_features$Score <- "."
+reg_features <- reg_features[Chromosome %in% c(1:22, "X", "Y")]
+
+
+names(TF_motifs) <- c("Binding_matrix","Chromosome", "Start", "Stop", "Score", "Feature")
+TF_motifs <- TF_motifs[, c("Chromosome", "Start", "Stop", "Feature", "Binding_matrix", "Score")]
+#Сольем 2 колонки Feature и Matrix через |
+TF_motifs$Feature <- paste(TF_motifs$Feature, TF_motifs$Binding_matrix, sep = "|") 
+TF_motifs$Binding_matrix <- NULL
+TF_motifs <- TF_motifs[Chromosome %in% c(1:22, "X", "Y")]
+
+miRNA_targets$`Feature type class` <- NULL
+names(miRNA_targets) <- c("Chromosome", "Start", "Stop", "Feature")
+miRNA_targets$Score <- "."
+miRNA_targets <- miRNA_targets[Chromosome %in% c(1:22, "X", "Y")]
+
+names(other_regions) <- c("Chromosome", "Start", "Stop", "Class", "Feature")
+other_regions$Class <- strsplit(other_regions$Class, " ")
+other_regions$Class <- sapply(other_regions$Class, function(x) x[1]) 
+other_regions[Feature == "Transcription Start Site", Feature := "TSS"]
+other_regions$Feature <- paste(other_regions$Class, other_regions$Feature,  sep = " ")
+other_regions$Score <- "."
+other_regions <- other_regions[Chromosome %in% c(1:22, "X", "Y")]
+other_regions$Class <- NULL
+
+
+reg_evidence$`Feature type class` <- NULL
+names(reg_evidence) <- c("Chromosome", "Start", "Stop", "Feature")
+reg_evidence <- reg_evidence[Chromosome %in% c(1:22, "X", "Y")]
+
+#Объединим все датасеты, кроме reg_evidence, с ним будем отдельно работать, если вообще будем
+reg_features <- rbindlist(list(reg_features, miRNA_targets, TF_motifs, other_regions))
+rm(miRNA_targets, TF_motifs, other_regions)
+
+#Допишем имя хромосомы нормально
+reg_features$Chromosome <- paste("chr", reg_features$Chromosome, sep = "")
+
+#Проверяем на косячки
+sum(reg_features$Start > reg_features$Stop) #Если 0, то все в порядке
+
+#Записываем в файл
+fwrite(reg_features, file = "reg_features.bed", sep = "\t", col.names = FALSE)
+#rm(reg_features)
+```
+
+Как оказывается, у нас есть бины, которые входят в несколько пиков сразу в одной клеточной линии, но их мало - вот сколько
+```{r}
+tmp <- common_bins[,.N, by=.(Peak_Bins, Cell_line)]
+tmp <- tmp[,.N, by=N]
+names(tmp) <- c("occurence", "number")
+tmp
+rm(tmp)
+```
+Теперь сделаем датасет для бинов общих и засунем их в .bed-файл
+```{r}
+cell_line <- common_bins[,.N, by=Cell_line]
+cell_line <- cell_line[N == min(N), Cell_line] #Выбрали линию, в которой минимальное число повторяющихся бинов
+
+bins_for_bed <- common_bins[Cell_line == cell_line[1], .(Chromosome, Peak_Bins), by=Peak_name]
+
+bins_for_bed <- bins_for_bed[ , .(Chromosome, Start = min(Peak_Bins), 
+                                  Stop = max(Peak_Bins)+50), by=Peak_name]
+bins_for_bed <- bins_for_bed[!duplicated(bins_for_bed), ]
+bins_for_bed$Peak_name <- NULL
+fwrite(bins_for_bed, file = "common_bins.bed", sep = "\t", col.names = FALSE)
+rm(cell_line)
+```
+
+
+Ну-ка, посмотрим, что у нас там в этих общих бинах видно
+```{r}
+#Распределение по хромосомам
+ggplot(bins_for_bed, aes(Chromosome, Stop-Start))+
+  geom_boxplot()+
+  theme_bw()+
+  labs(title = "Common regions length distribution",
+       x = "Chromosome",
+       y = "Region length")
+
+#Распределение всех регионов по длинам. Красота же, видно все!
+ggplot(bins_for_bed, aes(x=1 ,Stop-Start))+
+  geom_boxplot()+
+  theme_bw()+
+  labs(title = "Common regions length distribution",
+              y = "Region length")
+
+#Распределение всех регионов по длинам. Красота же, видно все!  
+ggplot(bins_for_bed, aes(Stop-Start, ..count..))+
+  geom_histogram(fill ="red", alpha = 0.5)+
+  theme_bw()+
+  labs(title = "Common regions length distribution",
+              y = "Region length")
+
+#Посмотрим на чиселки
+table(bins_for_bed$Stop - bins_for_bed$Start)
+
+#Видим, что размер этого элемента лежит в области от 150 до 250
+barplot(table(bins_for_bed$Stop - bins_for_bed$Start))
+```
+
+
+Теперь на помощь спешит bedtools closest
+```{r, engine= 'bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/
+#Отсортируем файл с регуляторными фичами
+sort -k 1,1 -k2,2n reg_features.bed > reg_features_sorted.bed
+rm reg_features.bed && mv reg_features_sorted.bed reg_features.bed 
+
+#Отсортируем файл с бинами
+sort -k 1,1 -k2,2n common_bins.bed > common_bins_sorted.bed
+rm common_bins.bed && mv common_bins_sorted.bed common_bins.bed 
+
+#А теперь пошли фичи искать
+closestBed -D b -k 2 -a common_bins.bed -b reg_features.bed > closest_reg_features.bed
+```
+
+Возьмем общие бины, и для этих областей посмотрим регуляторные элементы
+```{r}
+closest_reg_features <- fread("closest_reg_features.bed", sep = "\t")
+names(closest_reg_features) <- c("Chromosome", "peak_Start", "peak_Stop", 
+                             "Chr", "feature_Start", "feature_Stop",  
+                     "Feature_name", "Score", "distance")
+closest_reg_features$Chr <- NULL
+
+#Уберем все то, что лежит далеко, более чем в 600п.н. - если меньше, то спишем на погрешность
+
+closest_reg_features <- subset(closest_reg_features, closest_reg_features$distance<600 & closest_reg_features$distance > -600)
+
+
+#Сгруппируем по каждому общему участку связывания и посмотрим
+summary_reg_features <- closest_reg_features[,.(Features = list(Feature_name)), by = .(Chromosome, peak_Start, peak_Stop)]
+
+#Выкинем дупликации из summary_reg_features
+
+summary_reg_features$Features <- sapply(summary_reg_features$Features, function(x) x[!duplicated(x)])
+
+#Посмотрим по местоположению:
+barplot(table(sapply(summary_reg_features$Features, function(x) x[1])))
+pie(table(sapply(summary_reg_features$Features, function(x) x[1])))
+
+#Видно, что эти куски лежат в промоторах и в promoter-flanking regions, а также есть немного в энхансерах
+temp <- gsub("\\|.*", "", unlist(summary_reg_features$Features)) 
+top_features <- as.data.table(table(temp))
+names(top_features) <- c("Feature", "occurence")
+top_features[order(-rank(occurence))]
+rm(temp, top_features)
+
+#Теперь посмотрим, как обстоят дела с длинами участков, и есть ли в них kb-сайты. Возможно, что у нас остались огрызки, в которых нет kb-сайтов.
+
+summary_reg_features$kb_occurence <- grepl("NFKB\\|MA.*", summary_reg_features$Features)
+
+ggplot(summary_reg_features, aes(summary_reg_features$kb_occurence, summary_reg_features$peak_Stop - summary_reg_features$peak_Start))+
+  geom_boxplot()+
+  theme_bw()
+
+#Ну в общем-то да, так и оказалось, что там, где kb-сайтов нет, там огрызки от пересечений.
+
+#Теперь посмотрим на то, как обогащены термины в той и другой группе
+temp <- gsub("\\|.*", "", unlist(summary_reg_features[kb_occurence == TRUE, Features])) 
+site <- as.data.table(table(temp))
+names(site) <- c("Feature", "site")
+
+temp <- gsub("\\|.*", "", unlist(summary_reg_features[kb_occurence == FALSE, Features])) 
+no_site <- as.data.table(table(temp))
+names(no_site) <- c("Feature", "no_site")
+
+top_features <- (merge(x = site, y = no_site, by = "Feature", all = T))
+top_features[is.na(top_features)] <- 0
+top_features[order(site ,decreasing = T)]
+rm(temp, site, no_site)
+```
+
+Ну что, мы видим что, по большому счету не отличаются по встречаемости фичи в участках с сайтами и без них.
+
+Поэтому, вполне вероятно, что у нас есть артефакт пересечений и при пересечении kb-сайты просто обрезались
+
+Чтобы избавиться от этого, нарастим до 500 нуклеотидов участки без сайтов и определим, поменялось ли что-то
+
+```{r peak_elongation}
+# Отберем для начала те, где нет kb-сайтов из closest_reg_features
+bin_500_features <- summary_reg_features[kb_occurence==FALSE, .(Chromosome, peak_Start, peak_Stop)]
+bin_500_features$new_start <- bin_500_features$peak_Start - (500 - (bin_500_features$peak_Stop - bin_500_features$peak_Start))/2
+bin_500_features$new_stop <- bin_500_features$peak_Stop + (500 - (bin_500_features$peak_Stop - bin_500_features$peak_Start))/2
+bin_500_features$new_stop - bin_500_features$new_start == 500 #Проверили, все ли у нас получилось
+
+# Сделаем .bed
+bin_500_features$peak_Start <- bin_500_features$peak_Stop <- NULL
+fwrite(bin_500_features, file = "nosite_bins.bed", sep = "\t", col.names = FALSE)
+```
+
+Теперь давай фичи посмотрим
+
+```{r, engine= 'bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/
+
+#Отсортируем файл с бинами
+sort -k 1,1 -k2,2n nosite_bins.bed > nosite_bins_sorted.bed
+rm nosite_bins.bed && mv nosite_bins_sorted.bed nosite_bins.bed 
+
+#А теперь пошли фичи искать
+closestBed -D b -k 2 -a nosite_bins.bed -b reg_features.bed > nosite_reg_features.bed
+```
+
+Смотрим, что вышло
+
+```{r}
+bin_500_features <- fread("nosite_reg_features.bed", sep = "\t")
+names(bin_500_features) <- c("Chromosome", "peak_Start", "peak_Stop", 
+                             "Chr", "feature_Start", "feature_Stop",  
+                     "Feature_name", "Score", "distance")
+bin_500_features$Chr <- NULL
+
+#Уберем все то, что лежит далеко, более чем в 600п.н. - если меньше, то спишем на погрешность
+
+bin_500_features <- subset(bin_500_features, bin_500_features$distance<600 & bin_500_features$distance > -600)
+
+
+#Сгруппируем по каждому общему участку связывания и посмотрим
+temp_reg_features <- bin_500_features[,.(Features = list(Feature_name)), by = .(Chromosome, peak_Start, peak_Stop)]
+
+#Выкинем дупликации из summary_reg_features
+
+temp_reg_features$Features <- sapply(temp_reg_features$Features, function(x) x[!duplicated(x)])
+
+temp <- gsub("\\|.*", "", unlist(temp_reg_features$Features)) 
+temp <- as.data.table(table(temp))
+names(temp) <- c("Feature", "occurence")
+temp[order(occurence ,decreasing = T)]
+
+rm(temp, bin_500_features)
+```
+
+Теперь попробуем нарастить все сайты до 500 нуклеотидов без разбора и посмотрим, что выйдет
+
+```{r}
+# Отберем для начала те, где нет kb-сайтов из closest_reg_features
+summary_reg_features$new_start <- summary_reg_features$peak_Start - 
+  (500 - (summary_reg_features$peak_Stop - summary_reg_features$peak_Start))/2
+summary_reg_features$new_stop <- summary_reg_features$peak_Stop +
+  (500 - (summary_reg_features$peak_Stop - summary_reg_features$peak_Start))/2
+summary_reg_features$new_stop - summary_reg_features$new_start == 500 #Проверили, все ли у нас получилось
+
+# Сделаем .bed
+summary_reg_features$peak_Start <- summary_reg_features$peak_Stop <- summary_reg_features$kb_occurence <- NULL
+summary_reg_features <- summary_reg_features[, .(Chromosome, new_start, new_stop, Features)]
+fwrite(summary_reg_features, file = "500_bins.bed", sep = "\t", col.names = FALSE)
+```
+
+Теперь давай фичи посмотрим
+
+```{r, engine= 'bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/
+
+#Отсортируем файл с бинами
+sort -k 1,1 -k2,2n 500_bins.bed > 500_bins_sorted.bed
+rm 500_bins.bed && mv 500_bins_sorted.bed 500_bins.bed 
+
+#А теперь пошли фичи искать
+closestBed -D b -k 2 -a 500_bins.bed -b reg_features.bed > 500_bins_reg_features.bed
+```
+
+Смотрим, что вышло
+
+```{r}
+bin_500_features <- fread("500_bins_reg_features.bed", sep = "\t")
+bin_500_features$V4 <- NULL
+names(bin_500_features) <- c("Chromosome", "peak_Start", "peak_Stop", 
+                             "Chr", "feature_Start", "feature_Stop",  
+                     "Feature_name", "Score", "distance")
+bin_500_features$Chr <- NULL
+
+#Уберем все то, что лежит далеко, более чем в 600п.н. - если меньше, то спишем на погрешность
+
+bin_500_features <- subset(bin_500_features, bin_500_features$distance<600 & bin_500_features$distance > -600)
+
+
+#Сгруппируем по каждому общему участку связывания и посмотрим
+bin_500_reg_features <- bin_500_features[,.(Features = list(Feature_name)), by = .(Chromosome, peak_Start, peak_Stop)]
+
+#Выкинем дупликации из summary_reg_features
+
+bin_500_reg_features$Features <- sapply(bin_500_reg_features$Features, function(x) x[!duplicated(x)])
+
+temp <- gsub("\\|.*", "", unlist(bin_500_reg_features$Features)) 
+temp <- as.data.table(table(temp))
+names(temp) <- c("Feature", "occurence")
+temp[order(occurence ,decreasing = T)]
+
+rm(temp, temp_reg_features)
+```
+ОК, лады, kB-сайты не появились, попробуем прогнать последовательности через MEME
+
+```{r bed to fasta ,engine='bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/
+bedtools getfasta -fo 500_bins.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed ~/R_stuff/ENCODE_NF-kB_peaks/500_bins.bed
+```
+
+##Нормальная аннотация по ближайшим TSS
+
+Проанализируем полученные участки по ближайшим генам
+Оценим расстояние до ближайшего старт-кодона, его будем определять как первый нуклеотид транскрипта
+Достанем для начала из аннотации все транскрипты и запишем их в отдельный .bed 
+
+```{r}
+start_codons_v24 <- annotation_v24[annotation_v24$Type == "transcript"]
+start_codons_v24$Type <- NULL
+#Добавим по 10 нуклеотидов к старту, чтобы нормально съел bedtools
+start_codons_v24$Stop <- start_codons_v24$Start + 10
+
+#Проверяем на косячки
+sum(start_codons_v24$Start > start_codons_v24$Stop) #Если 0, то все в порядке
+
+#Запишем в файл
+fwrite(start_codons_v24, file = "start_codons.bed", sep = "\t", col.names = FALSE)
+```
+
+bedtools closest
+```{r, engine= 'bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/
+#Отсортируем файл с регуляторными фичами
+sort -k 1,1 -k2,2n start_codons.bed > start_codons_sorted.bed
+rm start_codons.bed && mv start_codons_sorted.bed start_codons.bed 
+
+#А теперь найдем ближайшие TSS
+closestBed -D b -k 2 -a common_bins.bed -b start_codons.bed > closest_start_codons.bed
+```
+
+Посмотрим, что же вышло
+```{r}
+closest_TSS <- fread("closest_start_codons.bed", sep = "\t")
+names(closest_TSS) <- c("Chromosome", "peak_Start", "peak_Stop", 
+                             "Chr", "feature_Start", "feature_Stop",  
+                     "Strand", "Ensemble_ID", "distance")
+closest_TSS$Chr <- NULL
+
+#Удалим хвостики у названий транскриптов
+closest_TSS$Ensemble_ID <- gsub("\\:\\d+", "", closest_TSS$Ensemble_ID)
+
+#Уберем дупликаты
+closest_TSS <- closest_TSS[!duplicated(closest_TSS)]
+
+#Упорядочим нормально хромосомки, чтобы было красиво
+closest_TSS$Chromosome <- factor(closest_TSS$Chromosome, 
+                                   levels =c("chr1","chr2","chr3","chr4","chr5",
+                                             "chr6","chr7","chr8","chr9","chr10",
+                                             "chr11", "chr12", "chr13", "chr14", "chr15",
+                                             "chr16", "chr17", "chr18", "chr19", "chr20",
+                                             "chr21", "chr22", "chrX", "chrY"))
+
+#Построим график, чтобы понимать распределение этих участков относительно TSS
+
+ggplot(closest_TSS, aes(distance))+
+  geom_histogram(fill = "red", alpha = 0.5)+
+  labs(title = "Peak position distribution",
+       x = "Position",
+       y = "Peak number")+
+  theme_bw()
+
+
+ggplot(closest_TSS, aes(Chromosome, distance))+
+  geom_boxplot()+
+  labs(title = "Peak position distribution",
+       x = "Position",
+       y = "Peak number")+
+    #scale_x_continuous(breaks = seq(-3000, 3000, 500))+
+  theme_bw()
+
+```
+Что-то сайты вокруг TSS примерно распределены.
+
+##Консенсусные сайты.
+Теперь настает время расковыривать консенсусную последовательность.
+
+Для начала попробуем посмотреть, не раскластерятся ли они на 2 группы по последовательностям?
+
+Для этого выгрузим последовательности в common_bins.fasta
+Запустим для этого bedtools
+
+```{r bed to fasta ,engine='bash'}
+bedtools getfasta -fo common_bins.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed ~/R_stuff/ENCODE_NF-kB_peaks/common_bins.bed
+```
+
+Не раскластерились, все эти последовательности довольно-таки разные.
+

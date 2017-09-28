@@ -1,0 +1,72 @@
+
+GIMSAN (GIbbsMarkov Significance ANalysis) README
+=================================================
+last updated: August 30, 2010
+
+GIMSAN (GIbbsMarkov with Significance ANalysis) is a novel tool for de novo motif finding:
+
+    * Hybrid Gibbs sampler for motif finding that uses a Bayesian prior on the percentage of sequences containing 
+      sites but uses a maximum likelihood approach on the motif matrix
+    * Biologically realistic and reliable statistical significance analysis
+          o Using a 3-Gamma approximation scheme
+          o Factoring local sequence composition information
+          o Reports an approximate 95% confidence interval of the point estimator of the motif p-value 
+    * Can be used to select the optimal width from a range of motif widths based on our significance analysis
+	* NEW Column pair dependency estimated using a Monte-Carlo scheme 
+
+
+REFERENCE
+=========
+If you use this program in your research, please cite:
+
+Patrick Ng, Uri Keich. GIMSAN: A Gibbs motif finder with significance analysis. Bioinformatics, In press. 
+
+
+REQUIREMENTS
+============
+1. Perl 5.8.5 or later
+2. R command line version 2.6.1 or later (http://www.r-project.org/). 
+   If you are using Mac OS X, see FAQ from www.r-project.org to setup the command line version.
+
+
+INSTALLATION
+============
+1. Extract GIMSAN into a directory of your choice: e.g. <GIMSAN_HOME>
+
+2. Change your current working directory to <GIMSAN_HOME>/gimsan_cmdline/
+
+3. Run "bash install.sh". GibbsMarkov should have been compiled, and the tarball of weblogo should have been extracted.
+
+4. Set GIMSAN environment variable as your <GIMSAN_HOME>/gimsan_cmdline/. 
+   For example, you can initialize the environment variable in Bash by:
+
+         export GIMSAN=~/gimsan/gimsan-cmdline/
+
+5. Set R_BIN environment variable as the directory where R is located. 
+   For example, you can initialize the environment variable in Bash by:
+
+         export R_BIN=/usr/local/bin/
+
+
+USING GIMSAN
+============
+There are two main scripts: gimsan_submit_job.pl and gimsan_result.pl
+You can find their help menu and examples by running either scripts without any arguments. 
+
+1. gimsan_submit_job.pl - submits a GIMSAN job on your current machine or on a cluster via qsub. 
+   Get help by "./gimsan_submit_job.pl" or "perl gimsan_submit_job.pl"
+
+2. gimsan_result.pl - generates a html output of a GIMSAN job and performs motif significance evaluation
+   Get help by "./gimsan_result.pl" or "perl gimsan_result.pl"
+
+CHANGLOG
+========
+
+2010/8/30: Fixed issue with missing psprior
+
+QUESTIONS
+=========
+Visit GIMSAN homepage at http://www.cs.cornell.edu/~ppn3/gimsan/
+
+Please send any questions, comments, or suggestions to ppn3@cs.cornell.edu
+

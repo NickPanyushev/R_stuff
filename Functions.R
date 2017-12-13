@@ -45,3 +45,73 @@ bin.peaks <- function(dataframe, window_size = 50, append = TRUE)
     return(bin_vector)
   }
 }
+
+#Функция, которая пересекает все бины в сочетаниях от 1 до пересечь все и считает количество общих
+#Берет на вход датафрейм с бинами, которые надо пересечь. Возвращает файл .tsv - с таблицей
+library(compiler)
+bins_intersect <- function(df){
+  library(data.table, quietly = T)
+  library(parallel)
+  
+  # Initiate cluster
+  cl <- makeCluster(detectCores() - 1)
+  
+  #Поставим ограничение по памяти в 10гб
+  if (.Platform$OS.type == "unix"){
+    ulimit::memory_limit(10000) 
+  }
+  if (.Platform$OS.type == "windows"){
+    memory.limit(size = 10000) 
+  }
+  
+  #Сделаем лист с векторами, содержащими бины
+  #Имя каждого элемента - имя линии
+  bin_vecs <- list()
+  for (i in unique(df$Cell_line)){
+    bin_vecs[[i]] <- df[Cell_line == i, Peak_Bins]
+  }
+  
+  #Функция, которая перебирает все сочетания клеточных линий, заменяет имена линий бинами, и сразу их пересекает
+  #На вход она берет количество линий и выдает вектор с количеством общих бинов
+  common_bin_number <- function(x){
+    temp <- combn(unique(df$Cell_line), x, 
+                  FUN = function(x) bin_vecs[x],
+                  simplify = F)
+    temp <- sapply(temp, function(x) length(Reduce(intersect, x)))
+    
+    return(temp)
+  }
+  
+  #Сделаем датафрейм с именами линий в сочетании в каждой ячейке
+  #Имя каждого столбца - количество линий в сочетании
+  ncells <- length(unique(df$Cell_line))
+  comb_df <- matrix(data=NA,
+                    nrow = choose(ncells, ncells %/% 2),     
+                    ncol = ncells,
+                    dimnames = list(NULL, seq(from = 1, to = ncells)))
+  comb_df <- as.data.table(comb_df)
+
+  #Заполним датафрейм сочетаниями, с помощью функции common_bin_number
+  
+  for (i in 1:ncells){
+    comb_df[[i]][1:choose(ncells, i)] <- common_bin_number(as.numeric(i))
+  }
+  rm(i)
+  stopCluster(cl)
+  registerDoSEQ()
+  #Теперь переформуем в 2-столбчатый датасет
+  comb_df <- as.data.table(t(comb_df))
+  comb_df$Line_number <- c(1:ncells)
+
+  comb_df <- melt(comb_df, id="Line_number")
+  comb_df$Bin_numbers <- comb_df$value
+  comb_df$variable <- NULL
+  comb_df$value <- NULL
+  comb_df <- comb_df[!is.na(comb_df$Bin_numbers)]
+
+  #Запишем в файл
+  fwrite(comb_df, file = "combinations.tsv", sep = "\t")
+  print("Bins combinations were successfully written to combinations.tsv")
+  rm(bin_vecs, comb_df, cl)
+}
+bins_intersect <- cmpfun(bins_intersect) # Bytecode compilation  

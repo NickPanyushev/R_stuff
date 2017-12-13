@@ -1,9 +1,3 @@
----
-output:
-  word_document: default
-  html_document: default
----
----)`
 title: "ENCODE_NF-kB"
 author: "Панюшев Николай"
 date: '15 мая 2017 г '
@@ -20,11 +14,7 @@ output: html_document
 
 ```{r libraries import, echo=F, warning=FALSE, message=FALSE}
 library(ggplot2)
-library(corrplot)
 library(tidyr)
-library(VennDiagram)
-#library(stargazer)
-
 library(dplyr)
 library(data.table)
 library(compiler)
@@ -412,131 +402,17 @@ ggplot(final_peaks[final_peaks$distance!=0,], aes(distance, ..count..))+
 ```
 Интересный график, понимать буквально я, его, конечно не буду
 
-## Кластеризация
 
-Теперь попробуем раскластерить линии по всем бинам
-```{r}
-#Для того, чтобы все получилось, нужно сделать правильную матричку
-ncells <- length(unique(all_bins$Cell_line))
-nbins <- max(all_bins[,.N, by=Cell_line]$N)
-bins <- matrix(data=NA, nrow = ncells,
-               ncol = nbins,
-               dimnames =list(unique(all_bins$Cell_line)))
-rm(nbins)
-
-#Теперь мы ее заполним
-for (i in unique(all_bins$Cell_line)){
-  length = length(all_bins[Cell_line == i, Peak_Bins])
-  bins[i, 1:length] <- all_bins[Cell_line == i, Peak_Bins]
-}
-
-
-#Теперь можно приступать к кластеризации
-distance <- dist(bins, method = "euclidean") # distance matrix
-fit <- hclust(distance, method="ward")
-plot(fit) # display dendogram
-
-rm(fit, distance, bins)
-gc()
-```
-
-Ну-ка, интересненько!
-Что мы имеем - 3 кластера, достаточно четко очерченных
-Давай разбираться, что к чему
-
-Итак, первый кластер
-
-Клеточная линия  | Количество бинов | Происхождение | 
-------------- | ------------- | -------------
-GM10847 | `r nrow(all_bins[Cell_line =="GM10847", ])`| B-lymphoblastoid, female, caucasian, EBV-transformed   
-GM12892 | `r nrow(all_bins[Cell_line =="GM12892", ])`| B-lymphoblastoid, female, caucasian, EBV-transformed
-GM18951 | `r nrow(all_bins[Cell_line =="GM18951", ])`| B-lymphoblastoid, female, japanese, EBV-transformed
-SGBS | `r nrow(all_bins[Cell_line =="SGBS", ])`| Preadipocytes, primary
-
-Второй кластер
-
-Клеточная линия  | Количество бинов | Происхождение | 
-------------- | ------------- | -------------
-GM12891 | `r nrow(all_bins[Cell_line =="GM12891", ])` | B-lymphoblastoid, male, caucasian, EBV-transformed
-GM19099 | `r nrow(all_bins[Cell_line =="GM19099", ])` | B-lymphoblastoid, female, Yoruba, EBV-transformed
-GM12878 | `r nrow(all_bins[Cell_line =="GM12878", ])` | B-lymphoblastoid, female, caucasian, EBV-transformed 
-HUVEC | `r nrow(all_bins[Cell_line =="HUVEC", ])` |  endothelium, newborn, primary
-
-Третий кластер
-
-Клеточная линия  | Количество бинов | Происхождение | 
-------------- | ------------- | -------------
-A549 | `r nrow(all_bins[Cell_line =="A549", ])` | lung adenocarcinoma, male, caucasian
-IMR90 | `r nrow(all_bins[Cell_line =="IMR90", ])` | lung fibroblast, female, caucasian
-GM15510 | `r nrow(all_bins[Cell_line =="GM15510", ])`| B-lymphoblastoid, ?, ?, EBV-transformed 
-GM18505 | `r nrow(all_bins[Cell_line =="GM18505", ])`|  B-lymphoblastoid, female, Yoruba, EBV-transformed
-
-Не очень понятно, что происходит. Но можно с уверенностью сказать, что не число бинов играет решающую роль.
-Прикольно, что IMR90 и A549 лежат рядом, что как бы намекает, что это связано с происхождением клеток. 
 
 ## График по сочетаниям
 
-Теперь построим график, который нам скажет, хватит ли, или надобно еще добавить линий
-
+Теперь построим график по количеству бинов во всех возможных пересечениях
 ```{r}
 if (!file.exists("combinations.tsv")){
-  
-#Скрипт может отожрать очень много оперативы, поставим ограничение по памяти в 10гб
-ulimit::memory_limit(10000)
-
-#Сделаем лист с векторами, содержащими бины
-#Имя каждого элемента - имя линии
-bin_vecs <- list()
-for (i in unique(all_bins$Cell_line)){
-  bin_vecs[[i]] <- all_bins[Cell_line == i, Peak_Bins]
+  bins_intersect(all_bins)
 }
-
-#Сделали функцию, которая перебирает все сочетания клеточных линий, заменяет имена линий бинами, и сразу их пересекает
-#На вход она берет количество линий и выдает вектор с количеством общих бинов
-common_bin_number <- function(x){
-  temp <- combn(unique(all_bins$Cell_line), x, 
-                FUN = function(x) bin_vecs[x],
-                simplify = F)
-  temp <- sapply(temp, function(x) length(Reduce(intersect, x)))
-  return(temp)
-}
-common_bin_number <- cmpfun(common_bin_number) # Ускорим эту функцию с помощью bytecode compilation
-
-#Сделаем датафрейм с именами линий в сочетании в каждой ячейке
-#Имя каждого столбца - количество линий в сочетании
-
-comb_df <- matrix(data=NA,
-                  nrow = choose(ncells, ncells %/% 2),     
-                  ncol = ncells,
-                  dimnames = list(NULL, seq(from = 1, to = ncells)))
-comb_df <- as.data.table(comb_df)
-
-#Заполним датафрейм сочетаниями
-#Лучше заменить for на foreach и распараллелить
-
-for (i in 1:ncells){
-  comb_df[[i]][1:choose(ncells, i)] <- common_bin_number(as.numeric(i))
-}
-rm(i)
-#Теперь переформуем в 2-столбчатый датасет
-comb_df <- as.data.table(t(comb_df))
-comb_df$Line_number <- c(1:ncells)
-
-comb_df <- melt(comb_df, id="Line_number")
-comb_df$Bin_numbers <- comb_df$value
-comb_df$variable <- NULL
-comb_df$value <- NULL
-comb_df <- comb_df[!is.na(comb_df$Bin_numbers)]
-
-#Запишем в файл 
-fwrite(comb_df, file = "combinations.tsv", sep = "\t")
-rm(bin_vecs)
-}else{
-  comb_df <- fread("combinations.tsv", "\t")
-}
+comb_df <- fread("combinations.tsv", "\t")
 ```
-
-Теперь, после стольких мучений - давай график строить
 
 ```{r, echo=F}
 #Построим графичек
@@ -821,7 +697,7 @@ summary_reg_features$new_stop - summary_reg_features$new_start == 500 #Пров�
 
 # Сделаем .bed
 summary_reg_features$peak_Start <- summary_reg_features$peak_Stop <- summary_reg_features$kb_occurence <- NULL
-summary_reg_features <- summary_reg_features[, .(Chromosome, new_start, new_stop, Features)]
+summary_reg_features <- summary_reg_features[, .(Chromosome, new_start, new_stop)]
 fwrite(summary_reg_features, file = "500_bins.bed", sep = "\t", col.names = FALSE)
 ```
 

@@ -1,14 +1,26 @@
 ---
-title: "Clusrtering"
+title: "Clustering"
 author: "Панюшев Николай"
 date: '8 декабря 2017 г '
 output: html_document
 ---
 
-#Кластеризация
+```{r, warning=FALSE, error=FALSE, message=FALSE}
+setwd(dir = "~/R_stuff/ENCODE_NF-kB_peaks/")
+library(ggplot2)
+library(dplyr)
+library(data.table)
+```
 
-Попробуем раскластерить линии по всем бинам
-```{r}
+Импортнем all_bins
+```{r,  warning=FALSE, error=FALSE, message=FALSE, results='hide'}
+unzip(zipfile = "all_bins.zip")
+all_bins <- fread("all_bins.tsv")
+file.remove("all_bins.tsv")
+```
+
+Теперь давай кластерить линии по всем бинам
+```{r, message=FALSE, warning=FALSE}
 #Для того, чтобы все получилось, нужно сделать правильную матричку
 ncells <- length(unique(all_bins$Cell_line))
 nbins <- max(all_bins[,.N, by=Cell_line]$N)
@@ -30,7 +42,6 @@ fit <- hclust(distance, method="ward")
 plot(fit) # display dendogram
 
 rm(fit, distance, bins)
-gc()
 ```
 
 Ну-ка, интересненько!
@@ -41,19 +52,20 @@ gc()
 
 Клеточная линия  | Количество бинов | Происхождение | 
 ------------- | ------------- | -------------
-GM10847 | `r nrow(all_bins[Cell_line =="GM10847", ])`| B-lymphoblastoid, female, caucasian, EBV-transformed   
-GM12892 | `r nrow(all_bins[Cell_line =="GM12892", ])`| B-lymphoblastoid, female, caucasian, EBV-transformed
-GM18951 | `r nrow(all_bins[Cell_line =="GM18951", ])`| B-lymphoblastoid, female, japanese, EBV-transformed
-SGBS | `r nrow(all_bins[Cell_line =="SGBS", ])`| Preadipocytes, primary
+GM12891 | `r nrow(all_bins[Cell_line =="GM12891", ])` | B-lymphoblastoid, male, caucasian, EBV-transformed
+Beas | `r nrow(all_bins[Cell_line =="Beas", ])` | bronchus, male, caucasian, epitelial virus transformed
+GM19099 | `r nrow(all_bins[Cell_line =="GM19099", ])` | B-lymphoblastoid, female, Yoruba, EBV-transformed
+GM12878 | `r nrow(all_bins[Cell_line =="GM12878", ])` | B-lymphoblastoid, female, caucasian, EBV-transformed 
+HUVEC | `r nrow(all_bins[Cell_line =="HUVEC", ])` |  endothelium, newborn, primary
 
 Второй кластер
 
 Клеточная линия  | Количество бинов | Происхождение | 
 ------------- | ------------- | -------------
-GM12891 | `r nrow(all_bins[Cell_line =="GM12891", ])` | B-lymphoblastoid, male, caucasian, EBV-transformed
-GM19099 | `r nrow(all_bins[Cell_line =="GM19099", ])` | B-lymphoblastoid, female, Yoruba, EBV-transformed
-GM12878 | `r nrow(all_bins[Cell_line =="GM12878", ])` | B-lymphoblastoid, female, caucasian, EBV-transformed 
-HUVEC | `r nrow(all_bins[Cell_line =="HUVEC", ])` |  endothelium, newborn, primary
+GM10847 | `r nrow(all_bins[Cell_line =="GM10847", ])`| B-lymphoblastoid, female, caucasian, EBV-transformed   
+GM12892 | `r nrow(all_bins[Cell_line =="GM12892", ])`| B-lymphoblastoid, female, caucasian, EBV-transformed
+GM18951 | `r nrow(all_bins[Cell_line =="GM18951", ])`| B-lymphoblastoid, female, japanese, EBV-transformed
+SGBS | `r nrow(all_bins[Cell_line =="SGBS", ])`| Preadipocytes, primary
 
 Третий кластер
 
@@ -61,8 +73,9 @@ HUVEC | `r nrow(all_bins[Cell_line =="HUVEC", ])` |  endothelium, newborn, prima
 ------------- | ------------- | -------------
 A549 | `r nrow(all_bins[Cell_line =="A549", ])` | lung adenocarcinoma, male, caucasian
 IMR90 | `r nrow(all_bins[Cell_line =="IMR90", ])` | lung fibroblast, female, caucasian
+AC16 | `r nrow(all_bins[Cell_line =="AC16", ])` | Cardiomyocyte fused with transformed fibroblasts, female, ?
 GM15510 | `r nrow(all_bins[Cell_line =="GM15510", ])`| B-lymphoblastoid, ?, ?, EBV-transformed 
 GM18505 | `r nrow(all_bins[Cell_line =="GM18505", ])`|  B-lymphoblastoid, female, Yoruba, EBV-transformed
 
-Не очень понятно, что происходит. Но можно с уверенностью сказать, что не число бинов играет решающую роль.
-Прикольно, что IMR90 и A549 лежат рядом, что как бы намекает, что это связано с происхождением клеток. 
+Не очень понятно, что происходит. 
+Прикольно, что IMR90 и A549 лежат рядом, что может намекать, что это связано с происхождением клеток. А так-то у них просто очень совпадает количество бинов. 

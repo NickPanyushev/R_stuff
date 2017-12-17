@@ -1,0 +1,165 @@
+---
+title: "Data_preparation"
+author: "Панюшев Николай"
+date: '16 декабря 2017 г '
+output: html_document
+---
+
+```{r libraries import, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/")
+source("~/R_stuff/Functions.R")
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(data.table)
+```
+
+## Импорт и контроль качества данных
+
+Теперь считаем файлы с пиками с помощью read.narrowpeak из Functions.R
+
+```{r file read, warning=FALSE}
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/Raw_files/")
+GM10847_peaks <- read.narrowpeak("GM10847_p65vsInput_TNFa_peaks.narrowPeak")
+GM12878_peaks <- read.narrowpeak("GM12878_p65vsInput_TNFa_peaks.narrowPeak")
+GM12891_peaks <- read.narrowpeak("GM12891_p65vsInput_TNFa_peaks.narrowPeak")
+GM12892_peaks <- read.narrowpeak("GM12892_p65vsInput_TNFa_peaks.narrowPeak")
+GM15510_peaks <- read.narrowpeak("GM15510_p65vsInput_TNFa_peaks.narrowPeak")
+GM18505_peaks <- read.narrowpeak("GM18505_p65vsInput_TNFa_peaks.narrowPeak")
+GM18526_peaks <- read.narrowpeak("GM18526_p65vsInput_TNFa_peaks.narrowPeak")
+GM18951_peaks <- read.narrowpeak("GM18951_p65vsInput_TNFa_peaks.narrowPeak")
+GM19099_peaks <- read.narrowpeak("GM19099_p65vsInput_TNFa_peaks.narrowPeak")
+Beas_peaks <- read.narrowpeak("Beas_TNFvsInput_peaks.narrowPeak")
+AC16_peaks <- read.narrowpeak("AC16_TNFvsAsis_peaks.narrowPeak")
+A549_peaks <- read.narrowpeak("A549_TNF_vs_bg_peaks.narrowPeak")
+HUVEC_peaks <- read.narrowpeak("HUVEC_TNFvsASIS_peaks.narrowPeak")
+IMR90_peaks <- read.narrowpeak("IMR90_TNFvsASIS_peaks.narrowPeak")
+SGBS_peaks <- read.narrowpeak("SGBS_TNFvsVeh_peaks.narrowPeak")
+```
+
+Итак, количество пиков по линиям (РАСКРАСИВИТЬ ТАБЛИЧКУ)
+
+A549 | `r nrow(A549_peaks)`  
+AC16 | `r nrow(AC16_peaks)`   
+Beas | `r nrow(Beas_peaks)`  
+HUVEC | `r nrow(HUVEC_peaks)`  
+IMR90 | `r nrow(IMR90_peaks)`  
+SGBS | `r nrow(SGBS_peaks)`  
+GM10847 | `r nrow(GM10847_peaks)`  
+GM12878 | `r nrow(GM12878_peaks)`  
+GM12891 | `r nrow(GM12891_peaks)`  
+GM12892 | `r nrow(GM12892_peaks)`  
+GM15510 | `r nrow(GM15510_peaks)`  
+GM18505 | `r nrow(GM18505_peaks)`  
+GM18526 | `r nrow(GM18526_peaks)`  
+GM18951 | `r nrow(GM18951_peaks)`  
+GM19099 | `r nrow(GM19099_peaks)`  
+
+Выглядит несколько подозрительно, очень большой разброс! 
+
+Поглядим на графики
+
+Клеточная линия  | Количество пиков | Распределение ридов
+------------- | ------------- | -------------
+GM10847 | `r nrow(GM10847_peaks)`| `r knitr::include_graphics("Peak_pics/GM10847_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM12878 | `r nrow(GM12878_peaks)`|`r knitr::include_graphics("Peak_pics/GM12878_p65vsInput_TNFa_model-0.png", dpi = 200)`
+GM12891 | `r nrow(GM12891_peaks)`|`r knitr::include_graphics("Peak_pics/GM12891_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM12892 | `r nrow(GM12892_peaks)`|`r knitr::include_graphics("Peak_pics/GM12892_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM15510 | `r nrow(GM15510_peaks)`|`r knitr::include_graphics("Peak_pics/GM15510_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM18505 | `r nrow(GM18505_peaks)`|`r knitr::include_graphics("Peak_pics/GM18505_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM18951 | `r nrow(GM18951_peaks)`| `r knitr::include_graphics("Peak_pics/GM18951_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+GM19099 | `r nrow(GM19099_peaks)`| `r knitr::include_graphics("Peak_pics/GM19099_p65vsInput_TNFa_model-0.png", dpi = 200)`  
+BEAS | `r nrow(Beas_peaks)`| `r knitr::include_graphics("Peak_pics/Beas_TNFvsInput_model-0.png", dpi = 200)`  
+AC16 | `r nrow(AC16_peaks)`| `r knitr::include_graphics("Peak_pics/AC16_TNFvsAsis_model-0.png", dpi = 200)`  
+
+Ну в принципе, везде нормально c небольшими допущениями
+
+А все остальные сложим в одну data.table
+И добавим туда наши линии из предыдущего проекта.
+```{r merge peaks}
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/Raw_files/")
+
+rm(GM18526_peaks)
+
+AC16_peaks$Cell_line <- "AC16"
+A549_peaks$Cell_line <- "A549"
+Beas_peaks$Cell_line <- "Beas"
+HUVEC_peaks$Cell_line <- "HUVEC"
+IMR90_peaks$Cell_line <- "IMR90"
+SGBS_peaks$Cell_line <- "SGBS"
+
+GM10847_peaks$Cell_line <- "GM10847"
+GM12878_peaks$Cell_line <- "GM12878"
+GM12891_peaks$Cell_line <- "GM12891"
+GM12892_peaks$Cell_line <- "GM12892"
+GM15510_peaks$Cell_line <- "GM15510"
+GM18505_peaks$Cell_line <- "GM18505"
+GM18951_peaks$Cell_line <- "GM18951"
+GM19099_peaks$Cell_line <- "GM19099"
+
+all_peaks <- rbindlist(list(GM10847_peaks, GM12878_peaks, GM12891_peaks, 
+                            GM12892_peaks, GM15510_peaks, GM18505_peaks,
+                            GM18951_peaks, GM19099_peaks, A549_peaks,
+                            HUVEC_peaks, IMR90_peaks, SGBS_peaks,
+                            Beas_peaks, AC16_peaks))
+
+rm(GM10847_peaks, GM12878_peaks, GM12891_peaks, 
+                            GM12892_peaks, GM15510_peaks, GM18505_peaks,
+                            GM18951_peaks, GM19099_peaks, A549_peaks,
+                            HUVEC_peaks, IMR90_peaks, SGBS_peaks,
+                            Beas_peaks, AC16_peaks)
+```
+
+Позабавимся гистограммками!
+
+Гистограммка по fold_change дает странные результаты, но вполне объяснимые
+```{r fold_change analysis, echo=FALSE}
+ggplot(all_peaks, aes(fold_change, ..count.., fill = Chromosome))+
+  geom_density(aes(fill=Chromosome), alpha = 0.5) +
+  labs(title = "Fold change peak distribution",
+       x = "Fold change",
+       y = "Peak number")+
+  theme_bw()+
+  facet_wrap(~ Cell_line)
+```
+
+Сделаем диаграммку с распределением длин пиков
+
+```{r peak_length analysis, echo=FALSE}
+ggplot(all_peaks, aes(Cell_line, Stop-Start))+
+  geom_boxplot()+
+  labs(title = "Peak length distribution",
+       x = "Cell line",
+       y = "Peak length")+
+  theme_bw()
+```
+
+Ну что, картинка длин пиков говорит нам, что все на самом деле в порядке, пики длиной нуклеотидов в 250, просто есть большой разброс по их количеству. И встречаются пики очень длинные для некоторых линий
+
+Ну что же, прикольно.
+Теперь бинаризуем пики окошком в 50 нуклетоидов
+И еще сделаем distance from summit для каждого бина информативной
+
+```{r peak_binarization}
+all_peaks <- bin.peaks(all_peaks, window_size = 50)
+#Выделим для каждого бина отдельную строку, чтобы было удобнее. Для этого возьмем функцию unnest из пакетика tidyr
+all_bins <- unnest(all_peaks, Peak_Bins)
+all_bins <- as.data.table(all_bins)
+all_bins$summit_position <- all_bins$Start + all_bins$summit_position_from_start - all_bins$Peak_Bins
+all_bins$summit_position_from_start <- NULL
+```
+
+```{r writing_files}
+#Запишем all_bins в .zip архив
+fwrite(all_bins, "all_bins.tsv")
+zip("all_bins.zip", "all_bins.tsv")
+file.remove("all_bins.tsv")
+
+#Запишем all_peaks в .zip архив
+fwrite(all_peaks, "all_peaks.tsv")
+zip("all_peaks.zip", "all_peaks.tsv")
+file.remove("all_peaks.tsv")
+
+
+```
+

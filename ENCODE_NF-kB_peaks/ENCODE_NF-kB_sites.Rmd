@@ -4,20 +4,11 @@ date: '15 мая 2017 г '
 output: html_document
 ---
 
-## Цель и задачи этого маленького проектика
-
-Вышло вполне интересно и занимательно анализировать пики чипсека для 4 клеточных линий, пришло время расширяться!
-
-Попробуем проанализировать пики для ENCODE cell lines!
-
-Итак, поехали!
-
-```{r libraries import, echo=F, warning=FALSE, message=FALSE}
+```{r libraries import, echo=F, warning=FALSE, message=FALSE, results='hide'}
 library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(data.table)
-library(compiler)
 ```
 
 ## Импорт и контроль качества данных
@@ -33,6 +24,16 @@ setwd("~/R_stuff/ENCODE_NF-kB_peaks/")
 
 ```{r file read, warning=FALSE}
 setwd("~/R_stuff/ENCODE_NF-kB_peaks/Raw_files/")
+
+#Non-encode cell lines
+A549_peaks <- read.narrowpeak("A549_TNF_vs_bg_peaks.narrowPeak")
+HUVEC_peaks <- read.narrowpeak("HUVEC_TNFvsASIS_peaks.narrowPeak")
+IMR90_peaks <- read.narrowpeak("IMR90_TNFvsASIS_peaks.narrowPeak")
+SGBS_peaks <- read.narrowpeak("SGBS_TNFvsVeh_peaks.narrowPeak")
+Beas_peaks <- read.narrowpeak("Beas_TNFvsInput_peaks.narrowPeak")
+AC16_peaks <- read.narrowpeak("AC16_TNFvsAsis_peaks.narrowPeak")
+
+#Encode cell lines
 GM10847_peaks <- read.narrowpeak("GM10847_p65vsInput_TNFa_peaks.narrowPeak")
 GM12878_peaks <- read.narrowpeak("GM12878_p65vsInput_TNFa_peaks.narrowPeak")
 GM12891_peaks <- read.narrowpeak("GM12891_p65vsInput_TNFa_peaks.narrowPeak")
@@ -42,23 +43,26 @@ GM18505_peaks <- read.narrowpeak("GM18505_p65vsInput_TNFa_peaks.narrowPeak")
 GM18526_peaks <- read.narrowpeak("GM18526_p65vsInput_TNFa_peaks.narrowPeak")
 GM18951_peaks <- read.narrowpeak("GM18951_p65vsInput_TNFa_peaks.narrowPeak")
 GM19099_peaks <- read.narrowpeak("GM19099_p65vsInput_TNFa_peaks.narrowPeak")
-Beas_peaks <- read.narrowpeak("Beas_TNFvsInput_peaks.narrowPeak")
-AC16_peaks <- read.narrowpeak("AC16_TNFvsAsis_peaks.narrowPeak")
 ```
 
 Итак, количество пиков по линиям
 
-*GM10847 - `r nrow(GM10847_peaks)`
-*GM12878 - `r nrow(GM12878_peaks)`
-*GM12891 - `r nrow(GM12891_peaks)`
-*GM12892 - `r nrow(GM12892_peaks)`
-*GM15510 - `r nrow(GM15510_peaks)`
-*GM18505 - `r nrow(GM18505_peaks)`
-*GM18526 - `r nrow(GM18526_peaks)`
-*GM18951 - `r nrow(GM18951_peaks)`
-*GM19099 - `r nrow(GM19099_peaks)`
-*BEAS - `r nrow(Beas_peaks)`
-*AC16 - `r nrow(AC16_peaks)`
+A549|`r nrow(A549_peaks)`
+AC16|`r nrow(AC16_peaks)`
+Beas|`r nrow(Beas_peaks)`
+HUVEC|`r nrow(HUVEC_peaks)`
+IMR90|`r nrow(IMR90_peaks)`
+SGBS|`r nrow(SGBS_peaks)`
+------------- | ------------- |
+GM10847|`r nrow(GM10847_peaks)`
+GM12878|`r nrow(GM12878_peaks)`
+GM12891|`r nrow(GM12891_peaks)`
+GM12892|`r nrow(GM12892_peaks)`
+GM15510|`r nrow(GM15510_peaks)`
+GM18505|`r nrow(GM18505_peaks)`
+GM18526|`r nrow(GM18526_peaks)`
+GM18951|`r nrow(GM18951_peaks)`
+GM19099|`r nrow(GM19099_peaks)`
 
 Выглядит несколько подозрительно, очень большой разброс! 
 
@@ -84,10 +88,7 @@ AC16 | `r nrow(AC16_peaks)`| `r knitr::include_graphics("Peak_pics/AC16_TNFvsAsi
 ```{r merge peaks}
 setwd("~/R_stuff/ENCODE_NF-kB_peaks/Raw_files/")
 
-A549_peaks <- read.narrowpeak("A549_TNF_vs_bg_peaks.narrowPeak")
-HUVEC_peaks <- read.narrowpeak("HUVEC_TNFvsASIS_peaks.narrowPeak")
-IMR90_peaks <- read.narrowpeak("IMR90_TNFvsASIS_peaks.narrowPeak")
-SGBS_peaks <- read.narrowpeak("SGBS_TNFvsVeh_peaks.narrowPeak")
+rm(GM18526_peaks) #Удалили их, очень мало пиков
 
 AC16_peaks$Cell_line <- "AC16"
 A549_peaks$Cell_line <- "A549"
@@ -95,8 +96,6 @@ Beas_peaks$Cell_line <- "Beas"
 HUVEC_peaks$Cell_line <- "HUVEC"
 IMR90_peaks$Cell_line <- "IMR90"
 SGBS_peaks$Cell_line <- "SGBS"
-
-rm(GM18526_peaks)
 
 GM10847_peaks$Cell_line <- "GM10847"
 GM12878_peaks$Cell_line <- "GM12878"
@@ -106,6 +105,7 @@ GM15510_peaks$Cell_line <- "GM15510"
 GM18505_peaks$Cell_line <- "GM18505"
 GM18951_peaks$Cell_line <- "GM18951"
 GM19099_peaks$Cell_line <- "GM19099"
+
 
 all_peaks <- rbindlist(list(GM10847_peaks, GM12878_peaks, GM12891_peaks, 
                             GM12892_peaks, GM15510_peaks, GM18505_peaks,
@@ -157,6 +157,9 @@ all_bins <- unnest(all_peaks, Peak_Bins)
 all_bins <- as.data.table(all_bins)
 all_bins$summit_position <- all_bins$Start + all_bins$summit_position_from_start - all_bins$Peak_Bins
 all_bins$summit_position_from_start <- NULL
+fwrite(all_bins, "all_bins.tsv")
+zip("all_bins.zip", "all_bins.tsv")
+file.remove("all_bins.tsv")
 ```
 
 ## Пересечения бинов

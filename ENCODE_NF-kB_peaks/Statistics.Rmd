@@ -16,7 +16,7 @@ library(data.table)
 library(compiler)
 #library(fitdistrplus)
 ```
-А теперь импортнем таблицу all_bins
+Импортнем all_bins
  
 ```{r}
 unzip(zipfile = "all_bins.zip")

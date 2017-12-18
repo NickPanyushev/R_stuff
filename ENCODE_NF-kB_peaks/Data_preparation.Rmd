@@ -37,14 +37,16 @@ IMR90_peaks <- read.narrowpeak("IMR90_TNFvsASIS_peaks.narrowPeak")
 SGBS_peaks <- read.narrowpeak("SGBS_TNFvsVeh_peaks.narrowPeak")
 ```
 
-Итак, количество пиков по линиям (РАСКРАСИВИТЬ ТАБЛИЧКУ)
+Итак, количество пиков по линиям:
 
-A549 | `r nrow(A549_peaks)`  
-AC16 | `r nrow(AC16_peaks)`   
-Beas | `r nrow(Beas_peaks)`  
+Cell line | Peak number
+------------- | ------------- 
+A549  | `r nrow(A549_peaks)`  
+AC16  | `r nrow(AC16_peaks)`   
+Beas  | `r nrow(Beas_peaks)`  
 HUVEC | `r nrow(HUVEC_peaks)`  
 IMR90 | `r nrow(IMR90_peaks)`  
-SGBS | `r nrow(SGBS_peaks)`  
+SGBS  | `r nrow(SGBS_peaks)`  
 GM10847 | `r nrow(GM10847_peaks)`  
 GM12878 | `r nrow(GM12878_peaks)`  
 GM12891 | `r nrow(GM12891_peaks)`  
@@ -55,22 +57,22 @@ GM18526 | `r nrow(GM18526_peaks)`
 GM18951 | `r nrow(GM18951_peaks)`  
 GM19099 | `r nrow(GM19099_peaks)`  
 
-Выглядит несколько подозрительно, очень большой разброс! 
+Выбросим GM18526 - слишком мало пиков
 
 Поглядим на графики
 
 Клеточная линия  | Количество пиков | Распределение ридов
 ------------- | ------------- | -------------
-GM10847 | `r nrow(GM10847_peaks)`| `r knitr::include_graphics("Peak_pics/GM10847_p65vsInput_TNFa_model-0.png", dpi = 200)`  
-GM12878 | `r nrow(GM12878_peaks)`|`r knitr::include_graphics("Peak_pics/GM12878_p65vsInput_TNFa_model-0.png", dpi = 200)`
-GM12891 | `r nrow(GM12891_peaks)`|`r knitr::include_graphics("Peak_pics/GM12891_p65vsInput_TNFa_model-0.png", dpi = 200)`  
-GM12892 | `r nrow(GM12892_peaks)`|`r knitr::include_graphics("Peak_pics/GM12892_p65vsInput_TNFa_model-0.png", dpi = 200)`  
-GM15510 | `r nrow(GM15510_peaks)`|`r knitr::include_graphics("Peak_pics/GM15510_p65vsInput_TNFa_model-0.png", dpi = 200)`  
-GM18505 | `r nrow(GM18505_peaks)`|`r knitr::include_graphics("Peak_pics/GM18505_p65vsInput_TNFa_model-0.png", dpi = 200)`  
-GM18951 | `r nrow(GM18951_peaks)`| `r knitr::include_graphics("Peak_pics/GM18951_p65vsInput_TNFa_model-0.png", dpi = 200)`  
-GM19099 | `r nrow(GM19099_peaks)`| `r knitr::include_graphics("Peak_pics/GM19099_p65vsInput_TNFa_model-0.png", dpi = 200)`  
-BEAS | `r nrow(Beas_peaks)`| `r knitr::include_graphics("Peak_pics/Beas_TNFvsInput_model-0.png", dpi = 200)`  
-AC16 | `r nrow(AC16_peaks)`| `r knitr::include_graphics("Peak_pics/AC16_TNFvsAsis_model-0.png", dpi = 200)`  
+GM10847 | `r nrow(GM10847_peaks)`| `r knitr::include_graphics("Peak_pics/GM10847_p65vsInput_TNFa_model-0.png", dpi = 100)`  
+GM12878 | `r nrow(GM12878_peaks)`|`r knitr::include_graphics("Peak_pics/GM12878_p65vsInput_TNFa_model-0.png", dpi = 100)`
+GM12891 | `r nrow(GM12891_peaks)`|`r knitr::include_graphics("Peak_pics/GM12891_p65vsInput_TNFa_model-0.png", dpi = 100)`  
+GM12892 | `r nrow(GM12892_peaks)`|`r knitr::include_graphics("Peak_pics/GM12892_p65vsInput_TNFa_model-0.png", dpi = 100)`  
+GM15510 | `r nrow(GM15510_peaks)`|`r knitr::include_graphics("Peak_pics/GM15510_p65vsInput_TNFa_model-0.png", dpi = 100)`  
+GM18505 | `r nrow(GM18505_peaks)`|`r knitr::include_graphics("Peak_pics/GM18505_p65vsInput_TNFa_model-0.png", dpi = 100)`  
+GM18951 | `r nrow(GM18951_peaks)`| `r knitr::include_graphics("Peak_pics/GM18951_p65vsInput_TNFa_model-0.png", dpi = 100)`  
+GM19099 | `r nrow(GM19099_peaks)`| `r knitr::include_graphics("Peak_pics/GM19099_p65vsInput_TNFa_model-0.png", dpi = 100)`  
+BEAS | `r nrow(Beas_peaks)`| `r knitr::include_graphics("Peak_pics/Beas_TNFvsInput_model-0.png", dpi = 100)`  
+AC16 | `r nrow(AC16_peaks)`| `r knitr::include_graphics("Peak_pics/AC16_TNFvsAsis_model-0.png", dpi = 100)`  
 
 Ну в принципе, везде нормально c небольшими допущениями
 
@@ -142,7 +144,7 @@ ggplot(all_peaks, aes(Cell_line, Stop-Start))+
 
 ```{r peak_binarization}
 all_peaks <- bin.peaks(all_peaks, window_size = 50)
-#Выделим для каждого бина отдельную строку, чтобы было удобнее. Для этого возьмем функцию unnest из пакетика tidyr
+#Выделим для каждого бина отдельную строку, чтобы было удобнее.
 all_bins <- unnest(all_peaks, Peak_Bins)
 all_bins <- as.data.table(all_bins)
 all_bins$summit_position <- all_bins$Start + all_bins$summit_position_from_start - all_bins$Peak_Bins
@@ -159,7 +161,8 @@ file.remove("all_bins.tsv")
 fwrite(all_peaks, "all_peaks.tsv")
 zip("all_peaks.zip", "all_peaks.tsv")
 file.remove("all_peaks.tsv")
-
-
 ```
 
+```{r clean-up, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+rm(list = setdiff(ls(), lsf.str()))
+```

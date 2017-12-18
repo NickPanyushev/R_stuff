@@ -7,18 +7,18 @@ output: html_document
 
 Попробуем оценить, насколько у нас достоверно пересекаются пики.
 Для этого нагенерим 100 раз по 14 векторов с бинами, чтобы было похоже на то, что у нас есть в линиях.
-```{r, warning=FALSE, error=FALSE, message=FALSE}
-setwd(dir = "~/R_stuff/ENCODE_NF-kB_peaks/")
+```{r libraries import, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/")
+source("~/R_stuff/Functions.R")
 library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(data.table)
 library(compiler)
-#library(fitdistrplus)
 ```
+
 Импортнем all_bins
- 
-```{r}
+```{r, warning=FALSE, message=FALSE, results='hide'} 
 unzip(zipfile = "all_bins.zip")
 all_bins <- fread("all_bins.tsv")
 file.remove("all_bins.tsv")
@@ -31,10 +31,10 @@ ggplot(all_bins[Chromosome=="chr1", ,], aes(Peak_Bins))+
   facet_wrap(~ Cell_line)+       
   theme_bw()
 ```
-Теперь обЪясняю концепцию - надо нагенерить случайные выборки, чтобы они выглядели примерно как то, что мы видим в реальных данных, но совсем случайные. 
+Теперь объясняю концепцию - надо нагенерить случайные выборки, чтобы они выглядели примерно как то, что мы видим в реальных данных, но совсем случайные. 
 Поэтому порежем геном на кусочки, в каждом из которых естб примерно столько бинов, сколько и в реальных данных. 
 
-Хорошо, если у нас геном человека - 3млрд оснований, то порежем его на кусочки примерно по 10 кб - и в каждой нагенерим столько бинов, сколько в среднем есть в реальных данных. 
+Хорошо, если у нас геном человека - 3млрд оснований, то порежем его на кусочки примерно по 10 кб - и в каждой нагенерим столько бинов, сколько в том диапазоне, который есть в реальных данных. 
 
 Для начала заведем вектор, в котором сохраним среднее количество бинов в реальных данных.
 ```{r}
@@ -42,9 +42,37 @@ min(all_bins$Peak_Bins)
 max(all_bins$Peak_Bins)
 regions_of_bins<- seq(min(all_bins$Peak_Bins), max(all_bins$Peak_Bins))
 
-bins_num <- round(x,digits = 0)
+#bins_num <- round(x, digits = 0)
 ```
 
 
+## График по сочетаниям
 
+Теперь построим график по количеству бинов во всех возможных пересечениях
+```{r}
+if (!file.exists("combinations.tsv")){
+  bins_intersect(all_bins)
+}
+comb_df <- fread("combinations.tsv", "\t")
+```
 
+```{r, echo=F}
+#Построим графичек
+ggplot(comb_df, aes(x = Line_number, y = Bin_numbers))+
+  geom_jitter(alpha = 0.5, color = "red", size = 1.5, na.rm = T)+
+  #geom_smooth(method = "nls", formula = Bin_numbers ~ a+Line_number/b*Line_number,  se = FALSE, fullrange = TRUE)+
+  labs(title = "Common bin number",
+       x = "Number of lines",
+       y = "Common peak number")+
+  ylim(0, 2e+05)+
+theme_bw()
+```
+
+```{r}
+comb_df[, round(mean(Bin_numbers), digits = 0), by = Line_number] 
+```
+Всего вышло `r min(comb_df$Bin_numbers)` общих бинов
+
+```{r clean-up, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+rm(list = setdiff(ls(), lsf.str()))
+```

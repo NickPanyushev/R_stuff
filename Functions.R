@@ -115,3 +115,5 @@ bins_intersect <- function(df){
   rm(bin_vecs, comb_df, cl)
 }
 bins_intersect <- cmpfun(bins_intersect) # Bytecode compilation  
+
+rm(list = setdiff(ls(), lsf.str()))

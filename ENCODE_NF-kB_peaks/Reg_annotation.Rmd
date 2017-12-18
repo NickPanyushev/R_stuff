@@ -1,0 +1,345 @@
+---
+title: "Reg_annotation"
+author: "Панюшев Николай"
+date: '18 декабря 2017 г '
+output: html_document
+---
+
+#Добавить проверку на существование файла - чтобы не парсить каждый раз
+#Добавить скачивалку с biomaRt
+#Убрать лишнее с удлинением бинов
+
+##Подготовка датасета
+ENCODE consortium сделал карту всех регуляторных элементов генома, исходя из своих данных. 
+Сейчас мы глянем, куда что ложатся ли туда бины.
+
+Для этого скачал с ENSEMBL через web Biomart 	
+Данные Human Regulatory Evidence (GRCh38.p10):
+Regulatory features
+Regulatory evidence
+TF binding motifs
+Other regulatory motifs
+miRNA target regions
+
+```{r}
+#Импортируем их как таблицу
+reg_features <- fread("ENSEMBL_data/reg_features.txt")
+miRNA_targets <- fread("ENSEMBL_data/miRNA_targets.txt")
+other_regions <- fread("ENSEMBL_data/other_regions.txt")
+TF_motifs <- fread("ENSEMBL_data/bind_motifs.txt")
+reg_evidence <- fread("ENSEMBL_data/reg_evidence.txt") #Может быть битым
+
+#Приведем все эти файлы к единому виду
+names(reg_features) <- c("Chromosome", "Start", "Stop", "Feature")
+reg_features$Score <- "."
+reg_features <- reg_features[Chromosome %in% c(1:22, "X", "Y")]
+
+
+names(TF_motifs) <- c("Binding_matrix","Chromosome", "Start", "Stop", "Score", "Feature")
+TF_motifs <- TF_motifs[, c("Chromosome", "Start", "Stop", "Feature", "Binding_matrix", "Score")]
+#Сольем 2 колонки Feature и Matrix через |
+TF_motifs$Feature <- paste(TF_motifs$Feature, TF_motifs$Binding_matrix, sep = "|") 
+TF_motifs$Binding_matrix <- NULL
+TF_motifs <- TF_motifs[Chromosome %in% c(1:22, "X", "Y")]
+
+miRNA_targets$`Feature type class` <- NULL
+names(miRNA_targets) <- c("Chromosome", "Start", "Stop", "Feature")
+miRNA_targets$Score <- "."
+miRNA_targets <- miRNA_targets[Chromosome %in% c(1:22, "X", "Y")]
+
+names(other_regions) <- c("Chromosome", "Start", "Stop", "Class", "Feature")
+other_regions$Class <- strsplit(other_regions$Class, " ")
+other_regions$Class <- sapply(other_regions$Class, function(x) x[1]) 
+other_regions[Feature == "Transcription Start Site", Feature := "TSS"]
+other_regions$Feature <- paste(other_regions$Class, other_regions$Feature,  sep = " ")
+other_regions$Score <- "."
+other_regions <- other_regions[Chromosome %in% c(1:22, "X", "Y")]
+other_regions$Class <- NULL
+
+
+reg_evidence$`Feature type class` <- NULL
+names(reg_evidence) <- c("Chromosome", "Start", "Stop", "Feature")
+reg_evidence <- reg_evidence[Chromosome %in% c(1:22, "X", "Y")]
+
+#Объединим все датасеты, кроме reg_evidence, с ним будем отдельно работать, если вообще будем
+reg_features <- rbindlist(list(reg_features, miRNA_targets, TF_motifs, other_regions))
+rm(miRNA_targets, TF_motifs, other_regions)
+
+#Допишем имя хромосомы нормально
+reg_features$Chromosome <- paste("chr", reg_features$Chromosome, sep = "")
+
+#Проверяем на косячки
+sum(reg_features$Start > reg_features$Stop) #Если 0, то все в порядке
+```
+
+```{r writing_files}
+#Запишем reg_features в .zip архив
+fwrite(reg_features, file = "reg_features.bed", sep = "\t", col.names = FALSE)
+zip("reg_features.bed.zip", "reg_features.bed")
+file.remove("reg_features.bed")
+```
+
+##Пересечение с бинами
+
+
+Как оказывается, у нас есть бины, которые входят в несколько пиков сразу в одной клеточной линии, но их мало - вот сколько
+```{r}
+tmp <- common_bins[,.N, by=.(Peak_Bins, Cell_line)]
+tmp <- tmp[,.N, by=N]
+names(tmp) <- c("occurence", "number")
+tmp
+rm(tmp)
+```
+Теперь сделаем датасет для бинов общих и засунем их в .bed-файл
+```{r}
+cell_line <- common_bins[,.N, by=Cell_line]
+cell_line <- cell_line[N == min(N), Cell_line] #Выбрали линию, в которой минимальное число повторяющихся бинов
+
+bins_for_bed <- common_bins[Cell_line == cell_line[1], .(Chromosome, Peak_Bins, summit_position), by=Peak_name]
+
+bins_for_bed <- bins_for_bed[, .(Chromosome, Start = min(Peak_Bins), 
+                                Stop = max(Peak_Bins)+50,
+                                Summit = min(summit_position+Peak_Bins)), by=Peak_name]
+bins_for_bed <- bins_for_bed[!duplicated(bins_for_bed), ]
+bins_for_bed$Peak_name <- NULL
+fwrite(bins_for_bed, file = "common_bins.bed", sep = "\t", col.names = FALSE)
+rm(cell_line)
+```
+
+
+Ну-ка, посмотрим, что у нас там в этих общих бинах видно
+```{r}
+#Распределение по хромосомам
+ggplot(bins_for_bed, aes(Chromosome, Stop-Start))+
+  geom_boxplot()+
+  theme_bw()+
+  labs(title = "Common regions length distribution",
+       x = "Chromosome",
+       y = "Region length")
+
+#Распределение всех регионов по длинам. Красота же, видно все!
+ggplot(bins_for_bed, aes(x=1 ,Stop-Start))+
+  geom_boxplot()+
+  theme_bw()+
+  labs(title = "Common regions length distribution",
+              y = "Region length")
+
+#Распределение всех регионов по длинам. Красота же, видно все!  
+ggplot(bins_for_bed, aes(Stop-Start, ..count..))+
+  geom_histogram(fill ="red", alpha = 0.5)+
+  theme_bw()+
+  labs(title = "Common regions length distribution",
+              y = "Region length")
+
+#Посмотрим на чиселки
+table(bins_for_bed$Stop - bins_for_bed$Start)
+
+#Видим, что размер этого элемента лежит в области от 150 до 250
+barplot(table(bins_for_bed$Stop - bins_for_bed$Start))
+```
+
+
+Теперь на помощь спешит bedtools closest
+```{r, engine= 'bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/
+#Отсортируем файл с регуляторными фичами
+sort -k 1,1 -k2,2n reg_features.bed > reg_features_sorted.bed
+rm reg_features.bed && mv reg_features_sorted.bed reg_features.bed 
+
+#Отсортируем файл с бинами
+sort -k 1,1 -k2,2n common_bins.bed > common_bins_sorted.bed
+rm common_bins.bed && mv common_bins_sorted.bed common_bins.bed 
+
+#А теперь пошли фичи искать
+closestBed -D b -k 2 -a common_bins.bed -b reg_features.bed > closest_reg_features.bed
+```
+
+Возьмем общие бины, и для этих областей посмотрим регуляторные элементы
+```{r}
+closest_reg_features <- fread("closest_reg_features.bed", sep = "\t")
+names(closest_reg_features) <- c("Chromosome", "peak_Start", "peak_Stop", 
+                             "Chr", "feature_Start", "feature_Stop",  
+                     "Feature_name", "Score", "distance")
+closest_reg_features$Chr <- NULL
+
+#Уберем все то, что лежит далеко, более чем в 600п.н. - если меньше, то спишем на погрешность
+
+closest_reg_features <- subset(closest_reg_features, closest_reg_features$distance<600 & closest_reg_features$distance > -600)
+
+
+#Сгруппируем по каждому общему участку связывания и посмотрим
+summary_reg_features <- closest_reg_features[,.(Features = list(Feature_name)), by = .(Chromosome, peak_Start, peak_Stop)]
+
+#Выкинем дупликации из summary_reg_features
+
+summary_reg_features$Features <- sapply(summary_reg_features$Features, function(x) x[!duplicated(x)])
+
+#Посмотрим по местоположению:
+barplot(table(sapply(summary_reg_features$Features, function(x) x[1])))
+pie(table(sapply(summary_reg_features$Features, function(x) x[1])))
+
+#Видно, что эти куски лежат в промоторах и в promoter-flanking regions, а также есть немного в энхансерах
+temp <- gsub("\\|.*", "", unlist(summary_reg_features$Features)) 
+top_features <- as.data.table(table(temp))
+names(top_features) <- c("Feature", "occurence")
+top_features[order(-rank(occurence))]
+rm(temp, top_features)
+
+#Теперь посмотрим, как обстоят дела с длинами участков, и есть ли в них kb-сайты. Возможно, что у нас остались огрызки, в которых нет kb-сайтов.
+
+summary_reg_features$kb_occurence <- grepl("NFKB\\|MA.*", summary_reg_features$Features)
+
+ggplot(summary_reg_features, aes(summary_reg_features$kb_occurence, summary_reg_features$peak_Stop - summary_reg_features$peak_Start))+
+  geom_boxplot()+
+  theme_bw()
+
+#Ну в общем-то да, так и оказалось, что там, где kb-сайтов нет, там огрызки от пересечений.
+
+#Теперь посмотрим на то, как обогащены термины в той и другой группе
+temp <- gsub("\\|.*", "", unlist(summary_reg_features[kb_occurence == TRUE, Features])) 
+site <- as.data.table(table(temp))
+names(site) <- c("Feature", "site")
+
+temp <- gsub("\\|.*", "", unlist(summary_reg_features[kb_occurence == FALSE, Features])) 
+no_site <- as.data.table(table(temp))
+names(no_site) <- c("Feature", "no_site")
+
+top_features <- (merge(x = site, y = no_site, by = "Feature", all = T))
+top_features[is.na(top_features)] <- 0
+top_features[order(site ,decreasing = T)]
+rm(temp, site, no_site)
+```
+
+Ну что, мы видим что, по большому счету, не отличаются по встречаемости фичи в участках с сайтами и без них.
+
+Поэтому, вполне вероятно, что у нас есть артефакт пересечений и при пересечении kb-сайты просто обрезались
+
+Чтобы избавиться от этого, нарастим до 500 нуклеотидов участки без сайтов и определим, поменялось ли что-то
+
+```{r peak_elongation}
+# Отберем для начала те, где нет kb-сайтов из closest_reg_features
+bin_500_features <- summary_reg_features[kb_occurence==FALSE, .(Chromosome, peak_Start, peak_Stop)]
+bin_500_features$new_start <- bin_500_features$peak_Start - (500 - (bin_500_features$peak_Stop - bin_500_features$peak_Start))/2
+bin_500_features$new_stop <- bin_500_features$peak_Stop + (500 - (bin_500_features$peak_Stop - bin_500_features$peak_Start))/2
+bin_500_features$new_stop - bin_500_features$new_start == 500 #Проверили, все ли у нас получилось
+
+# Сделаем .bed
+bin_500_features$peak_Start <- bin_500_features$peak_Stop <- NULL
+fwrite(bin_500_features, file = "nosite_bins.bed", sep = "\t", col.names = FALSE)
+```
+
+Теперь давай фичи посмотрим
+
+```{r, engine= 'bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/
+
+#Отсортируем файл с бинами
+sort -k 1,1 -k2,2n nosite_bins.bed > nosite_bins_sorted.bed
+rm nosite_bins.bed && mv nosite_bins_sorted.bed nosite_bins.bed 
+
+#А теперь пошли фичи искать
+closestBed -D b -k 2 -a nosite_bins.bed -b reg_features.bed > nosite_reg_features.bed
+```
+
+Смотрим, что вышло
+
+```{r}
+bin_500_features <- fread("nosite_reg_features.bed", sep = "\t")
+names(bin_500_features) <- c("Chromosome", "peak_Start", "peak_Stop", 
+                             "Chr", "feature_Start", "feature_Stop",  
+                     "Feature_name", "Score", "distance")
+bin_500_features$Chr <- NULL
+
+#Уберем все то, что лежит далеко, более чем в 600п.н. - если меньше, то спишем на погрешность
+
+bin_500_features <- subset(bin_500_features, bin_500_features$distance<600 & bin_500_features$distance > -600)
+
+
+#Сгруппируем по каждому общему участку связывания и посмотрим
+temp_reg_features <- bin_500_features[,.(Features = list(Feature_name)), by = .(Chromosome, peak_Start, peak_Stop)]
+
+#Выкинем дупликации из summary_reg_features
+
+temp_reg_features$Features <- sapply(temp_reg_features$Features, function(x) x[!duplicated(x)])
+
+temp <- gsub("\\|.*", "", unlist(temp_reg_features$Features)) 
+temp <- as.data.table(table(temp))
+names(temp) <- c("Feature", "occurence")
+temp[order(occurence ,decreasing = T)]
+
+rm(temp, bin_500_features)
+```
+
+Теперь попробуем нарастить все сайты до 500 нуклеотидов без разбора и посмотрим, что выйдет
+
+```{r}
+# Отберем для начала те, где нет kb-сайтов из closest_reg_features
+summary_reg_features$new_start <- summary_reg_features$peak_Start - 
+  (500 - (summary_reg_features$peak_Stop - summary_reg_features$peak_Start))/2
+summary_reg_features$new_stop <- summary_reg_features$peak_Stop +
+  (500 - (summary_reg_features$peak_Stop - summary_reg_features$peak_Start))/2
+summary_reg_features$new_stop - summary_reg_features$new_start == 500 #Проверили, все ли у нас получилось
+
+# Сделаем .bed
+summary_reg_features$peak_Start <- summary_reg_features$peak_Stop <- summary_reg_features$kb_occurence <- NULL
+summary_reg_features <- summary_reg_features[, .(Chromosome, new_start, new_stop)]
+fwrite(summary_reg_features, file = "500_bins.bed", sep = "\t", col.names = FALSE)
+```
+
+Теперь давай фичи посмотрим
+
+```{r, engine= 'bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/
+
+#Отсортируем файл с бинами
+sort -k 1,1 -k2,2n 500_bins.bed > 500_bins_sorted.bed
+rm 500_bins.bed && mv 500_bins_sorted.bed 500_bins.bed 
+
+#А теперь пошли фичи искать
+closestBed -D b -k 2 -a 500_bins.bed -b reg_features.bed > 500_bins_reg_features.bed
+```
+
+Смотрим, что вышло
+
+```{r}
+bin_500_features <- fread("500_bins_reg_features.bed", sep = "\t")
+bin_500_features$V4 <- NULL
+names(bin_500_features) <- c("Chromosome", "peak_Start", "peak_Stop", 
+                             "Chr", "feature_Start", "feature_Stop",  
+                     "Feature_name", "Score", "distance")
+bin_500_features$Chr <- NULL
+
+#Уберем все то, что лежит далеко, более чем в 600п.н. - если меньше, то спишем на погрешность
+
+bin_500_features <- subset(bin_500_features, bin_500_features$distance<600 & bin_500_features$distance > -600)
+
+
+#Сгруппируем по каждому общему участку связывания и посмотрим
+bin_500_reg_features <- bin_500_features[,.(Features = list(Feature_name)), by = .(Chromosome, peak_Start, peak_Stop)]
+
+#Выкинем дупликации из summary_reg_features
+
+bin_500_reg_features$Features <- sapply(bin_500_reg_features$Features, function(x) x[!duplicated(x)])
+
+temp <- gsub("\\|.*", "", unlist(bin_500_reg_features$Features)) 
+temp <- as.data.table(table(temp))
+names(temp) <- c("Feature", "occurence")
+temp[order(occurence ,decreasing = T)]
+
+rm(temp, temp_reg_features)
+```
+ОК, лады, kB-сайты не появились, попробуем прогнать последовательности через MEME
+
+```{r bed to fasta ,engine='bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/
+bedtools getfasta -fo 500_bins.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed ~/R_stuff/ENCODE_NF-kB_peaks/500_bins.bed
+```
+А в meme-chip они совершенно замечательно появились!
+
+
+
+
+
+```{r clean-up, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+rm(list = setdiff(ls(), lsf.str()))
+```

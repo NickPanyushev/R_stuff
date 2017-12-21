@@ -16,25 +16,17 @@ library(compiler)
 
 Импортнем all_bins
 ```{r, warning=FALSE, message=FALSE, results='hide'} 
+setwd("Script_files/")
 unzip(zipfile = "all_bins.zip")
 all_bins <- fread("all_bins.tsv")
 file.remove("all_bins.tsv")
 ```
-
-#В этом документе должны остаться только:
-* Пересечение бинов
-* Преобразование бинов в пики обратно
-* Центровка пиков по саммитам
-* Наращивание пиков
-
-Все остальное - в другие файлы раскидать!!!
 
 ## Пересечения бинов
 
 Посмотрим, есть ли пересечения бинов
 
 ```{r}
-#Немного говнокода, но мы переживем, зато не надо ничего руками делать
 all_intersect <- Reduce(intersect, all_bins[, .(list(unique(Peak_Bins))), Cell_line]$V1)
 ```
 Итого,количество общих бинов `r length(all_intersect)` 
@@ -42,14 +34,12 @@ all_intersect <- Reduce(intersect, all_bins[, .(list(unique(Peak_Bins))), Cell_l
 Теперь отберем только общие бины, остальные нас уже не интересуют
 ```{r}
 common_bins <- all_bins[all_bins$Peak_Bins %in% all_intersect, ]
+rm(all_intersect)
 ```
-
-
-## Аннтотация общих бинов
 
 Глянем, как они распределены общие бины по хромосомам
 
-```{r genome location}
+```{r genome location, echo=F}
 ggplot(common_bins, aes(Chromosome, fill = Chromosome))+
   geom_histogram(aes(fill=Chromosome), alpha = 0.5, stat = "count") +
   labs(title = "Common bin location distribution",
@@ -100,79 +90,80 @@ common_peaks$'q-value' <- aggregate(common_bins$`q-value`,
                           by = list(common_bins$Peak_name),
                           FUN = function(x) x[1])[,2]
 
+common_bins$Summit <- common_bins$Peak_Bins+common_bins$summit_position
+
+common_peaks$Summit <- aggregate(common_bins$Summit,
+                          by = list(common_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
 
 #Переставим в правильном порядке столбцы, чтобы bedtools съел
-common_peaks <- common_peaks[,c("Chromosome", "Start", "Stop", "Peak_name", 
+common_peaks <- common_peaks[,c("Chromosome", "Start", "Stop", "Peak_name", "Summit",
                              "Fold_change", "p-value", "q-value", "Cell_line")]
 
 # Проверим, нет ли косяков в .bed файле и запишем в файл
 stopifnot(sum(common_peaks$Start > common_peaks$Stop) == 0)
-fwrite(common_peaks, "peaks.bed", sep = "\t", col.names = FALSE)
-```
-
-Удалим ненужную переменную
-```{r}
-rm(all_intersect)
+setwd("BEDs/")
+fwrite(common_peaks, "common_peaks.bed", sep = "\t", col.names = FALSE)
+zip("common_peaks.zip", "common_peaks.bed")
 ```
 
 Сделаем бокс-плот, который покажет, как распределены общие пики по fold_change и по q-value в этих клеточных линиях
 
-```{r}
+Fold change distribution
+```{r, echo=F}
 #fold_change для начала
 ggplot(common_peaks, aes(Cell_line, Fold_change))+
   geom_boxplot()+
-  labs(title = "Common Peak distribution",
+  labs(title = "Fold_change distribution of common peaks",
        x = "Cell line",
        y = "Fold change")+
   theme_bw()
 ```
 
-```{r}
+q-value distribution
+```{r, echo=F}
 #Теперь q-value
 ggplot(common_peaks, aes(Cell_line, common_peaks$`q-value`))+
   geom_boxplot()+
-  labs(title = "Common Peak distribution",
+  labs(title = "Fold_change distribution of common peaks",
        x = "Cell line",
-       y = "Fold change")+
+       y = "q-value")+
   theme_bw()
 ```
 Картинки примерно повторяют друг друга, видим, что самые качественные пики находятся в AC16, GM18505, HUVEC, IMR90
 
+Выгрузим последовательности в fasta.
 
-##Консенсусные сайты.
-Теперь настает время расковыривать консенсусную последовательность.
-
-Для начала попробуем посмотреть, не раскластерятся ли они на 2 группы по последовательностям?
-
-Для этого выгрузим последовательности в common_bins.fasta
 Запустим для этого bedtools
-
-```{r bed to fasta ,engine='bash'}
-bedtools getfasta -fo common_bins.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed ~/R_stuff/ENCODE_NF-kB_peaks/common_bins.bed
+```{r common_bins.fa, engine="bash"}
+#Reference genome was downloaded from here ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_24/GRCh38.p5.genome.fa.gz
+cd ~/R_stuff/ENCODE_NF-kB_peaks/FASTAs/
+bedtools getfasta -fo common_bins.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed ~/R_stuff/ENCODE_NF-kB_peaks/BEDs/common_bins.bed
+zip common_bins.zip common_bins.fa && rm common_bins.fa 
 ```
 
-Не раскластерились, все эти последовательности довольно-таки разные.
-
 ###Отцентруем по саммитам
-Так как у нас есть саммиты для каждого из пиков, то сейчас мы сделаем .bed, где все участки общие будут отцентрованы по позиции саммита.
-Заодно удлинним до 1000 нуклеотидов общие участки, мало ли чего 
+Так как у нас есть саммиты для каждого из пиков, то сделаем .bed, где все участки общие будут отцентрованы по позиции саммита.
+Заодно удлинним до 1000 нуклеотидов общие участки, во избежание всяких погрешностей 
 ```{r summit_centered}
 region_length <- 1000
-for_fasta <- bins_for_bed
-for_fasta$Start <- bins_for_bed$Summit - region_length/2
-for_fasta$Stop <- bins_for_bed$Summit + region_length/2
+for_fasta <- common_peaks
+for_fasta$Start <- common_peaks$Summit - region_length/2
+for_fasta$Stop <- common_peaks$Summit + region_length/2
 
 for_fasta$Stop - for_fasta$Start  == region_length #Проверили, все ли у нас получилось
+
 # Сделаем .bed
-fwrite(for_fasta, file = "1000_centered.bed", sep = "\t", col.names = FALSE)
+fwrite(for_fasta, file = "BEDs/1000_centered.bed", sep = "\t", col.names = FALSE)
+zip("BEDs/1000_centered.zip", "1000_centered.bed")
 rm(region_length, for_fasta)
 ```
 
-```{r bed to fasta, engine='bash'}
-bedtools getfasta -fo 1000_centered.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed ~/R_stuff/ENCODE_NF-kB_peaks/1000_centered.bed
+```{r 1000_centered.fa, engine='bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/FASTAs
+bedtools getfasta -fo ~/FASTAs/1000_centered.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed ~/R_stuff/ENCODE_NF-kB_peaks/1000_centered.bed
+zip 1000_centered.zip 1000_centered.fa && rm 1000_centered.fa
 ```
-
-
 
 Попробуем вытащить бэкграунд для консенсусных сайтов - для этого нам надо отфильтровать мусор всякий.
 То есть возьмем бины, которые встречаются в 2х клеточных линиях, если будем брать больше, то бэкграундных бинов будет слишком мало
@@ -196,6 +187,7 @@ for (i in 1:5){
   rm(filename, i, t, temp_bins, intersect)
 }
 ```
+
 Теперь сделаем из .bed .fasta
 Этот кусок кода не работает из R, только в консоли почему-то.
 ```{r bed to fasta, engine='bash', eval = F}
@@ -210,5 +202,8 @@ done
 
 
 ```{r clean-up, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+file.remove("common_peaks.bed")
+file.remove("1000_centered.bed")
 rm(list = setdiff(ls(), lsf.str()))
+gc()
 ```

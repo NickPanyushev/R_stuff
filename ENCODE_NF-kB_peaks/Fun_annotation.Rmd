@@ -20,31 +20,35 @@ library(data.table)
 Используем ту же аннотацию, которую распарсили
 
 ```{r Получение аннотации}
-setwd("~/R_stuff/ENSEMBL_data/Annotation/")
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/Annotation_data/")
 unzip(zipfile = "Gencode_v24.zip")
 annotation_v24 <- fread("Gencode_v24.bed")
 file.remove("Gencode_v24.bed")
 
-#Теперь вытащим только транскрипты
+#Вытащим только транскрипты
 transcripts <- subset(annotation_v24, annotation_v24$Type == "transcript")
 transcripts$Type <- NULL
-fwrite(transcripts, "transcripts.bed", sep = "\t", col.names = FALSE)
+fwrite(transcripts, "BEDs/transcripts.bed", sep = "\t", col.names = FALSE)
+zip("BEDs/transcripts.zip", "transcripts.bed")
+
 rm(annotation_v24)
 ```
 
 Не будем изобретать велосипед, а сделаем скрипт, который с помощью bedtools найдет нам ближайшие гены.
 
 ```{r, engine= 'bash'}
-cd ~/R_stuff/ENCODE_NF-kB_peaks/
+cd ~/R_stuff/ENCODE_NF-kB_peaks/BEDs
 #Отсортируем файл с транскриптами и с пиками
 sortBed -i transcripts.bed > sorted_transcripts.bed
 sortBed -i peaks.bed > sorted_peaks.bed
+rm peaks.bed && mv sorted_peaks.bed peaks.bed
+rm transcripts.bed && mv sorted_transcripts.bed transcripts.bed
 
 #А теперь пошли фичи искать
-closestBed -D b -k 2 -a sorted_peaks.bed -b sorted_transcripts.bed > closest_transcripts.bed
+closestBed -D b -k 2 -a peaks.bed -b transcripts.bed > closest_transcripts.bed
 ```
 
-Окей, нашли ближайшие транскрипты, отфильруем их
+Окей, нашли ближайшие транскрипты, отфильруем их и сожмем их в .zip
 
 ```{r}
 features <- fread("closest_transcripts.bed")

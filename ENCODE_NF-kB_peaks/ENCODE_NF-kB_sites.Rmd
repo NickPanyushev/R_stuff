@@ -24,12 +24,12 @@ file.remove("all_bins.tsv")
 
 ## Пересечения бинов
 
-Посмотрим, есть ли пересечения бинов
+Пересечем бины
 
 ```{r}
 all_intersect <- Reduce(intersect, all_bins[, .(list(unique(Peak_Bins))), Cell_line]$V1)
 ```
-Итого,количество общих бинов `r length(all_intersect)` 
+Общих бинов всего `r length(all_intersect)` 
 
 Теперь отберем только общие бины, остальные нас уже не интересуют
 ```{r}
@@ -102,9 +102,10 @@ common_peaks <- common_peaks[,c("Chromosome", "Start", "Stop", "Peak_name", "Sum
 
 # Проверим, нет ли косяков в .bed файле и запишем в файл
 stopifnot(sum(common_peaks$Start > common_peaks$Stop) == 0)
-setwd("BEDs/")
+setwd("Script_files/")
 fwrite(common_peaks, "common_peaks.bed", sep = "\t", col.names = FALSE)
 zip("common_peaks.zip", "common_peaks.bed")
+file.remove("common_peaks.bed")
 ```
 
 Сделаем бокс-плот, который покажет, как распределены общие пики по fold_change и по q-value в этих клеточных линиях
@@ -131,6 +132,8 @@ ggplot(common_peaks, aes(Cell_line, common_peaks$`q-value`))+
   theme_bw()
 ```
 Картинки примерно повторяют друг друга, видим, что самые качественные пики находятся в AC16, GM18505, HUVEC, IMR90
+
+Для начала сделаем 
 
 Выгрузим последовательности в fasta.
 
@@ -202,6 +205,7 @@ done
 
 
 ```{r clean-up, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+setwd("BEDs/")
 file.remove("common_peaks.bed")
 file.remove("1000_centered.bed")
 rm(list = setdiff(ls(), lsf.str()))

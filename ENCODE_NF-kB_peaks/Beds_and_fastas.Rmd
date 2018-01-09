@@ -1,0 +1,179 @@
+title: "Making .fasta and .bed files"
+author: "Панюшев Николай"
+date: 'кровавое воскресенье 2018 г'
+output: html_document
+---
+
+```{r libraries import, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/")
+source("~/R_stuff/Functions.R")
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(data.table)
+library(compiler)
+```
+
+Импортнем all_bins
+```{r, warning=FALSE, message=FALSE, results='hide'} 
+setwd("Script_files/")
+unzip(zipfile = "all_bins.zip")
+all_bins <- fread("all_bins.tsv")
+file.remove("all_bins.tsv")
+```
+
+## Пересечение бинов
+
+Пересечем бины
+
+```{r}
+all_intersect <- Reduce(intersect, all_bins[, .(list(unique(Peak_Bins))), Cell_line]$V1)
+```
+Общих бинов всего `r length(all_intersect)` 
+
+Отберем только общие бины, остальные нас не интересуют
+
+```{r}
+common_bins <- all_bins[all_bins$Peak_Bins %in% all_intersect, ]
+common_bins$Summit <- common_bins$Peak_Bins+common_bins$summit_position #Добавили положение бинов 
+rm(all_intersect)
+```
+
+## Группировка бинов обратно в пики
+Сгруппируем общие бины в пики
+
+```{r}
+#Теперь переведем бины обратно в пики
+common_peaks <- data.table()
+common_peaks <- aggregate(common_bins$Peak_Bins,
+                          by = list(common_bins$Peak_name, common_bins$Cell_line),
+                          FUN = min)
+
+names(common_peaks) <- c("Peak_name", "Cell_line", "Start")
+
+common_peaks$Stop <- aggregate(common_bins$Peak_Bins,
+                          by = list(common_bins$Peak_name,common_bins$Cell_line),
+                          FUN = function(x) max(x)+50)[,3]
+
+common_peaks$Chromosome <- aggregate(common_bins$Chromosome,
+                          by = list(common_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks$Fold_change <- aggregate(common_bins$fold_change,
+                          by = list(common_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks$'p-value' <- aggregate(common_bins$`p-value`,
+                          by = list(common_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks$'q-value' <- aggregate(common_bins$`q-value`,
+                          by = list(common_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks$Summit <- aggregate(common_bins$Summit,
+                          by = list(common_bins$Peak_name),
+                          FUN = function(x) x[1])[,2]
+
+common_peaks <- as.data.table(common_peaks)
+setcolorder(common_peaks, c("Chromosome", "Start", "Stop", "Peak_name", "Summit",
+                             "Fold_change", "p-value", "q-value", "Cell_line"))
+
+# Проверим, нет ли косяков в .bed файле и запишем в файл
+stopifnot(sum(common_peaks$Start > common_peaks$Stop) == 0)
+```
+
+Общих пиков всего `r length(unique(common_peaks$Start))` 
+
+##Сформируем .bed - файлы 
+
+Запишем сommon_peaks в uncentered_peaks.bed
+```{r}
+fwrite(common_peaks, "BEDs/uncentered_peaks.bed", sep = "\t", col.names = FALSE)
+```
+
+Так как у нас есть саммиты для каждого из пиков, то сделаем .bed, где все участки общие будут отцентрованы по позиции саммита.
+Заодно удлинним до 500 и 1000 нуклеотидов общие участки, во избежание всяких погрешностей 
+```{r 500_centered}
+region_length <- 500
+for_fasta <- common_peaks[Cell_line == "A549", .(Chromosome, Start, Stop, Summit)]
+for_fasta$Start <- for_fasta$Summit - region_length/2
+for_fasta$Stop <- for_fasta$Summit + region_length/2
+for_fasta$Summit <- NULL
+stopifnot(for_fasta$Stop - for_fasta$Start  == region_length) #Проверка, все ли у нас получилось
+
+# Сделаем .bed
+fwrite(for_fasta, file = "BEDs/500_centered.bed", sep = "\t", col.names = FALSE)
+rm(region_length, for_fasta)
+```
+
+```{r 1000_centered}
+region_length <- 1000
+for_fasta <- common_peaks[Cell_line == "A549", .(Chromosome, Start, Stop, Summit)]
+for_fasta$Start <- for_fasta$Summit - region_length/2
+for_fasta$Stop <- for_fasta$Summit + region_length/2
+for_fasta$Summit <- NULL
+stopifnot(for_fasta$Stop - for_fasta$Start  == region_length) #Проверка, все ли у нас получилось
+
+# Сделаем .bed
+fwrite(for_fasta, file = "BEDs/1000_centered.bed", sep = "\t", col.names = FALSE)
+rm(region_length, for_fasta)
+```
+##Сформируем .fasta - файлы
+
+Отсортируем .bed файлы и сделаем из них .fasta
+Запустим для этого bedtools
+```{r make_fasta, engine="bash"}
+#Reference genome was downloaded from here ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_24/GRCh38.p5.genome.fa.gz
+cd ~/R_stuff/ENCODE_NF-kB_peaks/BEDs/
+for i in *.bed
+do
+  TAG=${i%%.bed}
+  sort -k 1,1 -k2,2n $TAG.bed > $TAG_sorted.bed
+  rm $TAG.bed && mv $TAG_sorted.bed $TAG.bed
+  bedtools getfasta -fo ../FASTAs/$TAG.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed $i
+done
+```
+
+## Фон для MEME
+
+Попробуем вытащить бэкграунд для консенсусных сайтов - для этого нам надо отфильтровать мусор всякий.
+То есть возьмем бины, которые встречаются в 2х клеточных линиях, если будем пересекать из большего количества линий, то бэкграундных бинов будет слишком мало
+ 
+```{r, MEME_background}
+setwd("FASTAs/")
+for (i in 1:5){
+  t <- sample(unique(all_bins$Cell_line), size = 2)
+  intersect <- intersect(all_bins[Cell_line == t[1], Peak_Bins],
+                        all_bins[Cell_line == t[2], Peak_Bins])
+  temp_bins <- all_bins[all_bins$Peak_Bins %in% intersect, 
+                        .(Chromosome, Cell_line, Peak_name, Peak_Bins) ]
+  temp_bins <- temp_bins[Cell_line == t[1], .(Chromosome, Peak_Bins), by=Peak_name]
+  temp_bins <- temp_bins[ , .(Chromosome, Start = min(Peak_Bins), 
+                                  Stop = max(Peak_Bins)+50), by=Peak_name]
+  temp_bins <- temp_bins[!duplicated(temp_bins), ]
+  temp_bins$new_start <- temp_bins$Start - (500 - (temp_bins$Stop - temp_bins$Start))/2
+  temp_bins$new_stop <- temp_bins$Stop + (500 - (temp_bins$Stop - temp_bins$Start))/2
+  temp_bins$Peak_name <- temp_bins$Start <- temp_bins$Stop <- NULL
+  filename <- paste(c(t, "bg.bed"), collapse = "_")
+  fwrite(temp_bins, filename, sep = "\t", col.names = FALSE)
+}
+rm(i)
+```
+
+Теперь сделаем из .bed .fasta
+```{r bed to fasta, engine='bash'}
+cd ~/R_stuff/ENCODE_NF-kB_peaks/FASTAs 
+for i in *_bg.bed
+do
+    TAG=${i%%.bed}
+    bedtools getfasta -fo ./$TAG.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed $i && rm $i
+done
+zip MEME_background.zip *_bg.fa && rm *_bg.fa
+```
+
+
+```{r clean-up, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+rm(list = setdiff(ls(), lsf.str()))
+gc()
+```

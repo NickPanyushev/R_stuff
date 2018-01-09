@@ -45,6 +45,64 @@ regions_of_bins<- seq(min(all_bins$Peak_Bins), max(all_bins$Peak_Bins))
 #bins_num <- round(x, digits = 0)
 ```
 
+##Обобщенная статистика по общим регионам
+
+Сделаем бокс-плот, который покажет, как распределены общие пики по fold_change и по q-value в этих клеточных линиях
+
+Fold change distribution
+```{r, echo=F}
+#fold_change для начала
+ggplot(common_peaks, aes(Cell_line, Fold_change))+
+  geom_boxplot()+
+  labs(title = "Fold_change distribution of common peaks",
+       x = "Cell line",
+       y = "Fold change")+
+  theme_bw()
+```
+
+q-value distribution
+```{r, echo=F}
+#Теперь q-value
+ggplot(common_peaks, aes(Cell_line, common_peaks$`q-value`))+
+  geom_boxplot()+
+  labs(title = "Fold_change distribution of common peaks",
+       x = "Cell line",
+       y = "q-value")+
+  theme_bw()
+```
+Картинки примерно повторяют друг друга, видим, что самые качественные пики находятся в AC16, GM18505, HUVEC, IMR90
+
+Глянем, как они распределены общие бины по хромосомам
+
+```{r genome location, echo=F}
+#Упорядочим нормально хромосомки, чтобы было красиво
+common_bins$Chromosome <- factor(common_bins$Chromosome, 
+                                   levels =c("chr1","chr2","chr3","chr4","chr5",
+                                             "chr6","chr7","chr8","chr9","chr10",
+                                             "chr11", "chr12", "chr13", "chr14", "chr15",
+                                             "chr16", "chr17", "chr18", "chr19", "chr20",
+                                             "chr21", "chr22", "chrX", "chrY"))
+
+ggplot(common_bins, aes(Chromosome, fill = Chromosome))+
+  geom_histogram(aes(fill=Chromosome), alpha = 0.5, stat = "count") +
+  labs(title = "Common bin location distribution",
+       x = "Genome location",
+       y = "Peak number")+
+   theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        panel.background = element_rect(fill = "white", 
+            colour = NA), panel.border = element_rect(fill = NA, 
+            colour = "grey20"), panel.grid.major = element_line(colour = "grey92"), 
+            panel.grid.minor = element_line(colour = "grey92", 
+                size = 0.25), strip.background = element_rect(fill = "grey85", 
+                colour = "grey20"), legend.key = element_rect(fill = "white", 
+                colour = NA), complete = TRUE)
+```
+
+Выглядит прикольно, видим, что у нас больше всего общих бинов на 1 и на 18 хромосоме.
+
+Интересно, что же там такое?
 
 ## График по сочетаниям
 

@@ -1,0 +1,50 @@
+==================================================
+file name: uncentered_peaks.fa      
+sequences:          1199
+total length:     227950 bp  (227950 bp excl N/X-runs)
+GC level:         56.28 %
+bases masked:      16130 bp ( 7.08 %)
+==================================================
+               number of      length   percentage
+               elements*    occupied  of sequence
+--------------------------------------------------
+SINEs:               41         2906 bp    1.27 %
+      ALUs            0            0 bp    0.00 %
+      MIRs           41         2906 bp    1.27 %
+
+LINEs:               24         3855 bp    1.69 %
+      LINE1          24         3855 bp    1.69 %
+      LINE2           0            0 bp    0.00 %
+      L3/CR1          0            0 bp    0.00 %
+
+LTR elements:        32         4415 bp    1.94 %
+      ERVL            2          279 bp    0.12 %
+      ERVL-MaLRs     15         1261 bp    0.55 %
+      ERV_classI     15         2875 bp    1.26 %
+      ERV_classII     0            0 bp    0.00 %
+
+DNA elements:        28         2758 bp    1.21 %
+     hAT-Charlie      0            0 bp    0.00 %
+     TcMar-Tigger     0            0 bp    0.00 %
+
+Unclassified:         0            0 bp    0.00 %
+
+Total interspersed repeats:    13934 bp    6.11 %
+
+
+Small RNA:            0            0 bp    0.00 %
+
+Satellites:           0            0 bp    0.00 %
+Simple repeats:      49         1562 bp    0.69 %
+Low complexity:      16          634 bp    0.28 %
+==================================================
+
+* most repeats fragmented by insertions or deletions
+  have been counted as one element
+                                                      
+
+The query species was assumed to be homo sapiens  
+RepeatMasker Combined Database: Dfam_Consensus-20170127, RepBase-20170127
+        
+run with rmblastn version 2.6.0+
+

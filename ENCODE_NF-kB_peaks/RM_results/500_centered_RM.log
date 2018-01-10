@@ -1,0 +1,31 @@
+RepeatMasker version open-4.0.7
+Search Engine: NCBI/RMBLAST [ 2.6.0+ ]
+Master RepeatMasker Database: /opt/RepeatMasker_4.0.7/RepeatMasker/Libraries/RepeatMaskerLib.embl ( Complete Database: dc20170127-rb20170127 )
+
+
+
+analyzing file 500_centered.fa
+identifying Simple Repeats in batch 1 of 1
+identifying full-length ALUs in batch 1 of 1
+identifying full-length interspersed repeats in batch 1 of 1
+identifying remaining ALUs in batch 1 of 1
+identifying most interspersed repeats in batch 1 of 1
+identifying long interspersed repeats in batch 1 of 1
+identifying ancient repeats in batch 1 of 1
+identifying retrovirus-like sequences in batch 1 of 1
+identifying Simple Repeats in batch 1 of 1
+refining SINE/Alu elements in batch 1 of 1
+processing output: 
+cycle 1 
+cycle 2 
+cycle 3 
+cycle 4 
+cycle 5 
+cycle 6 
+cycle 7 
+cycle 8 
+cycle 9 
+cycle 10 
+Generating output... 
+masking
+done

@@ -5,8 +5,8 @@ date: '14 ноября 2017 г '
 output: html_document
 ---
 
-Попробуем оценить, насколько у нас достоверно пересекаются пики.
-Для этого нагенерим 100 раз по 14 векторов с бинами, чтобы было похоже на то, что у нас есть в линиях.
+#Все графики и статистический анализ здесь
+
 ```{r libraries import, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 setwd("~/R_stuff/ENCODE_NF-kB_peaks/")
 source("~/R_stuff/Functions.R")
@@ -17,33 +17,65 @@ library(data.table)
 library(compiler)
 ```
 
-Импортнем all_bins
 ```{r, warning=FALSE, message=FALSE, results='hide'} 
+setwd("Script_files/")
 unzip(zipfile = "all_bins.zip")
 all_bins <- fread("all_bins.tsv")
 file.remove("all_bins.tsv")
 ```
 
-Теперь посмотрим распределение по 1й хромосоме бинов во всех клеточных линиях
+##Оценка вероятности получить общие бины случайно
+
+Концепция такая - надо нагенерить случайные данные, чтобы они выглядели примерно как то, что мы видим в реальных данных. 
+Для этого сгенерируем 14 (по количеству использованных клеточных линий) векторов с бинами.  
+
+Поэтому порежем геном на кусочки, в каждом из которых есть примерно столько бинов, сколько и в реальных данных. 
+
+Мы работаем с геномом человека он - 3млрд оснований, порежем его на кусочки примерно по 10 кб - и в каждом из этих кусочков сгенерим столько бинов, сколько в том диапазоне, который есть в реальных данных. 
+
+
+В качестве иллюстрации посмотрим на распределение по 1й хромосоме бинов во всех клеточных линиях
 ```{r}
 ggplot(all_bins[Chromosome=="chr1", ,], aes(Peak_Bins))+
          geom_histogram()+
   facet_wrap(~ Cell_line)+       
   theme_bw()
 ```
-Теперь объясняю концепцию - надо нагенерить случайные выборки, чтобы они выглядели примерно как то, что мы видим в реальных данных, но совсем случайные. 
-Поэтому порежем геном на кусочки, в каждом из которых естб примерно столько бинов, сколько и в реальных данных. 
 
-Хорошо, если у нас геном человека - 3млрд оснований, то порежем его на кусочки примерно по 10 кб - и в каждой нагенерим столько бинов, сколько в том диапазоне, который есть в реальных данных. 
+По графику видно, что количество пиков очень сильно варьирует, но профиль повторяется, пиков нет в центромерном участке, например. 
 
 Для начала заведем вектор, в котором сохраним среднее количество бинов в реальных данных.
-```{r}
-min(all_bins$Peak_Bins)
-max(all_bins$Peak_Bins)
-regions_of_bins<- seq(min(all_bins$Peak_Bins), max(all_bins$Peak_Bins))
+`r min(all_bins$Peak_Bins)` - координата начала самого первого пика на первой хромосоме
+`r max(all_bins$Peak_Bins)` - координата конца самого последнего пика на Y-хромосоме
 
-#bins_num <- round(x, digits = 0)
+Вне этих пределов не имеет смысла генерировать бины, потому что их нет в реальных данных совсем.
+
+```{r}
+piece_size = 10000
+bins_regions <- seq(min(all_bins$Peak_Bins), max(all_bins$Peak_Bins), by = piece_size) #Определили координаты начала участков, где будем пики генерить
 ```
+
+Cделаем data.table из двух столбцов - где будет начало региона, и среднее по всем линиям количество бинов, которые в этом регионе встречаются
+
+```{r}
+bin_number_dt <- data.table(bins_regions)
+names(bin_number_dt) <- c("Regions")
+bin_number_dt$max_number <- NA
+bin_number_dt$min_number <- NA
+bin_number_dt$mean_number <- NA
+
+
+#bin_number_dt$max_number <- sapply(bin_number_dt$Regions, function(x) max(all_bins[Start > x & Stop < x + piece_size, length(Peak_Bins), by=Cell_line]$V1) )
+#bin_number_dt$min_number <- sapply(bin_number_dt$Regions, function(x) min(all_bins[Start > x & Stop < x + piece_size, length(Peak_Bins), by=Cell_line]$V1) )
+#bin_number_dt$mean_number <- sapply(bin_number_dt$Regions, function(x) mean(all_bins[Start > x & Stop <= x + piece_size, length(Peak_Bins), by=Cell_line]$V1) )
+#bin_number_dt$mean_number <- round(bin_number_dt$mean_number, digits = 0)
+
+temp_df <- nest(all_bins, Peak_Bins) # NOT WORKING
+#CONSIDER importing the raw data and peak binarization instead of doing nest()
+
+rm(bins_regions)
+```
+
 
 ##Обобщенная статистика по общим регионам
 

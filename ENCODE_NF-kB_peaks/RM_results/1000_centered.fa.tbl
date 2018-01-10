@@ -1,0 +1,50 @@
+==================================================
+file name: 1000_centered.fa         
+sequences:            85
+total length:      85000 bp  (85000 bp excl N/X-runs) 
+GC level:         53.33 %
+bases masked:      15483 bp ( 18.22 %)
+==================================================
+               number of      length   percentage
+               elements*    occupied  of sequence
+--------------------------------------------------
+SINEs:               47         7029 bp    8.27 %
+      ALUs           21         3763 bp    4.43 %
+      MIRs           26         3266 bp    3.84 %
+
+LINEs:               13         3869 bp    4.55 %
+      LINE1           6         2620 bp    3.08 %
+      LINE2           7         1249 bp    1.47 %
+      L3/CR1          0            0 bp    0.00 %
+
+LTR elements:         6         1354 bp    1.59 %
+      ERVL            0            0 bp    0.00 %
+      ERVL-MaLRs      3          475 bp    0.56 %
+      ERV_classI      1          508 bp    0.60 %
+      ERV_classII     0            0 bp    0.00 %
+
+DNA elements:         8          769 bp    0.90 %
+     hAT-Charlie      4          410 bp    0.48 %
+     TcMar-Tigger     0            0 bp    0.00 %
+
+Unclassified:         0            0 bp    0.00 %
+
+Total interspersed repeats:    13021 bp   15.32 %
+
+
+Small RNA:            0            0 bp    0.00 %
+
+Satellites:           0            0 bp    0.00 %
+Simple repeats:      39         1820 bp    2.14 %
+Low complexity:      11          642 bp    0.76 %
+==================================================
+
+* most repeats fragmented by insertions or deletions
+  have been counted as one element
+                                                      
+
+The query species was assumed to be homo sapiens  
+RepeatMasker Combined Database: Dfam_Consensus-20170127, RepBase-20170127
+        
+run with rmblastn version 2.6.0+
+

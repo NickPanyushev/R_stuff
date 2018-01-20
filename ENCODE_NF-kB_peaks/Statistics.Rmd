@@ -58,20 +58,23 @@ bins_regions <- seq(min(all_bins$Peak_Bins), max(all_bins$Peak_Bins), by = piece
 Cделаем data.table из двух столбцов - где будет начало региона, и среднее по всем линиям количество бинов, которые в этом регионе встречаются
 
 ```{r}
-bin_number_dt <- data.table(bins_regions)
-names(bin_number_dt) <- c("Regions")
+bin_number_dt <- matrix(bins_regions, ncol = length(unique(all_bins$Cell_line)),
+                        nrow = length(bins_regions))
+bin_number_dt <- as.data.table(bin_number_dt)
+bin_number_dt <- apply(bin_number_dt, c(1,2), as.list)
+#Теперь надо в каждую ячейку вторым элементом листа дописать клеточную линию с помощью := 
+bin_number_dt <- bin_number_dt[1L, V1 := 1L]
+#Потом пишем функцию и применяем ее ко всем ячейкам
+
+
 bin_number_dt$max_number <- NA
 bin_number_dt$min_number <- NA
 bin_number_dt$mean_number <- NA
-
-
 #bin_number_dt$max_number <- sapply(bin_number_dt$Regions, function(x) max(all_bins[Start > x & Stop < x + piece_size, length(Peak_Bins), by=Cell_line]$V1) )
 #bin_number_dt$min_number <- sapply(bin_number_dt$Regions, function(x) min(all_bins[Start > x & Stop < x + piece_size, length(Peak_Bins), by=Cell_line]$V1) )
 #bin_number_dt$mean_number <- sapply(bin_number_dt$Regions, function(x) mean(all_bins[Start > x & Stop <= x + piece_size, length(Peak_Bins), by=Cell_line]$V1) )
 #bin_number_dt$mean_number <- round(bin_number_dt$mean_number, digits = 0)
 
-temp_df <- nest(all_bins, Peak_Bins) # NOT WORKING
-#CONSIDER importing the raw data and peak binarization instead of doing nest()
 
 rm(bins_regions)
 ```

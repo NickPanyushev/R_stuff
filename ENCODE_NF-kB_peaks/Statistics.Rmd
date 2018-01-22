@@ -55,28 +55,41 @@ piece_size = 10000
 bins_regions <- seq(min(all_bins$Peak_Bins), max(all_bins$Peak_Bins), by = piece_size) #Определили координаты начала участков, где будем пики генерить
 ```
 
-Cделаем data.table из двух столбцов - где будет начало региона, и среднее по всем линиям количество бинов, которые в этом регионе встречаются
+Cделаем data.table - где будет начало региона, минимальное, среднее и максимальное по всем линиям количество бинов, которые в этом регионе встречаются
 
 ```{r}
-bin_number_dt <- matrix(bins_regions, ncol = length(unique(all_bins$Cell_line)),
+setwd("Script_files/")
+if (!file.exists("regions_bins.tsv")){
+  Cell_line_matrix <- matrix(data = unique(all_bins$Cell_line), ncol = length(unique(all_bins$Cell_line)),
+                        nrow = length(bins_regions), dimnames = list(bins_regions, unique(all_bins$Cell_line)))
+  Regions_matrix <- matrix(bins_regions, ncol = length(unique(all_bins$Cell_line)),
                         nrow = length(bins_regions))
-bin_number_dt <- as.data.table(bin_number_dt)
-bin_number_dt <- apply(bin_number_dt, c(1,2), as.list)
-#Теперь надо в каждую ячейку вторым элементом листа дописать клеточную линию с помощью := 
-bin_number_dt <- bin_number_dt[1L, V1 := 1L]
-#Потом пишем функцию и применяем ее ко всем ячейкам
+  new_array <- array (c(Cell_line_matrix, Regions_matrix), dim = c(length(unique(all_bins$Cell_line)),
+                        length(bins_regions), 2))
+  sel_bins <- all_bins[, .(Cell_line, Peak_Bins)]
+  
+  bin_num <- function(vector){
+   cell_line <- vector[1]
+   region <- as.numeric(vector[2])
+   bins <- sel_bins[Cell_line == cell_line, Peak_Bins]
+   bins <- bins[bins > region & bins < region + piece_size]
+  return(length(bins))
+  }
+  
+  bin_number_dt <- apply(new_array, c(2,1), bin_num)
+  bin_number_dt <- as.data.table(bin_number_dt)
+  names(bin_number_dt) <- unique(all_bins$Cell_line) 
+  fwrite(bin_number_dt, "regions_bins.tsv", "\t")
 
+}else{
+  bin_number_dt <- fread("regions_bins.tsv", "\t")
+}
 
-bin_number_dt$max_number <- NA
-bin_number_dt$min_number <- NA
-bin_number_dt$mean_number <- NA
-#bin_number_dt$max_number <- sapply(bin_number_dt$Regions, function(x) max(all_bins[Start > x & Stop < x + piece_size, length(Peak_Bins), by=Cell_line]$V1) )
-#bin_number_dt$min_number <- sapply(bin_number_dt$Regions, function(x) min(all_bins[Start > x & Stop < x + piece_size, length(Peak_Bins), by=Cell_line]$V1) )
-#bin_number_dt$mean_number <- sapply(bin_number_dt$Regions, function(x) mean(all_bins[Start > x & Stop <= x + piece_size, length(Peak_Bins), by=Cell_line]$V1) )
-#bin_number_dt$mean_number <- round(bin_number_dt$mean_number, digits = 0)
-
-
-rm(bins_regions)
+to_generate_dt <- data.table(Regions = bins_regions)
+to_generate_dt$min <- sapply(bin_number_dt, min)
+to_generate_dt$mean <- round(sapply(bin_number_dt, mean), digits = 0)
+to_generate_dt$mean <- round(rowMeans(bin_number_dt), digits = 0)
+to_generate_dt$max <- sapply(bin_number_dt, max)
 ```
 
 

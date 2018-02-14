@@ -79,17 +79,18 @@ if (!file.exists("regions_bins.tsv")){
   bin_number_dt <- apply(new_array, c(2,1), bin_num)
   bin_number_dt <- as.data.table(bin_number_dt)
   names(bin_number_dt) <- unique(all_bins$Cell_line) 
-  fwrite(bin_number_dt, "regions_bins.tsv", "\t")
-
+  fwrite(bin_number_dt, "regions_bins.tsv", sep = "\t")
 }else{
-  bin_number_dt <- fread("regions_bins.tsv", "\t")
+  bin_number_dt <- fread("regions_bins.tsv", sep = "\t")
 }
 
 to_generate_dt <- data.table(Regions = bins_regions)
 to_generate_dt$min <- sapply(bin_number_dt, min)
 to_generate_dt$mean <- round(sapply(bin_number_dt, mean), digits = 0)
-to_generate_dt$mean <- round(rowMeans(bin_number_dt), digits = 0)
 to_generate_dt$max <- sapply(bin_number_dt, max)
+to_generate_dt[to_generate_dt$mean == 0] <- NULL #Выбросим пустые регионы
+to_generate_dt[, data := as.list]
+runif(10, min = 10, 1000)
 ```
 
 

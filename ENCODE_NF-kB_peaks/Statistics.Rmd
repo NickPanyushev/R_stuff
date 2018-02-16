@@ -88,9 +88,23 @@ to_generate_dt <- data.table(Regions = bins_regions)
 to_generate_dt$min <- sapply(bin_number_dt, min)
 to_generate_dt$mean <- round(sapply(bin_number_dt, mean), digits = 0)
 to_generate_dt$max <- sapply(bin_number_dt, max)
-to_generate_dt[to_generate_dt$mean == 0] <- NULL #Выбросим пустые регионы
-to_generate_dt[, data := as.list]
-runif(10, min = 10, 1000)
+to_generate_dt <- to_generate_dt[mean != 0]   #Выбросим пустые регионы, где в среднем нет бинов, только выбросы какие-то
+
+#Сделаем функцию, которая нам нагенерит вектора
+generate_vector <- function(df, piece_size, bin_size = 50){
+  df$data <- mapply(runif, runif(1, df$min, df$max), min = df$Regions, max = (df$Regions + piece_size),
+                              SIMPLIFY = F)
+  out_vector <- unlist(lapply(df$data, round))
+  out_vector <-  out_vector%/%bin_size*bin_size
+  return(sort(out_vector))
+}
+
+class(generate_vector(to_generate_dt, piece_size))
+#Теперь сделаем матричку, внутри которой будем пересекать бины
+#количество рядов матрички - length(Regions), количество столбцов - 25, этого будет достаточно для генерации 1000 уникальных сочетаний по 14 линиям
+
+intersect_matrix <- matrix(NA, nrow=length(to_generate_dt$Regions), ncol = 25)
+intersect_matrix <- apply(intersect_matrix, 2, function(x) generate_vector(to_generate_dt, piece_size)) #Исправить так, чтобы матрица была, а не лист
 ```
 
 

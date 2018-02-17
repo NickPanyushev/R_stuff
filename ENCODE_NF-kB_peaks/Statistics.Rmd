@@ -97,34 +97,37 @@ generate_vector <- function(df, piece_size, bin_size = 50){
   out_vector <- unlist(lapply(df$data, round))
   out_vector <-  out_vector%/%bin_size*bin_size
   out_vector <- sort(out_vector)
-  out_vector[length(vector): piece_size/bin_size*length(df$Regions)] <- NA
+  #out_vector[length(vector): piece_size/bin_size*length(df$Regions)] <- NA
   return(out_vector)
 }
 
-length(to_generate_dt$Regions)
-length(generate_vector(to_generate_dt, piece_size))
-tail(generate_vector(to_generate_dt, piece_size), 5)
-#Теперь сделаем матричку, внутри которой будем пересекать бины
+#Теперь сделаем лист, внутри которой будем пересекать бины
 #количество рядов матрички - length(Regions), количество столбцов - 25, этого будет достаточно для генерации 1000 уникальных сочетаний по 14 линиям
 
 intersect_matrix <- matrix(NA, nrow=length(to_generate_dt$Regions), ncol = 25)
 intersect_matrix <- apply(intersect_matrix, 2, function(x) generate_vector(to_generate_dt, piece_size))
-intersect_matrix <- as.data.table(intersect_matrix)
+#intersect_matrix <- as.data.table(intersect_matrix)
 
 #Наконец-то попробуем пересечь бины матрички так и получить вектор с количеством общих бинов
 #Сделаем функцию для этого
-inter_length <- function(name_vector, df=intersect_matrix){
-  my_vec1 <- Reduce(intersect, as.list(df[, .(name_vector)]))
-  return(length(!is.na(my_vec1)))
+inter_len <- function(num_vector, mx=intersect_matrix){
+  my_vec1 <- Reduce(intersect, mx[num_vector])
+  return(length(my_vec1))
 }
 
-Reduce(intersect, as.list(intersect_matrix[, .(V1, V2)]))
-inter_length(c("V1", "V2"))
-
 n_lines <- length(unique(all_bins$Cell_line))
- sample(names(intersect_matrix), n_lines)
 
-intersect_vec <- replicate(1000, inter_length(sample(names(intersect_matrix), n_lines))) 
+
+intersect_vec <- replicate(10, inter_len(sample(1:length(intersect_matrix), 2))) #для 2 линий 
+print(intersect_vec)
+intersect_vec <- replicate(10, inter_len(sample(1:length(intersect_matrix), 3))) #для 3 линий
+print(intersect_vec)
+intersect_vec <- replicate(10, inter_len(sample(1:length(intersect_matrix), 3))) #для 4 линий
+print(intersect_vec)
+
+#Для 10 сразу уже нули идут
+intersect_vec <- replicate(10, inter_len(sample(1:length(intersect_matrix), 10))) #для 10
+print(intersect_vec)
 
 ```
 

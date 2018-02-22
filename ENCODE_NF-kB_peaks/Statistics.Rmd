@@ -11,10 +11,8 @@ output: html_document
 setwd("~/R_stuff/ENCODE_NF-kB_peaks/")
 source("~/R_stuff/Functions.R")
 library(ggplot2)
-library(tidyr)
 library(dplyr)
 library(data.table)
-library(compiler)
 ```
 
 ```{r, warning=FALSE, message=FALSE, results='hide'} 
@@ -89,8 +87,10 @@ to_generate_dt$min <- sapply(bin_number_dt, min)
 to_generate_dt$mean <- round(sapply(bin_number_dt, mean), digits = 0)
 to_generate_dt$max <- sapply(bin_number_dt, max)
 to_generate_dt <- to_generate_dt[mean != 0]   #Выбросим пустые регионы, где в среднем нет бинов, только выбросы какие-то
+```
 
-#Сделаем функцию, которая нам нагенерит вектора
+Сделаем функцию, которая нам нагенерит вектора
+```{r}
 generate_vector <- function(df, piece_size, bin_size = 50){
   df$data <- mapply(runif, runif(1, df$min, df$max), min = df$Regions, max = (df$Regions + piece_size),
                               SIMPLIFY = F)
@@ -100,36 +100,86 @@ generate_vector <- function(df, piece_size, bin_size = 50){
   #out_vector[length(vector): piece_size/bin_size*length(df$Regions)] <- NA
   return(out_vector)
 }
+```
+Теперь сделаем лист, внутри которой будем пересекать бины
+количество рядов матрички - `r length(Regions)`, количество столбцов - 25, этого будет достаточно для генерации 1000 уникальных сочетаний по 14 линиям
 
-#Теперь сделаем лист, внутри которой будем пересекать бины
-#количество рядов матрички - length(Regions), количество столбцов - 25, этого будет достаточно для генерации 1000 уникальных сочетаний по 14 линиям
+```{r}
+intersect_list <- matrix(NA, nrow=length(to_generate_dt$Regions), ncol = 25)
+intersect_list <- apply(intersect_list, 2, function(x) generate_vector(to_generate_dt, piece_size)) #Так как длина столбцов разная, то будет лист
+```
 
-intersect_matrix <- matrix(NA, nrow=length(to_generate_dt$Regions), ncol = 25)
-intersect_matrix <- apply(intersect_matrix, 2, function(x) generate_vector(to_generate_dt, piece_size))
-#intersect_matrix <- as.data.table(intersect_matrix)
-
-#Наконец-то попробуем пересечь бины матрички так и получить вектор с количеством общих бинов
-#Сделаем функцию для этого
-inter_len <- function(num_vector, mx=intersect_matrix){
+Наконец-то попробуем пересечь бины матрички так и получить вектор с количеством общих бинов
+Сделаем функцию для этого
+```{r}
+inter_len <- function(num_vector, mx=intersect_list){
   my_vec1 <- Reduce(intersect, mx[num_vector])
   return(length(my_vec1))
 }
-
-n_lines <- length(unique(all_bins$Cell_line))
-
-
-intersect_vec <- replicate(10, inter_len(sample(1:length(intersect_matrix), 2))) #для 2 линий 
-print(intersect_vec)
-intersect_vec <- replicate(10, inter_len(sample(1:length(intersect_matrix), 3))) #для 3 линий
-print(intersect_vec)
-intersect_vec <- replicate(10, inter_len(sample(1:length(intersect_matrix), 3))) #для 4 линий
-print(intersect_vec)
-
-#Для 10 сразу уже нули идут
-intersect_vec <- replicate(10, inter_len(sample(1:length(intersect_matrix), 10))) #для 10
-print(intersect_vec)
-
 ```
+
+Теперь сделаем датафрейм такой же, как мы делали для пересечений линий, с тем лишь отличием, что для каждого пересечения у нас будет 100 точек
+```{r}
+n_lines <- length(unique(all_bins$Cell_line))
+generated_df <- as.list(seq(1,n_lines))
+generated_df <- lapply(generated_df, function(x) replicate(100, inter_len(sample(1:length(intersect_list), x))))
+generated_df <- as.data.table(generated_df)
+names(generated_df) <- as.character(seq(1,n_lines))
+# Преобразуем его в двухстолбчачтый
+generated_df <- as.data.table(t(generated_df))
+generated_df$Line_number <- c(1:n_lines)
+generated_df <- melt(generated_df, id="Line_number")
+generated_df$Bin_numbers <- generated_df$value
+generated_df$variable <- NULL
+generated_df$value <- NULL
+# Запишем в файл
+fwrite(generated_df, file = "Script_files/gen_conbinations.tsv")
+```
+
+## График по сочетаниям
+
+Теперь построим график по количеству бинов во всех возможных пересечениях
+```{r}
+setwd("Script_files/")
+if (!file.exists("combinations.tsv")){
+  bins_intersect(all_bins)
+}
+comb_df <- fread("combinations.tsv", "\t")
+```
+Построим график для "Естетственных пересечений"
+```{r, echo=F}
+#Построим графичек
+ggplot(comb_df[Line_number>2, ], aes(x = Line_number, y = Bin_numbers))+
+  geom_jitter(alpha = 0.5, color = "red", size = 1.5, na.rm = T)+
+  #geom_smooth(method = "nls", formula = Bin_numbers ~ a+Line_number/b*Line_number,  se = FALSE, fullrange = TRUE)+
+  labs(title = "Common bin number",
+       x = "Number of lines",
+       y = "Common peak number")+
+  ylim(0, 2e+04)+
+theme_bw()
+```
+
+А теперь график для сгенерированных сочетаний
+```{r, echo=F}
+#Построим графичек
+ggplot(generated_df[Line_number>2, ], aes(x = Line_number, y = Bin_numbers))+
+  geom_jitter(alpha = 0.5, color = "blue", size = 1.5, na.rm = T)+
+  #geom_smooth(method = "nls", formula = Bin_numbers ~ a+Line_number/b*Line_number,  se = FALSE, fullrange = TRUE)+
+  labs(title = "Common bin number",
+       x = "Number of lines",
+       y = "Common peak number")+
+  ylim(0, 2e+04)+
+theme_bw()
+```
+
+
+
+
+
+```{r}
+comb_df[, round(mean(Bin_numbers), digits = 0), by = Line_number] 
+```
+Всего вышло `r min(comb_df$Bin_numbers)` общих бинов
 
 
 ##Обобщенная статистика по общим регионам
@@ -191,32 +241,6 @@ ggplot(common_bins, aes(Chromosome, fill = Chromosome))+
 
 Интересно, что же там такое?
 
-## График по сочетаниям
-
-Теперь построим график по количеству бинов во всех возможных пересечениях
-```{r}
-if (!file.exists("combinations.tsv")){
-  bins_intersect(all_bins)
-}
-comb_df <- fread("combinations.tsv", "\t")
-```
-
-```{r, echo=F}
-#Построим графичек
-ggplot(comb_df, aes(x = Line_number, y = Bin_numbers))+
-  geom_jitter(alpha = 0.5, color = "red", size = 1.5, na.rm = T)+
-  #geom_smooth(method = "nls", formula = Bin_numbers ~ a+Line_number/b*Line_number,  se = FALSE, fullrange = TRUE)+
-  labs(title = "Common bin number",
-       x = "Number of lines",
-       y = "Common peak number")+
-  ylim(0, 2e+05)+
-theme_bw()
-```
-
-```{r}
-comb_df[, round(mean(Bin_numbers), digits = 0), by = Line_number] 
-```
-Всего вышло `r min(comb_df$Bin_numbers)` общих бинов
 
 ```{r clean-up, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 rm(list = setdiff(ls(), lsf.str()))

@@ -1,3 +1,6 @@
+library(data.table)
+library(dplyr)
+
 read.narrowpeak <- function(filename, filtering=TRUE){
   raw_peaks <-  read.table(filename, header = F, sep = "\t")
   names(raw_peaks) <- c("Chromosome", "Start", "Stop", "Peak_name",
@@ -58,6 +61,7 @@ bins_intersect <- function(df){
   
   #Поставим ограничение по памяти в 10гб
   if (.Platform$OS.type == "unix"){
+    devtools::install_github("krlmlr/ulimit")
     ulimit::memory_limit(10000) 
   }
   if (.Platform$OS.type == "windows"){

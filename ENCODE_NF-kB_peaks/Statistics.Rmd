@@ -171,7 +171,10 @@ ggplot(generated_df[Line_number>2, ], aes(x = Line_number, y = Bin_numbers))+
   ylim(0, 2e+04)+
 theme_bw()
 ```
-
+Проверим теперь это t- тестом
+```{r}
+t.test(comb_df[comb_df$Line_number==6, Bin_numbers], generated_df[generated_df$Line_number==6, Bin_numbers], alternative = "greater")
+```
 
 
 

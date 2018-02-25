@@ -29,8 +29,7 @@ file.remove("all_bins.tsv")
 
 Поэтому порежем геном на кусочки, в каждом из которых есть примерно столько бинов, сколько и в реальных данных. 
 
-Мы работаем с геномом человека он - 3млрд оснований, порежем его на кусочки примерно по 10 кб - и в каждом из этих кусочков сгенерим столько бинов, сколько в том диапазоне, который есть в реальных данных. 
-
+Мы работаем с геномом человека он - 3млрд оснований, порежем его на кусочки примерно по 5 кб - и в каждом из этих кусочков сгенерим столько бинов, сколько в том диапазоне, который есть в реальных данных. 
 
 В качестве иллюстрации посмотрим на распределение по 1й хромосоме бинов во всех клеточных линиях
 ```{r}
@@ -49,7 +48,7 @@ ggplot(all_bins[Chromosome=="chr1", ,], aes(Peak_Bins))+
 Вне этих пределов не имеет смысла генерировать бины, потому что их нет в реальных данных совсем.
 
 ```{r}
-piece_size = 10000
+piece_size = 5000
 bins_regions <- seq(min(all_bins$Peak_Bins), max(all_bins$Peak_Bins), by = piece_size) #Определили координаты начала участков, где будем пики генерить
 ```
 
@@ -121,19 +120,22 @@ inter_len <- function(num_vector, mx=intersect_list){
 Теперь сделаем датафрейм такой же, как мы делали для пересечений линий, с тем лишь отличием, что для каждого пересечения у нас будет 100 точек
 ```{r}
 n_lines <- length(unique(all_bins$Cell_line))
-generated_df <- as.list(seq(1,n_lines))
-generated_df <- lapply(generated_df, function(x) replicate(100, inter_len(sample(1:length(intersect_list), x))))
-generated_df <- as.data.table(generated_df)
-names(generated_df) <- as.character(seq(1,n_lines))
-# Преобразуем его в двухстолбчачтый
-generated_df <- as.data.table(t(generated_df))
-generated_df$Line_number <- c(1:n_lines)
-generated_df <- melt(generated_df, id="Line_number")
-generated_df$Bin_numbers <- generated_df$value
-generated_df$variable <- NULL
-generated_df$value <- NULL
-# Запишем в файл
-fwrite(generated_df, file = "Script_files/gen_conbinations.tsv")
+if (!file.exists("Script_files/gen_combinations.tsv")){
+  generated_df <- as.list(seq(1,n_lines))
+  generated_df <- lapply(generated_df, function(x) replicate(500, inter_len(sample(1:length(intersect_list), x))))
+  generated_df <- as.data.table(generated_df)
+  names(generated_df) <- as.character(seq(1,n_lines))
+  # Преобразуем его в двухстолбчачтый
+  generated_df <- as.data.table(t(generated_df))
+  generated_df$Line_number <- c(1:n_lines)
+  generated_df <- melt(generated_df, id="Line_number")
+  generated_df$Bin_numbers <- generated_df$value
+  generated_df$variable <- NULL
+  generated_df$value <- NULL
+  # Запишем в файл
+  fwrite(generated_df, file = "Script_files/gen_combinations.tsv", sep = "\t")
+}
+generated_df <- fread("Script_files/gen_combinations.tsv", sep = "\t")
 ```
 
 ## График по сочетаниям
@@ -149,40 +151,84 @@ comb_df <- fread("combinations.tsv", "\t")
 Построим график для "Естетственных пересечений"
 ```{r, echo=F}
 #Построим графичек
-ggplot(comb_df[Line_number>2, ], aes(x = Line_number, y = Bin_numbers))+
+ggplot(comb_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers))+
   geom_jitter(alpha = 0.5, color = "red", size = 1.5, na.rm = T)+
   #geom_smooth(method = "nls", formula = Bin_numbers ~ a+Line_number/b*Line_number,  se = FALSE, fullrange = TRUE)+
   labs(title = "Common bin number",
        x = "Number of lines",
        y = "Common peak number")+
-  ylim(0, 2e+04)+
+  scale_y_log10()+
+  #ylim(0, 2e+04)+
 theme_bw()
 ```
-
 А теперь график для сгенерированных сочетаний
 ```{r, echo=F}
 #Построим графичек
-ggplot(generated_df[Line_number>2, ], aes(x = Line_number, y = Bin_numbers))+
+ggplot(generated_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers))+
   geom_jitter(alpha = 0.5, color = "blue", size = 1.5, na.rm = T)+
   #geom_smooth(method = "nls", formula = Bin_numbers ~ a+Line_number/b*Line_number,  se = FALSE, fullrange = TRUE)+
   labs(title = "Common bin number",
        x = "Number of lines",
        y = "Common peak number")+
-  ylim(0, 2e+04)+
+    scale_y_log10()+
 theme_bw()
 ```
+
+Попробуем сопоставить графички, чтобы были вместе
+```{r}
+#Для этого состакаем датафреймы
+comb_df$type <- "natural"
+generated_df$type <- "unnatural"
+all_df <- rbind(comb_df, generated_df)
+ggplot(all_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers, group = type))+
+  geom_col(position = "dodge", alpha = 0.5, size = 1.5, na.rm = T)+
+  #position_dodge()+
+  labs(title = "Common bin number",
+       x = "Number of lines",
+       y = "Common peak number")+
+  #scale_y_log10()+
+  #ylim(0, 2e+04)+
+theme_bw()
+
+```
+
+
+
+
+
+
 Проверим теперь это t- тестом
 ```{r}
 t.test(comb_df[comb_df$Line_number==6, Bin_numbers], generated_df[generated_df$Line_number==6, Bin_numbers], alternative = "greater")
 ```
 
 
-
-
 ```{r}
-comb_df[, round(mean(Bin_numbers), digits = 0), by = Line_number] 
+comb_df[, round(mean(Bin_numbers), digits = 0), by = Line_number] # В естественных пересечениях
+generated_df[, round(mean(Bin_numbers), digits = 0), by = Line_number] # В сгенерированных пересечениях
 ```
 Всего вышло `r min(comb_df$Bin_numbers)` общих бинов
+
+##Зафиттим модельку и найдем предел
+
+Как говорит wolfram alpha, у нас тут наблюдается логарифмическая зависимость
+Ну убедимся в этом!
+
+```{r}
+#fit log model
+library(MASS)
+
+fit_natural <- loglm( ,comb_df[, round(mean(Bin_numbers), digits = 0), by = Line_number])
+
+#Results of the model
+summary(fit_natural)
+coef(fit_natural)
+#Plot the distribution
+x <- seq(from=1,to=20)
+y <- predict(fit_natural, interval="confidence")
+
+matlines(x, y, lwd=2)
+```
 
 
 ##Обобщенная статистика по общим регионам

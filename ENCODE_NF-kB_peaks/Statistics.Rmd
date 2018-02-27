@@ -204,30 +204,104 @@ generated_df[, round(mean(Bin_numbers), digits = 0), by = Line_number] # В сг
 
 ##Зафиттим модельку и найдем предел
 
-Как говорит wolfram alpha, у нас тут наблюдается логарифмическая зависимость
+###Реальные пересечения
+
+Я тут конкретно подозреваю обратно-пропорциональную зависимость
 Ну убедимся в этом!
-
+Зафиттим обратно-пропорциональную зависимость по средним значениям
 ```{r}
-x <- seq(1:20)
-y <- -1556.94*log(0.0684034*x)
+#Для начала попробуем зафиттить по средним
+temp_natural <- comb_df[, round(mean(Bin_numbers), digits = 0), by = Line_number] 
+fit_mean_natural <- lm(Line_number ~ I(1/V1), temp_natural)
 
-y
-
-#fit log model
-library(MASS)
-
-fit_natural <- loglm()
-
-#Results of the model
+#Что мы имеем 
 summary(fit_natural)
-coef(fit_natural)
-#Plot the distribution
-x <- seq(from=1,to=20)
-y <- predict(fit_natural, interval="confidence")
+#Выглядит неплохо
 
-matlines(x, y, lwd=2)
+#Немного непонятных метрик
+plot(fit_natural)
+```
+Вроде как подтвердили, что зависимость есть, давай теперь попробуем получить реальные значения по всем точкам
+```{r}
+fit_natural <- lm(Line_number ~ I(1/Bin_numbers), comb_df[Line_number>1, ])
+#Что мы имеем 
+summary(fit_natural)
+#R^2 отстойный, да и хуй бы с ним
+
+#Непонятные метрики
+plot(fit_natural)
+```
+Теперь попробуем предсказать, сколько у нас будет пересечений при увеличении количества линий до 30, например
+```{r}
+x <- c(1:100)
+y <- fit_natural$coefficients[1] + fit_natural$coefficients[2]/x
+y
+```
+Асимптота - получилась равна `r fit_natural$coefficients[1]` - но хрен мы к нему приблизимся, раньше все зашкварят погрешности эксперимента
+
+###Сгенерерированные пересечения
+
+Тоже зафиттим обратно-пропорциональную зависимость по средним значениям
+```{r}
+#Для начала попробуем зафиттить по средним
+temp_generated <- generated_df[, round(mean(Bin_numbers), digits = 0), by = Line_number] 
+temp_generated <- temp_generated[temp_generated$V1 != 0] #убрали нули
+fit_mean_generated <- lm(Line_number ~ I(1/V1), temp_generated)
+
+#Что мы имеем 
+summary(fit_mean_generated)
+#Выглядит плохо совсем
+
+#Немного непонятных метрик
+plot(fit_mean_generated)
+```
+Не очень удалось
+
+Попробуем зафиттить линейную модель
+```{r}
+temp_generated <- generated_df[, round(mean(Bin_numbers), digits = 0), by = Line_number]
+fit_mean_generated <- lm(Line_number ~ V1, temp_generated)
+
+#Что мы имеем 
+summary(fit_mean_generated)
+#Выглядит плохо совсем
+```
+Еще хуже выглядит
+
+Попробуем логарифмическую зафиттить
+```{r}
+fit_mean_generated <- lm(Line_number ~ I(exp(-V1)), temp_generated)
+
+#Что мы имеем 
+summary(fit_mean_generated)
+#Выглядит нормальненько
+
+#Немного непонятных метрик
+plot(fit_mean_generated)
+
 ```
 
+А вот логарифмическая - зашла
+
+Вроде как подтвердили, что зависимость есть, давай теперь попробуем предсказать реальные значения по всем точкам
+
+```{r}
+fit_generated <- lm(Line_number ~ I(exp(-Bin_numbers)), generated_df)
+
+#Что мы имеем 
+summary(fit_generated)
+#Выглядит нормальненько
+
+#Немного непонятных метрик
+plot(fit_generated)
+```
+А теперь предскажем, как поведет себя количество пересечений при увеличении количества линий
+```{r}
+x <- c(1:100)
+y <- fit_generated$coefficients[1] + fit_generated$coefficients[2]*exp(-x)
+y
+```
+Выглядит странно, но что уж тут поделаешь, суть не меняется. 
 
 ##Обобщенная статистика по общим регионам
 

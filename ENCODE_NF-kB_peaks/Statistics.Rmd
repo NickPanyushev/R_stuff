@@ -180,8 +180,8 @@ theme_bw()
 comb_df$type <- "natural"
 generated_df$type <- "unnatural"
 all_df <- rbind(comb_df, generated_df)
-ggplot(all_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers, group = type))+
-  geom_col(position = "dodge", alpha = 0.5, size = 1.5, na.rm = T)+
+ggplot(all_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers))+
+  geom_histogram(position = "dodge", alpha = 0.5, size = 1.5, na.rm = T)+
   #position_dodge()+
   labs(title = "Common bin number",
        x = "Number of lines",
@@ -189,17 +189,10 @@ ggplot(all_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers, group = t
   #scale_y_log10()+
   #ylim(0, 2e+04)+
 theme_bw()
-
 ```
-
-
-
-
-
-
 Проверим теперь это t- тестом
 ```{r}
-t.test(comb_df[comb_df$Line_number==6, Bin_numbers], generated_df[generated_df$Line_number==6, Bin_numbers], alternative = "greater")
+t.test(comb_df[comb_df$Line_number==4, Bin_numbers], generated_df[generated_df$Line_number==4, Bin_numbers], alternative = "greater")
 ```
 
 
@@ -215,10 +208,15 @@ generated_df[, round(mean(Bin_numbers), digits = 0), by = Line_number] # В сг
 Ну убедимся в этом!
 
 ```{r}
+x <- seq(1:20)
+y <- -1556.94*log(0.0684034*x)
+
+y
+
 #fit log model
 library(MASS)
 
-fit_natural <- loglm( ,comb_df[, round(mean(Bin_numbers), digits = 0), by = Line_number])
+fit_natural <- loglm()
 
 #Results of the model
 summary(fit_natural)

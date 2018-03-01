@@ -1,5 +1,5 @@
 library(data.table)
-setwd("R_stuff/Transposons/")
+setwd("~/R_stuff/Transposons/")
 if (!file.exists("RM_rawout.zip")){
   unzip("f.hep_RM.out.zip")
   RM_rawout <- fread("fasciola_hepatica.PRJEB6687.WBPS9.genomic.fa.out" , sep = " ", blank.lines.skip = T, fill = T)
@@ -13,8 +13,8 @@ if (!file.exists("RM_rawout.zip")){
   RM_rawout$Class <- lapply(RM_rawout$`class/family`, function(x) x[[1]])
   RM_rawout$Family <- lapply(RM_rawout$`class/family`, function(x) ifelse(length(x) > 1, x[[2]], NA))
   RM_rawout$`class/family` <- NULL
-  fwrite(RM_rawout, "RM_rawout.tsv")
-  zip("RM_rawout.zip", RM_rawout.tsv)
+  fwrite(RM_rawout, file = "RM_rawout.tsv", sep = "\t")
+  zip("RM_rawout.zip", "RM_rawout.tsv")
   file.remove("RM_rawout.tsv")
   file.remove("fasciola_hepatica.PRJEB6687.WBPS9.genomic.fa.out")
 }else{
@@ -22,8 +22,13 @@ if (!file.exists("RM_rawout.zip")){
   RM_rawout <- fread("RM_rawout.tsv")
   file.remove("RM_rawout.tsv")
 }
+
 #Отфильтруем все то, что нам не нужно
-RM_rawout <- RM_rawout[ RM_rawout$Сlass != "Simple_repeat", ]
-RM_rawout <- RM_rawout[ RM_rawout$Сlass != "Low_complexity", ]
-unique(RM_rawout$Class)
-unique(RM_rawout$Family)
+RM_rawout <- RM_rawout[Сlass != 'Simple_repeat']
+RM_rawout <- RM_rawout[ 'Сlass' != 'Low_complexity']
+RM_rawout <- RM_rawout[ 'Сlass' != 'tRNA']
+RM_rawout <- RM_rawout[ 'Сlass' != 'rRNA']
+RM_rawout <- RM_rawout[ 'Сlass' != 'snRNA']
+RM_rawout <- RM_rawout[ 'Сlass' != 'srpRNA']
+RM_rawout <- RM_rawout[ 'Сlass' != 'ARTEFACT']
+

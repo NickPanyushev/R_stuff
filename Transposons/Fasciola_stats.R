@@ -74,8 +74,8 @@ theme_grey() %+replace%
 #Plot of the TE classes
 ggplot(by_class, aes(x=reorder(V1,-N), N))+
   geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
-  labs(title = "TE classes distribuution",
-       x = "TE family name",
+  labs(title = "TE classes distribution",
+       x = "TE class name",
        y = "Number in genome")+
   theme_grey() %+replace% 
   theme(panel.background = element_rect(fill = "white", colour = NA),
@@ -88,9 +88,9 @@ ggplot(by_class, aes(x=reorder(V1,-N), N))+
         complete = TRUE)
 
 #Plot of the elements names
-ggplot(by_elements[1:20], aes(x=reorder(V1,-N), N))+
+ggplot(by_elements[1:15], aes(x=reorder(V1,-N), N))+
   geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
-  labs(title = "Top20 TE names",
+  labs(title = "Top15 TE's",
        x = "TE name",
        y = "Number in genome")+
   theme_grey() %+replace% 
@@ -115,11 +115,11 @@ bp_element <- RM_rawout[, .(sum(abs(query_stop - query_start))), by = element_na
 bp_element <- bp_element[order(bp_element$V1, decreasing = T), ]
 
 #По занятым нуклеотидам
-ggplot(bp_family[1:20,], aes(x=reorder(family,-V1), V1))+
+ggplot(bp_family[1:15,], aes(x=reorder(family,-V1), V1))+
   geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
-  labs(title = "Top20 TE families",
+  labs(title = "Top15 TE families",
        x = "TE family name",
-       y = "Number in genome")+
+       y = "Occupied nucleotides")+
   theme_grey() %+replace% 
   theme(panel.background = element_rect(fill = "white", colour = NA),
         panel.border = element_rect(fill = NA, colour = "grey20"),
@@ -132,9 +132,9 @@ ggplot(bp_family[1:20,], aes(x=reorder(family,-V1), V1))+
 
 ggplot(bp_class, aes(x=reorder(class,-V1), V1))+
   geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
-  labs(title = "Top20 TE families",
-       x = "TE family name",
-       y = "Number in genome")+
+  labs(title = "TE classes by occupancy",
+       x = "TE class name",
+       y = "Occupies nucleotides")+
   theme_grey() %+replace% 
   theme(panel.background = element_rect(fill = "white", colour = NA),
         panel.border = element_rect(fill = NA, colour = "grey20"),
@@ -169,6 +169,26 @@ names(class_table) <- c("class", "Occurences")
 setkey(class_table, class)
 class_table <- class_table[bp_class]
 names(class_table) <- c("class", "Occurences", "Total_bp")
-class_table$mean_length <- NULL
 class_table$mean_length <- class_table[, .(Mean_length = round(Total_bp/Occurences, digits = 0))]
+class_table$percent_genome <- class_table$Total_bp/fasciola_size*100
+fwrite(class_table, file = "graphs/classes.tsv", sep = "\t")
 
+#По семействам
+family_table <- by_family
+names(family_table) <- c("family", "Occurences")
+setkey(family_table, family)
+family_table <- family_table[bp_family]
+names(family_table) <- c("family", "Occurences", "Total_bp")
+family_table$mean_length <- family_table[, .(Mean_length = round(Total_bp/Occurences, digits = 0))]
+family_table$percent_genome <- family_table$Total_bp/fasciola_size*100
+fwrite(family_table, file = "graphs/families.tsv", sep = "\t")
+
+#По TE
+elements_table <- by_elements
+names(elements_table) <- c("elements", "Occurences")
+setkey(elements_table, elements)
+elements_table <- elements_table[bp_element]
+names(elements_table) <- c("elements", "Occurences", "Total_bp")
+elements_table$mean_length <- elements_table[, .(Mean_length = round(Total_bp/Occurences, digits = 0))]
+elements_table$percent_genome <- elements_table$Total_bp/fasciola_size*100
+fwrite(elements_table, file = "graphs/elements.tsv", sep = "\t")

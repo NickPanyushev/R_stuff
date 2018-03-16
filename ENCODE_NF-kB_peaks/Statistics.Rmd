@@ -48,7 +48,7 @@ ggplot(all_bins[Chromosome=="chr1", ,], aes(Peak_Bins))+
 Вне этих пределов не имеет смысла генерировать бины, потому что их нет в реальных данных совсем.
 
 ```{r}
-piece_size = 5000
+piece_size = 1000
 bins_regions <- seq(min(all_bins$Peak_Bins), max(all_bins$Peak_Bins), by = piece_size) #Определили координаты начала участков, где будем пики генерить
 ```
 
@@ -117,7 +117,7 @@ inter_len <- function(num_vector, mx=intersect_list){
 }
 ```
 
-Теперь сделаем датафрейм такой же, как мы делали для пересечений линий, с тем лишь отличием, что для каждого пересечения у нас будет 100 точек
+Теперь сделаем датафрейм такой же, как мы делали для пересечений линий, с тем лишь отличием, что для каждого пересечения у нас будет 500 точек
 ```{r}
 n_lines <- length(unique(all_bins$Cell_line))
 if (!file.exists("Script_files/gen_combinations.tsv")){
@@ -175,7 +175,7 @@ theme_bw()
 ```
 
 Попробуем сопоставить графички, чтобы были вместе
-```{r}
+```{r, eval=F}
 #Для этого состакаем датафреймы
 comb_df$type <- "natural"
 generated_df$type <- "unnatural"

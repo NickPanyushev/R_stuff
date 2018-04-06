@@ -13,6 +13,8 @@ source("~/R_stuff/Functions.R")
 library(ggplot2)
 library(dplyr)
 library(data.table)
+# library(sjmisc)
+#library(sjlabelled)
 ```
 
 ```{r, warning=FALSE, message=FALSE, results='hide'} 
@@ -101,7 +103,7 @@ generate_vector <- function(df, piece_size, bin_size = 50){
 }
 ```
 Теперь сделаем лист, внутри которой будем пересекать бины
-количество рядов матрички - `r length(Regions)`, количество столбцов - 25, этого будет достаточно для генерации 1000 уникальных сочетаний по 14 линиям
+количество рядов матрички - `r length(bins_regions)`, количество столбцов - 25, этого будет достаточно для генерации 1000 уникальных сочетаний по 14 линиям
 
 ```{r}
 intersect_list <- matrix(NA, nrow=length(to_generate_dt$Regions), ncol = 25)
@@ -117,7 +119,7 @@ inter_len <- function(num_vector, mx=intersect_list){
 }
 ```
 
-Теперь сделаем датафрейм такой же, как мы делали для пересечений линий, с тем лишь отличием, что для каждого пересечения у нас будет 500 точек
+Теперь сделаем датафрейм такой же, как мы делали для пересечений линий, и но количество пересечений будет отличаться от реальных данных - их будет везде по 500
 ```{r}
 n_lines <- length(unique(all_bins$Cell_line))
 if (!file.exists("Script_files/gen_combinations.tsv")){
@@ -157,42 +159,46 @@ ggplot(comb_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers))+
   labs(title = "Common bin number",
        x = "Number of lines",
        y = "Common peak number")+
-  scale_y_log10()+
-  #ylim(0, 2e+04)+
+  #scale_y_log10()+
+  ylim(0, 2e+05)+
 theme_bw()
 ```
+  
+
 А теперь график для сгенерированных сочетаний
 ```{r, echo=F}
 #Построим графичек
 ggplot(generated_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers))+
   geom_jitter(alpha = 0.5, color = "blue", size = 1.5, na.rm = T)+
-  #geom_smooth(method = "nls", formula = Bin_numbers ~ a+Line_number/b*Line_number,  se = FALSE, fullrange = TRUE)+
   labs(title = "Common bin number",
        x = "Number of lines",
        y = "Common peak number")+
-    scale_y_log10()+
+    #scale_y_log10()+
+  ylim(0, 2e+05)+
 theme_bw()
 ```
+  
 
 Попробуем сопоставить графички, чтобы были вместе
 ```{r, eval=F}
 #Для этого состакаем датафреймы
 comb_df$type <- "natural"
 generated_df$type <- "unnatural"
+
 all_df <- rbind(comb_df, generated_df)
-ggplot(all_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers))+
-  geom_histogram(position = "dodge", alpha = 0.5, size = 1.5, na.rm = T)+
-  #position_dodge()+
+#all_df$Bin_numbers[all_df$Bin_numbers == 0] <- NA
+#all_df$type <- factor(all_df$type)
+ggplot(all_df[Line_number > 1], aes(x = Line_number, y = Bin_numbers))+
+  geom_jitter(aes(color = type), position = position_jitterdodge(jitter.width = 0.1), size = 2, alpha = 0.5, na.rm = T) + 
   labs(title = "Common bin number",
        x = "Number of lines",
        y = "Common peak number")+
-  #scale_y_log10()+
-  #ylim(0, 2e+04)+
+   ylim(0, 1e+05)+
 theme_bw()
 ```
 Проверим теперь это t- тестом
 ```{r}
-t.test(comb_df[comb_df$Line_number==4, Bin_numbers], generated_df[generated_df$Line_number==4, Bin_numbers], alternative = "greater")
+t.test(generated_df[generated_df$Line_number == 13, Bin_numbers], comb_df[comb_df$Line_number == 13, Bin_numbers], alternative = "less")
 ```
 
 
@@ -215,11 +221,8 @@ temp_natural <- comb_df[, round(mean(Bin_numbers), digits = 0), by = Line_number
 fit_mean_natural <- lm(Line_number ~ I(1/V1), temp_natural)
 
 #Что мы имеем 
-summary(fit_natural)
+summary(fit_mean_natural)
 #Выглядит неплохо
-
-#Немного непонятных метрик
-plot(fit_natural)
 ```
 Вроде как подтвердили, что зависимость есть, давай теперь попробуем получить реальные значения по всем точкам
 ```{r}
@@ -227,9 +230,6 @@ fit_natural <- lm(Line_number ~ I(1/Bin_numbers), comb_df[Line_number>1, ])
 #Что мы имеем 
 summary(fit_natural)
 #R^2 отстойный, да и хуй бы с ним
-
-#Непонятные метрики
-plot(fit_natural)
 ```
 Теперь попробуем предсказать, сколько у нас будет пересечений при увеличении количества линий до 30, например
 ```{r}
@@ -251,37 +251,18 @@ fit_mean_generated <- lm(Line_number ~ I(1/V1), temp_generated)
 #Что мы имеем 
 summary(fit_mean_generated)
 #Выглядит плохо совсем
-
-#Немного непонятных метрик
-plot(fit_mean_generated)
 ```
-Не очень удалось
 
-Попробуем зафиттить линейную модель
-```{r}
-temp_generated <- generated_df[, round(mean(Bin_numbers), digits = 0), by = Line_number]
-fit_mean_generated <- lm(Line_number ~ V1, temp_generated)
-
-#Что мы имеем 
-summary(fit_mean_generated)
-#Выглядит плохо совсем
-```
-Еще хуже выглядит
-
-Попробуем логарифмическую зафиттить
+Попробуем exp(-x)
 ```{r}
 fit_mean_generated <- lm(Line_number ~ I(exp(-V1)), temp_generated)
 
 #Что мы имеем 
 summary(fit_mean_generated)
 #Выглядит нормальненько
-
-#Немного непонятных метрик
-plot(fit_mean_generated)
-
 ```
 
-А вот логарифмическая - зашла
+А вот exp(-x) - зашла
 
 Вроде как подтвердили, что зависимость есть, давай теперь попробуем предсказать реальные значения по всем точкам
 
@@ -308,7 +289,7 @@ y
 Сделаем бокс-плот, который покажет, как распределены общие пики по fold_change и по q-value в этих клеточных линиях
 
 Fold change distribution
-```{r, echo=F}
+```{r, echo=F, eval=F}
 #fold_change для начала
 ggplot(common_peaks, aes(Cell_line, Fold_change))+
   geom_boxplot()+
@@ -319,7 +300,7 @@ ggplot(common_peaks, aes(Cell_line, Fold_change))+
 ```
 
 q-value distribution
-```{r, echo=F}
+```{r, echo=F, eval=F}
 #Теперь q-value
 ggplot(common_peaks, aes(Cell_line, common_peaks$`q-value`))+
   geom_boxplot()+
@@ -332,7 +313,7 @@ ggplot(common_peaks, aes(Cell_line, common_peaks$`q-value`))+
 
 Глянем, как они распределены общие бины по хромосомам
 
-```{r genome location, echo=F}
+```{r genome location, echo=F, eval=F}
 #Упорядочим нормально хромосомки, чтобы было красиво
 common_bins$Chromosome <- factor(common_bins$Chromosome, 
                                    levels =c("chr1","chr2","chr3","chr4","chr5",

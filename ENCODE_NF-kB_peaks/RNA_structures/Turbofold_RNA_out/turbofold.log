@@ -1,0 +1,9 @@
+nohup: ignoring input
+Initializing nucleic acids...Using auto-detected DATAPATH: "./data_tables" (set the DATAPATH environment variable to avoid this warning).
+done.
+Folding nucleic acids...
+  0% [=                                                 ] /                      33% [=================                                 ] -                      66% [==================================                ] \                     100% [==================================================]  
+done.
+Calculating maximum expected accuracy structures...done.
+Writing output ct files...done.
+TurboFold complete.

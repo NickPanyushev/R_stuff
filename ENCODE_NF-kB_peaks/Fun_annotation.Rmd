@@ -28,8 +28,8 @@ file.remove("Gencode_v24.bed")
 #Вытащим только транскрипты
 transcripts <- subset(annotation_v24, annotation_v24$Type == "transcript")
 transcripts$Type <- NULL
-fwrite(transcripts, "BEDs/transcripts.bed", sep = "\t", col.names = FALSE)
-zip("BEDs/transcripts.zip", "transcripts.bed")
+fwrite(transcripts, "../BEDs/transcripts.bed", sep = "\t", col.names = FALSE)
+zip("../BEDs/transcripts.zip", "transcripts.bed")
 
 rm(annotation_v24)
 ```

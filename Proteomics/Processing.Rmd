@@ -1,0 +1,46 @@
+---
+title: "Proteome_analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+setwd("~/R_stuff/Proteomics/")
+library(data.table)
+library(ggplot2)
+library(biomaRt)
+```
+##Подготовка данных
+```{r}
+raw_data <- fread("raw_data.csv")
+raw_data$Total_score <- as.numeric(sapply(raw_data$Total_score, function(x) sub(",", ".", x)))
+raw_data$Unused_score <- as.numeric(sapply(raw_data$Unused_score, function(x) sub(",", ".", x)))
+raw_data$`% Cov` <- as.numeric(sapply(raw_data$`% Cov`, function(x) sub(",", ".", x)))
+raw_data$`% Cov (95)` <- as.numeric(sapply(raw_data$`% Cov (95)`, function(x) sub(",", ".", x)))
+raw_data$Accession <- sapply(raw_data$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
+#Удаляем белки с unused score < 1.3
+raw_data <- raw_data[raw_data$Unused_score >= 1.3]
+```
+##Аннотация по Gene Ontology
+```{r}
+# define biomart object
+mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
+
+# query biomart
+BM_out <- getBM(attributes = c("name_1006", "namespace_1003", "hgnc_symbol"),
+                 filters = "uniprotswissprot",
+                values = raw_data$Accession, 
+                mart = mart,
+                uniqueRows = TRUE)
+rm(mart)
+```
+##Топ mol_function, bio_process по группам белков
+##Определяем уникальные белки
+##Определяем общие белки
+## Насколько хорошо прошло разделение ядро/цитоплазма (сколько % белков, у которых только ядро в цп и наоборот)
+
+
+```{r}
+raw_data$Total_score[raw_data$Total_score != raw_data$Unused_score] - raw_data$Unused_score[raw_data$Total_score != raw_data$Unused_score]  
+```
+
+

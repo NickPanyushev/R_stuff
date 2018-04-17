@@ -8,6 +8,8 @@ setwd("~/R_stuff/Proteomics/")
 library(data.table)
 library(ggplot2)
 library(biomaRt)
+library(dplyr)
+library(tidyr)
 ```
 ##Подготовка данных
 ```{r}
@@ -17,6 +19,8 @@ raw_data$Unused_score <- as.numeric(sapply(raw_data$Unused_score, function(x) su
 raw_data$`% Cov` <- as.numeric(sapply(raw_data$`% Cov`, function(x) sub(",", ".", x)))
 raw_data$`% Cov (95)` <- as.numeric(sapply(raw_data$`% Cov (95)`, function(x) sub(",", ".", x)))
 raw_data$Accession <- sapply(raw_data$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
+setnames(raw_data, "Accession", "Uniprot")
+
 #Удаляем белки с unused score < 1.3
 raw_data <- raw_data[raw_data$Unused_score >= 1.3]
 ```
@@ -26,21 +30,59 @@ raw_data <- raw_data[raw_data$Unused_score >= 1.3]
 mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
 
 # query biomart
-BM_out <- getBM(attributes = c("name_1006", "namespace_1003", "hgnc_symbol"),
+BM_out <- getBM(attributes = c("name_1006", "namespace_1003", "hgnc_symbol", "uniprotswissprot"),
                  filters = "uniprotswissprot",
-                values = raw_data$Accession, 
+                values = raw_data$Uniprot, 
                 mart = mart,
                 uniqueRows = TRUE)
+
+#Удаляем неинформативные GO 
+BM_out <- BM_out[BM_out$name_1006 != "molecular_function" &
+                  BM_out$name_1006 != "cellular_component" &
+                   BM_out$name_1006 != "biological_process" ,]
+
+BM_out <- as.data.table(BM_out)
+
+mol_function <- BM_out[namespace_1003 == "molecular_function", .(uniprotswissprot, hgnc_symbol, name_1006)]
+mol_function[, mol_function := .(list(name_1006)), by=uniprotswissprot]
+mol_function[, name_1006 := NULL]
+mol_function <- mol_function[!duplicated(mol_function)]
+
+cell_component <- BM_out[namespace_1003 == "cellular_component", .(uniprotswissprot, hgnc_symbol, name_1006)]
+cell_component[, cell_component := .(list(name_1006)), by=uniprotswissprot]
+cell_component[, name_1006 := NULL]
+cell_component <- cell_component[!duplicated(cell_component)]
+
+bio_process <- BM_out[namespace_1003 == "biological_process", .(uniprotswissprot, hgnc_symbol, name_1006)]
+bio_process[, bio_process := .(list(name_1006)), by=uniprotswissprot]
+bio_process[, name_1006 := NULL]
+bio_process <- bio_process[!duplicated(bio_process)]
+
+GO_data <- merge(mol_function, cell_component)
+GO_data <- merge(GO_data, bio_process)
+
+setnames(GO_data, "uniprotswissprot", "Uniprot")
+
+final_data <- merge(raw_data, GO_data, by = "Uniprot")
+
+rm(BM_out, mol_function, cell_component, bio_process, GO_data, raw_data)
 rm(mart)
 ```
+
+Посмотрим, какие группы белков и сколько их там у нас реально есть
+```{r}
+prot_num <- final_data[, .N , by =. (Cell_line, Treatment, Compartment, Proteome_type)]
+print(prot_num[order(N, decreasing = T)])
+```
+
 ##Топ mol_function, bio_process по группам белков
+
+
+
 ##Определяем уникальные белки
 ##Определяем общие белки
 ## Насколько хорошо прошло разделение ядро/цитоплазма (сколько % белков, у которых только ядро в цп и наоборот)
 
 
-```{r}
-raw_data$Total_score[raw_data$Total_score != raw_data$Unused_score] - raw_data$Unused_score[raw_data$Total_score != raw_data$Unused_score]  
-```
 
 

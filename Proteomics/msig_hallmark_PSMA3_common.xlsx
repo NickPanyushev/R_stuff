@@ -1,0 +1,90 @@
+
+Overlap Results
+
+Collection(s):	H
+# overlaps shown:	8
+# genesets in collections:	50
+# genes in comparison (n):	67
+# genes in universe (N):	45956
+
+Gene Set Name	# Genes in Gene Set (K)	Description	# Genes in Overlap (k)	k/K	p-value	FDR q-value
+HALLMARK_MYC_TARGETS_V1	200	A subgroup of genes regulated by MYC - version 1 (v1).	14	0.0700	4.4E-20	2.2E-18
+HALLMARK_MTORC1_SIGNALING	200	Genes up-regulated through activation of mTORC1 complex.	5	0.0250	1.15E-5	2.88E-4
+HALLMARK_MYC_TARGETS_V2	58	A subgroup of genes regulated by MYC - version 2 (v2).	3	0.0517	8.63E-5	1.44E-3
+HALLMARK_G2M_CHECKPOINT	200	Genes involved in the G2/M checkpoint, as in progression through the cell division cycle.	4	0.0200	2.15E-4	2.15E-3
+HALLMARK_OXIDATIVE_PHOSPHORYLATION	200	Genes encoding proteins involved in oxidative phosphorylation.	4	0.0200	2.15E-4	2.15E-3
+HALLMARK_UNFOLDED_PROTEIN_RESPONSE	113	Genes up-regulated during unfolded protein response, a cellular stress response related to the endoplasmic reticulum.	3	0.0265	6.18E-4	5.15E-3
+HALLMARK_ALLOGRAFT_REJECTION	200	Genes up-regulated during transplant rejection.	3	0.0150	3.17E-3	1.98E-2
+HALLMARK_E2F_TARGETS	200	Genes encoding cell cycle related targets of E2F transcription factors.	3	0.0150	3.17E-3	1.98E-2
+
+
+Gene/Gene Set Overlap Matrix
+
+Entrez Gene Id	Gene Symbol	Gene Description	HALLMARK_MYC_TARGETS_V1	HALLMARK_MTORC1_SIGNALING	HALLMARK_MYC_TARGETS_V2	HALLMARK_G2M_CHECKPOINT	HALLMARK_OXIDATIVE_PHOSPHORYLATION	HALLMARK_UNFOLDED_PROTEIN_RESPONSE	HALLMARK_ALLOGRAFT_REJECTION	HALLMARK_E2F_TARGETS
+3329	HSPD1	heat shock 60kDa protein 1 (chaperonin)	HALLMARK_MYC_TARGETS_V1	HALLMARK_MTORC1_SIGNALING	HALLMARK_MYC_TARGETS_V2					
+4869	NPM1	nucleophosmin (nucleolar phosphoprotein B23, numatrin)	HALLMARK_MYC_TARGETS_V1		HALLMARK_MYC_TARGETS_V2			HALLMARK_UNFOLDED_PROTEIN_RESPONSE	HALLMARK_ALLOGRAFT_REJECTION	
+5245	PHB	prohibitin	HALLMARK_MYC_TARGETS_V1		HALLMARK_MYC_TARGETS_V2					
+6426	SRSF1	serine/arginine-rich splicing factor 1	HALLMARK_MYC_TARGETS_V1			HALLMARK_G2M_CHECKPOINT				HALLMARK_E2F_TARGETS
+3192	HNRNPU	heterogeneous nuclear ribonucleoprotein U (scaffold attachment factor A)	HALLMARK_MYC_TARGETS_V1			HALLMARK_G2M_CHECKPOINT				
+7416	VDAC1	voltage-dependent anion channel 1	HALLMARK_MYC_TARGETS_V1				HALLMARK_OXIDATIVE_PHOSPHORYLATION			
+26986	PABPC1	poly(A) binding protein, cytoplasmic 1	HALLMARK_MYC_TARGETS_V1							
+3178	HNRNPA1	heterogeneous nuclear ribonucleoprotein A1	HALLMARK_MYC_TARGETS_V1							
+3181	HNRNPA2B1	heterogeneous nuclear ribonucleoprotein A2/B1	HALLMARK_MYC_TARGETS_V1							
+3326	HSP90AB1	heat shock protein 90kDa alpha (cytosolic), class B member 1	HALLMARK_MYC_TARGETS_V1							
+5682	PSMA1	proteasome (prosome, macropain) subunit, alpha type, 1	HALLMARK_MYC_TARGETS_V1							
+6193	RPS5	ribosomal protein S5	HALLMARK_MYC_TARGETS_V1							
+6428	SRSF3	serine/arginine-rich splicing factor 3	HALLMARK_MYC_TARGETS_V1							
+8662	EIF3B	eukaryotic translation initiation factor 3, subunit B	HALLMARK_MYC_TARGETS_V1							
+3313	HSPA9	heat shock 70kDa protein 9 (mortalin)		HALLMARK_MTORC1_SIGNALING			HALLMARK_OXIDATIVE_PHOSPHORYLATION	HALLMARK_UNFOLDED_PROTEIN_RESPONSE		
+3309	HSPA5	heat shock 70kDa protein 5 (glucose-regulated protein, 78kDa)		HALLMARK_MTORC1_SIGNALING				HALLMARK_UNFOLDED_PROTEIN_RESPONSE		
+6184	RPN1	ribophorin I		HALLMARK_MTORC1_SIGNALING						
+5684	PSMA3	proteasome (prosome, macropain) subunit, alpha type, 3		HALLMARK_MTORC1_SIGNALING						
+4001	LMNB1	lamin B1				HALLMARK_G2M_CHECKPOINT				HALLMARK_E2F_TARGETS
+3312	HSPA8	heat shock 70kDa protein 8				HALLMARK_G2M_CHECKPOINT				
+4722	NDUFS3	NADH dehydrogenase (ubiquinone) Fe-S protein 3, 30kDa (NADH-coenzyme Q reductase)					HALLMARK_OXIDATIVE_PHOSPHORYLATION			
+3030	HADHA	hydroxyacyl-CoA dehydrogenase/3-ketoacyl-CoA thiolase/enoyl-CoA hydratase (trifunctional protein), alpha subunit					HALLMARK_OXIDATIVE_PHOSPHORYLATION			
+6189	RPS3A	ribosomal protein S3A							HALLMARK_ALLOGRAFT_REJECTION	
+6223	RPS19	ribosomal protein S19							HALLMARK_ALLOGRAFT_REJECTION	
+203068	TUBB	tubulin, beta class I								HALLMARK_E2F_TARGETS
+3315	HSPB1	heat shock 27kDa protein 1								
+4000	LMNA	lamin A/C								
+71	ACTG1	actin, gamma 1								
+7431	VIM	vimentin								
+8364	HIST1H4C	histone cluster 1, H4c								
+873	CBR1	carbonyl reductase 1								
+10314	LANCL1	LanC lantibiotic synthetase component C-like 1 (bacterial)								
+10694	CCT8	chaperonin containing TCP1, subunit 8 (theta)								
+10890	RAB10	RAB10, member RAS oncogene family								
+10960	LMAN2	lectin, mannose-binding 2								
+121504	HIST4H4	histone cluster 4, H4								
+126961	HIST2H3C	histone cluster 2, H3c								
+1650	DDOST	dolichyl-diphosphooligosaccharide--protein glycosyltransferase								
+1655	DDX5	DEAD (Asp-Glu-Ala-Asp) box polypeptide 5								
+1937	EEF1G	eukaryotic translation elongation factor 1 gamma								
+3039	HBA1	hemoglobin, alpha 1								
+3040	HBA2	hemoglobin, alpha 2								
+3182	HNRNPAB	heterogeneous nuclear ribonucleoprotein A/B								
+3187	HNRNPH1	heterogeneous nuclear ribonucleoprotein H1 (H)								
+3190	HNRNPK	heterogeneous nuclear ribonucleoprotein K								
+333932	HIST2H3A	histone cluster 2, H3a								
+3921	RPSA	ribosomal protein SA								
+4670	HNRNPM	heterogeneous nuclear ribonucleoprotein M								
+51593	SRRT	serrate RNA effector molecule homolog (Arabidopsis)								
+554313	HIST2H4B	histone cluster 2, H4b								
+55833	UBAP2	ubiquitin associated protein 2								
+653604	HIST2H3D	histone cluster 2, H3d								
+7916	PRRC2A	proline-rich coiled-coil 2A								
+8294	HIST1H4I	histone cluster 1, H4i								
+8359	HIST1H4A	histone cluster 1, H4a								
+8360	HIST1H4D	histone cluster 1, H4d								
+8361	HIST1H4F	histone cluster 1, H4f								
+8362	HIST1H4K	histone cluster 1, H4k								
+8363	HIST1H4J	histone cluster 1, H4j								
+8365	HIST1H4H	histone cluster 1, H4h								
+8366	HIST1H4B	histone cluster 1, H4b								
+8367	HIST1H4E	histone cluster 1, H4e								
+8368	HIST1H4L	histone cluster 1, H4l								
+8370	HIST2H4A	histone cluster 2, H4a								
+8663	EIF3C	eukaryotic translation initiation factor 3, subunit C								
+92140	MTDH	metadherin								
+9782	MATR3	matrin 3								

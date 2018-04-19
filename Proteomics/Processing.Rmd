@@ -20,7 +20,6 @@ raw_data$`% Cov` <- as.numeric(sapply(raw_data$`% Cov`, function(x) sub(",", "."
 raw_data$`% Cov (95)` <- as.numeric(sapply(raw_data$`% Cov (95)`, function(x) sub(",", ".", x)))
 raw_data$Accession <- sapply(raw_data$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
 setnames(raw_data, "Accession", "Uniprot")
-
 #Удаляем белки с unused score < 1.3
 raw_data <- raw_data[raw_data$Unused_score >= 1.3]
 ```
@@ -66,7 +65,6 @@ setnames(GO_data, "uniprotswissprot", "Uniprot")
 final_data <- merge(raw_data, GO_data, by = "Uniprot")
 
 rm(BM_out, mol_function, cell_component, bio_process, GO_data, raw_data)
-rm(mart)
 ```
 
 Посмотрим, какие группы белков и сколько их там у нас реально есть
@@ -74,15 +72,98 @@ rm(mart)
 prot_num <- final_data[, .N , by =. (Cell_line, Treatment, Compartment, Proteome_type)]
 print(prot_num[order(N, decreasing = T)])
 ```
+Прикольно, видим, что из ядра настрелялось больше всего белков! 
+Хотят тут может быть явный batch-эффект, когда от методики приготовления состав более зависим, чем от обработки. Надо подумать об этом  
+  
+## RPMI vs IM9
+Сравним RPMI и IM9 в контроле по списку белков.
+```{r}
+final_data[Treatment == "K", .N , by =. (Cell_line, Proteome_type)]
+```
+  
+Что видим, что где-то хорошо прошел эксперимент, а где-то явно так себе. Но мы не будем отчаиваться, будем делать как есть!
 
-##Топ mol_function, bio_process по группам белков
+```{r}
+#Разбили по разным датасетам по клеточной линии
+PSMA3 <- final_data[Proteome_type == "PSMA3", ]
+PSMA3 <- PSMA3[Treatment == "K", ]
 
+UBD <- final_data[Proteome_type == "UBD_HDAC6", ]
+UBD <- UBD[Treatment == "K", ]
+```
 
+###PSMA3 пробы
 
-##Определяем уникальные белки
-##Определяем общие белки
-## Насколько хорошо прошло разделение ядро/цитоплазма (сколько % белков, у которых только ядро в цп и наоборот)
+####Найдем общие белки для RPMI и IM9
+```{r}
+common_PSMA3 <- intersect(PSMA3[Cell_line == "Im9", Uniprot], PSMA3[Cell_line == "RPMI8226", Uniprot]) #Пересекли
+common_PSMA3 <- as.data.table(common_PSMA3)
+#Переведем идентификаторы Uniprot в NCBI gene symbols
 
+common_PSMA3 <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
+                 filters = "uniprotswissprot",
+                values = common_PSMA3, 
+                mart = mart,
+                uniqueRows = TRUE)
+#common_PSMA3$hgnc_id <- sub("HGNC:", "", common_PSMA3$hgnc_id, fixed = T,) 
+common_PSMA3$hgnc_symbol
+```
+Итого получили для RPMI и IM9 линий `length(common_PSMA3)`общих белков
+
+Что нам говорит msigdb для этих белков:
+В топе функций у нас - 
+GO_RNA_BINDING
+GO_POLY_A_RNA_BINDING
+GO_CHROMATIN_SILENCING_AT_RDNA
+GO_NEGATIVE_REGULATION_OF_MEGAKARYOCYTE_DIFFERENTIATION
+REACTOME_RNA_POL_I_PROMOTER_OPENING
+GO_GENE_SILENCING_BY_RNA
+GO_NEGATIVE_REGULATION_OF_HEMATOPOIETIC_PROGENITOR_CELL_DIFFERENTIATION
+REACTOME_MEIOSIS
+GO_REGULATION_OF_MEGAKARYOCYTE_DIFFERENTIATION
+GO_TELOMERE_CAPPING
+
+См. файл приложенный msig_all_PSMA3_common.xlsx - там есть и FDR p-value, эти функции белков достоверны. Из 67
+
+По hallmark genesets - похоже, что обогащение на фракцию генов - таргетов MYC
+См. файл приложенный msig_hallmark_PSMA3_common.xlsx
+
+####Найдем уникальные белки для RPMI и IM9
+Для RPMI линии:
+```{r}
+unique_RPMI_PSMA3 <- is.element(PSMA3[Cell_line == "RPMI8226", hgnc_symbol], common_PSMA3$hgnc_symbol)
+unique_RPMI_PSMA3 <- PSMA3[Cell_line == "RPMI8226", hgnc_symbol][-unique_RPMI_PSMA3]
+unique_RPMI_PSMA3
+```
+Для линии RPMI нашлось `length(unique_RPMI_PSMA3)` уникальных белков
+
+Что это за ребята? 
+Смотри файл - msig_all_PSMA3_RPMI_unique.xlsx
+Но там та же фигня, 
+
+Для IM9 линии:
+```{r}
+unique_IM9_PSMA3 <- is.element(PSMA3[Cell_line == "Im9", hgnc_symbol], common_PSMA3$hgnc_symbol)
+unique_IM9_PSMA3 <- PSMA3[Cell_line == "Im9", hgnc_symbol][-unique_IM9_PSMA3]
+unique_IM9_PSMA3
+```
+Для линии IM9 нашлось `length(unique_IM9_PSMA3)` уникальных белков
+Их тут гораздо больше! 
+Что это за ребята? 
+Смотри файл - msig_all_PSMA3_IM9_unique.xlsx
+Там в основном за РНК-связывание топят
+
+Топ -функций
+GO_POLY_A_RNA_BINDING
+GO_RNA_BINDING
+GO_MACROMOLECULAR_COMPLEX_BINDING
+GO_NUCLEAR_OUTER_MEMBRANE_ENDOPLASMIC_RETICULUM_MEMBRANE_NETWORK
+GO_CELLULAR_RESPONSE_TO_ORGANIC_SUBSTANCE
+GO_RIBONUCLEOPROTEIN_COMPLEX
+GO_ENDOPLASMIC_RETICULUM
+GO_ENDOPLASMIC_RETICULUM_PART
+GO_MEMBRANE_PROTEIN_COMPLEX
+GO_IMMUNE_SYSTEM_PROCESS
 
 
 

@@ -1,0 +1,110 @@
+
+Overlap Results
+
+Collection(s):	C1, C2, C3, C4, C5, C6, C7, H
+# overlaps shown:	10
+# genesets in collections:	17786
+# genes in comparison (n):	85
+# genes in universe (N):	45956
+
+Gene Set Name	# Genes in Gene Set (K)	Description	# Genes in Overlap (k)	k/K	p-value	FDR q-value
+MORF_BUB3	276	Neighborhood of BUB3	25	0.0906	1.52E-35	2.7E-31
+MORF_RAD23A	345	Neighborhood of RAD23A	26	0.0754	7.52E-35	6.68E-31
+GO_POLY_A_RNA_BINDING	1170	Interacting non-covalently with a poly(A) RNA, a RNA molecule which has a tail of adenine bases.	35	0.0299	2.58E-33	1.53E-29
+GO_RNA_BINDING	1598	Interacting selectively and non-covalently with an RNA molecule or a portion thereof.	37	0.0232	2.32E-31	1.03E-27
+MORF_GNB1	303	Neighborhood of GNB1	22	0.0726	4.21E-29	1.5E-25
+MORF_HDAC1	254	Neighborhood of HDAC1	21	0.0827	5.35E-29	1.59E-25
+MORF_DEK	262	Neighborhood of DEK	21	0.0802	1.04E-28	2.65E-25
+PUJANA_BRCA1_PCC_NETWORK	1652	Genes constituting the BRCA1-PCC network of transcripts whose expression positively correlated (Pearson correlation coefficient, PCC >= 0.4) with that of BRCA1 [GeneID=672] across a compendium of normal tissues.	34	0.0206	5.85E-27	1.3E-23
+MORF_HDAC2	277	Neighborhood of HDAC2	20	0.0722	1.98E-26	3.91E-23
+CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN	663	Genes down-regulated in APL (acute promyeolocytic leukemia) blasts expressing PML-RARA fusion [GeneID=5371;5914] compared to normal promyeloblasts.	25	0.0377	5.91E-26	1.05E-22
+
+
+Gene/Gene Set Overlap Matrix
+
+Entrez Gene Id	Gene Symbol	Gene Description	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+4841	NONO	non-POU domain containing, octamer-binding	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+3182	HNRNPAB	heterogeneous nuclear ribonucleoprotein A/B	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+23435	TARDBP	TAR DNA binding protein	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+4670	HNRNPM	heterogeneous nuclear ribonucleoprotein M	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+3192	HNRNPU	heterogeneous nuclear ribonucleoprotein U (scaffold attachment factor A)	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+27316	RBMX	RNA binding motif protein, X-linked	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	
+92140	MTDH	metadherin	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	
+10236	HNRNPR	heterogeneous nuclear ribonucleoprotein R	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	
+3183	HNRNPC	heterogeneous nuclear ribonucleoprotein C (C1/C2)	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK		CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+4691	NCL	nucleolin	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK		
+7284	TUFM	Tu translation elongation factor, mitochondrial	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK		MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+10128	LRPPRC	leucine-rich PPR-motif containing	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1		MORF_DEK		MORF_HDAC2	
+5591	PRKDC	protein kinase, DNA-activated, catalytic polypeptide	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1			PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	
+5901	RAN	RAN, member RAS oncogene family	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING		MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK		
+2091	FBL	fibrillarin	MORF_BUB3	MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING			MORF_DEK	PUJANA_BRCA1_PCC_NETWORK		
+2058	EPRS	glutamyl-prolyl-tRNA synthetase	MORF_BUB3	MORF_RAD23A		GO_RNA_BINDING	MORF_GNB1			PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+6389	SDHA	succinate dehydrogenase complex, subunit A, flavoprotein (Fp)	MORF_BUB3	MORF_RAD23A			MORF_GNB1	MORF_HDAC1	MORF_DEK		MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+6390	SDHB	succinate dehydrogenase complex, subunit B, iron sulfur (Ip)	MORF_BUB3	MORF_RAD23A			MORF_GNB1	MORF_HDAC1		PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	
+3030	HADHA	hydroxyacyl-CoA dehydrogenase/3-ketoacyl-CoA thiolase/enoyl-CoA hydratase (trifunctional protein), alpha subunit	MORF_BUB3	MORF_RAD23A			MORF_GNB1	MORF_HDAC1				CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+1650	DDOST	dolichyl-diphosphooligosaccharide--protein glycosyltransferase	MORF_BUB3	MORF_RAD23A			MORF_GNB1	MORF_HDAC1				
+10726	NUDC	nuclear distribution gene C homolog (A. nidulans)	MORF_BUB3	MORF_RAD23A			MORF_GNB1				MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+50814	NSDHL	NAD(P) dependent steroid dehydrogenase-like	MORF_BUB3	MORF_RAD23A				MORF_HDAC1			MORF_HDAC2	CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+790	CAD	carbamoyl-phosphate synthetase 2, aspartate transcarbamylase, and dihydroorotase	MORF_BUB3	MORF_RAD23A						PUJANA_BRCA1_PCC_NETWORK	MORF_HDAC2	
+10606	PAICS	phosphoribosylaminoimidazole carboxylase, phosphoribosylaminoimidazole succinocarboxamide synthetase	MORF_BUB3							PUJANA_BRCA1_PCC_NETWORK		CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+4678	NASP	nuclear autoantigenic sperm protein (histone-binding)	MORF_BUB3							PUJANA_BRCA1_PCC_NETWORK		CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+3032	HADHB	hydroxyacyl-CoA dehydrogenase/3-ketoacyl-CoA thiolase/enoyl-CoA hydratase (trifunctional protein), beta subunit		MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING	MORF_GNB1	MORF_HDAC1	MORF_DEK		MORF_HDAC2	
+821	CANX	calnexin		MORF_RAD23A	GO_POLY_A_RNA_BINDING	GO_RNA_BINDING		MORF_HDAC1	MORF_DEK			
+11316	COPE	coatomer protein complex, subunit epsilon		MORF_RAD23A			MORF_GNB1	MORF_HDAC1				
+6628	SNRPB	small nuclear ribonucleoprotein polypeptides B and B1			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING			MORF_DEK	PUJANA_BRCA1_PCC_NETWORK		CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+3190	HNRNPK	heterogeneous nuclear ribonucleoprotein K			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING			MORF_DEK	PUJANA_BRCA1_PCC_NETWORK		CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+1213	CLTC	clathrin, heavy chain (Hc)			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING			MORF_DEK		MORF_HDAC2	
+6421	SFPQ	splicing factor proline/glutamine-rich			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING				PUJANA_BRCA1_PCC_NETWORK		CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+5052	PRDX1	peroxiredoxin 1			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING				PUJANA_BRCA1_PCC_NETWORK		
+3191	HNRNPL	heterogeneous nuclear ribonucleoprotein L			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING				PUJANA_BRCA1_PCC_NETWORK		
+3930	LBR	lamin B receptor			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING				PUJANA_BRCA1_PCC_NETWORK		
+7019	TFAM	transcription factor A, mitochondrial			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING				PUJANA_BRCA1_PCC_NETWORK		
+7037	TFRC	transferrin receptor (p90, CD71)			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING				PUJANA_BRCA1_PCC_NETWORK		
+51593	SRRT	serrate RNA effector molecule homolog (Arabidopsis)			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING				PUJANA_BRCA1_PCC_NETWORK		
+811	CALR	calreticulin			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING				PUJANA_BRCA1_PCC_NETWORK		
+3105	HLA-A	major histocompatibility complex, class I, A			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING						
+3921	RPSA	ribosomal protein SA			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING						
+2316	FLNA	filamin A, alpha			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING						
+103	ADAR	adenosine deaminase, RNA-specific			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING						
+2194	FASN	fatty acid synthase			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING						
+5813	PURA	purine-rich element binding protein A			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING						
+7532	YWHAG	tyrosine 3-monooxygenase/tryptophan 5-monooxygenase activation protein, gamma polypeptide			GO_POLY_A_RNA_BINDING	GO_RNA_BINDING						
+7431	VIM	vimentin				GO_RNA_BINDING						
+9761	MLEC	malectin					MORF_GNB1				MORF_HDAC2	
+7529	YWHAB	tyrosine 3-monooxygenase/tryptophan 5-monooxygenase activation protein, beta polypeptide						MORF_HDAC1	MORF_DEK	PUJANA_BRCA1_PCC_NETWORK		
+60	ACTB	actin, beta								PUJANA_BRCA1_PCC_NETWORK		CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+581	BAX	BCL2-associated X protein								PUJANA_BRCA1_PCC_NETWORK		CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+7112	TMPO	thymopoietin								PUJANA_BRCA1_PCC_NETWORK		
+9404	LPXN	leupaxin								PUJANA_BRCA1_PCC_NETWORK		
+1315	COPB1	coatomer protein complex, subunit beta 1								PUJANA_BRCA1_PCC_NETWORK		
+7167	TPI1	triosephosphate isomerase 1										CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+9524	TECR	trans-2,3-enoyl-CoA reductase										CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+203068	TUBB	tubulin, beta class I										CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+230	ALDOC	aldolase C, fructose-bisphosphate										CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+37	ACADVL	acyl-CoA dehydrogenase, very long chain										CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+4000	LMNA	lamin A/C										CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN
+71	ACTG1	actin, gamma 1										
+5245	PHB	prohibitin										
+3122	HLA-DRA	major histocompatibility complex, class II, DR alpha										
+6046	BRD2	bromodomain containing 2										
+1314	COPA	coatomer protein complex, subunit alpha										
+832	CAPZB	capping protein (actin filament) muscle Z-line, beta										
+5788	PTPRC	protein tyrosine phosphatase, receptor type, C										
+4595	MUTYH	mutY homolog (E. coli)										
+4656	MYOG	myogenin (myogenic factor 4)										
+7448	VTN	vitronectin										
+27089	UQCRQ	ubiquinol-cytochrome c reductase, complex III subunit VII, 9.5kDa										
+10654	PMVK	phosphomevalonate kinase										
+3134	HLA-F	major histocompatibility complex, class I, F										
+1535	CYBA	cytochrome b-245, alpha polypeptide										
+3106	HLA-B	major histocompatibility complex, class I, B										
+5371	PML	promyelocytic leukemia										
+5447	POR	P450 (cytochrome) oxidoreductase										
+1536	CYBB	cytochrome b-245, beta polypeptide										
+22820	COPG	coatomer protein complex, subunit gamma										
+5346	PLIN1	perilipin 1										
+26227	PHGDH	phosphoglycerate dehydrogenase										
+8775	NAPA	N-ethylmaleimide-sensitive factor attachment protein, alpha										
+50852	TRAT1	T cell receptor associated transmembrane adaptor 1										
+118788	PIK3AP1	phosphoinositide-3-kinase adaptor protein 1										
+9049	AIP	aryl hydrocarbon receptor interacting protein										

@@ -128,6 +128,38 @@ GO_TELOMERE_CAPPING
 По hallmark genesets - похоже, что обогащение на фракцию генов - таргетов MYC
 См. файл приложенный msig_hallmark_PSMA3_common.xlsx
 
+Гистограммки по GO
+```{r}
+GO_PSMA_common <- merge(common_PSMA3, final_data[, .(hgnc_symbol, mol_function, bio_process, cell_component)], by = "hgnc_symbol",  all.x= T)
+GO_PSMA_common <- GO_PSMA_common[!duplicated(GO_PSMA_common), ]
+mf_table <- table(unlist(GO_PSMA_common$mol_function))
+bp_table <- table(unlist(GO_PSMA_common$bio_process))
+cc_table <- table(unlist(GO_PSMA_common$cell_component))
+
+mf_table <- as.data.table(mf_table)
+mf_table <- mf_table[order(mf_table$V1, decreasing = T), ]
+```
+  
+Гистограммка по mol_function
+```{r}
+ggplot(mf_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top15 TE elements",
+       x = "TE element name",
+       y = "Total nucleotides occupied")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 45, hjust = 0.5),
+        complete = TRUE)
+
+```
+
+
 ####Найдем уникальные белки для RPMI и IM9
 Для RPMI линии:
 ```{r}
@@ -154,16 +186,8 @@ unique_IM9_PSMA3
 Там в основном за РНК-связывание топят
 
 Топ -функций
-GO_POLY_A_RNA_BINDING
-GO_RNA_BINDING
-GO_MACROMOLECULAR_COMPLEX_BINDING
-GO_NUCLEAR_OUTER_MEMBRANE_ENDOPLASMIC_RETICULUM_MEMBRANE_NETWORK
-GO_CELLULAR_RESPONSE_TO_ORGANIC_SUBSTANCE
-GO_RIBONUCLEOPROTEIN_COMPLEX
-GO_ENDOPLASMIC_RETICULUM
-GO_ENDOPLASMIC_RETICULUM_PART
-GO_MEMBRANE_PROTEIN_COMPLEX
-GO_IMMUNE_SYSTEM_PROCESS
-
-
+#Какие обработки были сделаны:
+RB и FC есть для обеих линий
+CmC для RPMI
+CmB для Im9
 

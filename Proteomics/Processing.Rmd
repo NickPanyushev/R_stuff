@@ -108,7 +108,7 @@ common_PSMA3 <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
 #common_PSMA3$hgnc_id <- sub("HGNC:", "", common_PSMA3$hgnc_id, fixed = T,) 
 common_PSMA3$hgnc_symbol
 ```
-Итого получили для RPMI и IM9 линий `length(common_PSMA3)`общих белков
+Итого получили для RPMI и IM9 линий `length(common_PSMA3)` общих белков
 
 Что нам говорит msigdb для этих белков:
 В топе функций у нас - 
@@ -123,7 +123,7 @@ REACTOME_MEIOSIS
 GO_REGULATION_OF_MEGAKARYOCYTE_DIFFERENTIATION
 GO_TELOMERE_CAPPING
 
-См. файл приложенный msig_all_PSMA3_common.xlsx - там есть и FDR p-value, эти функции белков достоверны. Из 67
+См. файл приложенный msig_all_PSMA3_common.xlsx - там есть и FDR p-value, эти функции белков достоверны.
 
 По hallmark genesets - похоже, что обогащение на фракцию генов - таргетов MYC
 См. файл приложенный msig_hallmark_PSMA3_common.xlsx
@@ -135,18 +135,19 @@ GO_PSMA_common <- GO_PSMA_common[!duplicated(GO_PSMA_common), ]
 mf_table <- table(unlist(GO_PSMA_common$mol_function))
 bp_table <- table(unlist(GO_PSMA_common$bio_process))
 cc_table <- table(unlist(GO_PSMA_common$cell_component))
-
-mf_table <- as.data.table(mf_table)
-mf_table <- mf_table[order(mf_table$V1, decreasing = T), ]
 ```
+  
   
 Гистограммка по mol_function
 ```{r}
+mf_table <- as.data.table(mf_table)
+mf_table <- mf_table[order(mf_table$N, decreasing = T), ]
+
 ggplot(mf_table[1:15], aes(x=reorder(V1,-N), N))+
   geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
-  labs(title = "Top15 TE elements",
-       x = "TE element name",
-       y = "Total nucleotides occupied")+
+  labs(title = "Top15 Molecular functions for common proteins",
+       x = "Molecular function", 
+       y = "Number of occurences")+
   theme_grey() %+replace% 
   theme(panel.background = element_rect(fill = "white", colour = NA),
         panel.border = element_rect(fill = NA, colour = "grey20"),
@@ -156,7 +157,51 @@ ggplot(mf_table[1:15], aes(x=reorder(V1,-N), N))+
         legend.key = element_rect(fill = "white", colour = NA),
         axis.text.x = element_text(angle = 45, hjust = 0.5),
         complete = TRUE)
+```
+  
+  
+  
+Гистограммка по biological process - не информативна нифига, забей на нее 
+```{r}
+bp_table <- as.data.table(bp_table)
+bp_table <- bp_table[order(bp_table$N, decreasing = T), ]
 
+ggplot(bp_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top15 biological process for common proteins",
+       x = "Biological process", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 45, hjust = 0.5),
+        complete = TRUE)
+```
+  
+  
+Гистограммка по cell_component
+```{r}
+cc_table <- as.data.table(cc_table)
+cc_table <- cc_table[order(cc_table$N, decreasing = T), ]
+
+ggplot(cc_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top15 Cellular compartments for common proteins",
+       x = "Subsellular compartment", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.9),
+        complete = TRUE)
 ```
 
 
@@ -171,7 +216,93 @@ unique_RPMI_PSMA3
 
 Что это за ребята? 
 Смотри файл - msig_all_PSMA3_RPMI_unique.xlsx
-Но там та же фигня, 
+
+Гистограммки по GO
+```{r}
+unique_RPMI_PSMA3 <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
+                 filters = "hgnc_symbol",
+                values = common_PSMA3, 
+                mart = mart,
+                uniqueRows = TRUE)
+
+
+GO_unique_RPMI_PSMA3 <- merge(unique_RPMI_PSMA3, final_data[, .(hgnc_symbol, mol_function, bio_process, cell_component)], by = "hgnc_symbol",  all.x = T)
+
+GO_unique_RPMI_PSMA3 <- GO_unique_RPMI_PSMA3[!duplicated(GO_unique_RPMI_PSMA3), ]
+mf_table <- table(unlist(GO_unique_RPMI_PSMA3$mol_function))
+bp_table <- table(unlist(GO_unique_RPMI_PSMA3$bio_process))
+cc_table <- table(unlist(GO_unique_RPMI_PSMA3$cell_component))
+```
+
+
+Гистограммка по mol_function
+```{r}
+mf_table <- as.data.table(mf_table)
+mf_table <- mf_table[order(mf_table$N, decreasing = T), ]
+
+ggplot(mf_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 Molecular functions for RPMI8226-unique proteins",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+  
+Гистограммка по biological process - чуть более интересная 
+```{r}
+bp_table <- as.data.table(bp_table)
+bp_table <- bp_table[order(bp_table$N, decreasing = T), ]
+
+ggplot(bp_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 biological process for RPMI8226-unique proteins",
+       x = "Biological process", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+Гистограммка по cell_component
+```{r}
+cc_table <- as.data.table(cc_table)
+cc_table <- cc_table[order(cc_table$N, decreasing = T), ]
+
+ggplot(cc_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 Cellular compartments for RPMI8226-unique proteins",
+       x = "Subsellular compartment", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.9),
+        complete = TRUE)
+```
+
+
+
 
 Для IM9 линии:
 ```{r}
@@ -185,7 +316,375 @@ unique_IM9_PSMA3
 Смотри файл - msig_all_PSMA3_IM9_unique.xlsx
 Там в основном за РНК-связывание топят
 
-Топ -функций
+Гистограммки по GO
+```{r}
+unique_IM9_PSMA3 <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
+                 filters = "hgnc_symbol",
+                values = common_PSMA3, 
+                mart = mart,
+                uniqueRows = TRUE)
+
+
+GO_unique_IM9_PSMA3 <- merge(unique_IM9_PSMA3, final_data[, .(hgnc_symbol, mol_function, bio_process, cell_component)], by = "hgnc_symbol",  all.x = T)
+
+GO_unique_IM9_PSMA3 <- GO_unique_IM9_PSMA3[!duplicated(GO_unique_IM9_PSMA3), ]
+mf_table <- table(unlist(GO_unique_IM9_PSMA3$mol_function))
+bp_table <- table(unlist(GO_unique_IM9_PSMA3$bio_process))
+cc_table <- table(unlist(GO_unique_IM9_PSMA3$cell_component))
+```
+
+
+Гистограммка по mol_function
+```{r}
+mf_table <- as.data.table(mf_table)
+mf_table <- mf_table[order(mf_table$N, decreasing = T), ]
+
+ggplot(mf_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+  labs(title = "Top15 Molecular functions for IM9-unique proteins",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+  
+Гистограммка по biological process - чуть более интересная, но тоже ровная, ничего особо в ней классного 
+```{r}
+bp_table <- as.data.table(bp_table)
+bp_table <- bp_table[order(bp_table$N, decreasing = T), ]
+
+ggplot(bp_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+  labs(title = "Top15 biological process for IM9-unique proteins",
+       x = "Biological process", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+Гистограммка по cell_component
+```{r}
+cc_table <- as.data.table(cc_table)
+cc_table <- cc_table[order(cc_table$N, decreasing = T), ]
+
+ggplot(cc_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+  labs(title = "Top15 Cellular compartments for IM9-unique proteins",
+       x = "Subsellular compartment", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.9),
+        complete = TRUE)
+```
+
+
+###Разница между линиями по UBD
+
+####Схожие белки
+```{r}
+common_UBD <- intersect(UBD[Cell_line == "Im9", Uniprot], UBD[Cell_line == "RPMI8226", Uniprot]) #Пересекли
+common_UBD <- as.data.table(common_UBD)
+#Переведем идентификаторы Uniprot в NCBI gene symbols
+
+common_UBD <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
+                 filters = "uniprotswissprot",
+                values = common_UBD, 
+                mart = mart,
+                uniqueRows = TRUE)
+common_UBD$hgnc_symbol
+```
+Получилось `length(common_UBD$hgnc_symbol)` общих белков
+За что они отвечают - смотри в файле msig_all_UBD_common.xlsx
+
+Здесь мы просто посмотрим диаграммки по GO
+```{r}
+GO_UBD_common <- merge(common_UBD, final_data[, .(hgnc_symbol, mol_function, bio_process, cell_component)], by = "hgnc_symbol",  all.x= T)
+GO_UBD_common <- GO_UBD_common[!duplicated(GO_UBD_common), ]
+mf_table <- table(unlist(GO_UBD_common$mol_function))
+bp_table <- table(unlist(GO_UBD_common$bio_process))
+cc_table <- table(unlist(GO_UBD_common$cell_component))
+```
+
+Гистограммка по mol_function
+```{r}
+mf_table <- as.data.table(mf_table)
+mf_table <- mf_table[order(mf_table$N, decreasing = T), ]
+
+ggplot(mf_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top15 Molecular functions for common proteins",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+  
+Гистограммка по biological process 
+```{r}
+bp_table <- as.data.table(bp_table)
+bp_table <- bp_table[order(bp_table$N, decreasing = T), ]
+
+ggplot(bp_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top15 biological process for common proteins",
+       x = "Biological process", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+Гистограммка по cell_component
+```{r}
+cc_table <- as.data.table(cc_table)
+cc_table <- cc_table[order(cc_table$N, decreasing = T), ]
+
+ggplot(cc_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top15 Cellular compartments for common proteins",
+       x = "Subsellular compartment", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.9),
+        complete = TRUE)
+```
+
+####Найдем уникальные белки для RPMI и IM9
+Для RPMI линии:
+```{r}
+unique_RPMI_UBD <- is.element(UBD[Cell_line == "RPMI8226", hgnc_symbol], common_UBD$hgnc_symbol)
+unique_RPMI_UBD <- UBD[Cell_line == "RPMI8226", hgnc_symbol][-unique_RPMI_UBD]
+unique_RPMI_UBD
+```
+Для линии RPMI нашлось `length(unique_RPMI_PSMA3)` уникальных белков
+
+Что это за ребята? 
+Смотри файл - msig_all_PSMA3_RPMI_unique.xlsx
+
+Гистограммки по GO
+```{r}
+unique_RPMI_UBD <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
+                 filters = "hgnc_symbol",
+                values = common_UBD, 
+                mart = mart,
+                uniqueRows = TRUE)
+
+
+GO_unique_RPMI_UBD <- merge(unique_RPMI_UBD, final_data[, .(hgnc_symbol, mol_function, bio_process, cell_component)], by = "hgnc_symbol",  all.x = T)
+
+GO_unique_RPMI_UBD <- GO_unique_RPMI_UBD[!duplicated(GO_unique_RPMI_UBD), ]
+mf_table <- table(unlist(GO_unique_RPMI_UBD$mol_function))
+bp_table <- table(unlist(GO_unique_RPMI_UBD$bio_process))
+cc_table <- table(unlist(GO_unique_RPMI_UBD$cell_component))
+```
+
+Гистограммка по mol_function
+```{r}
+mf_table <- as.data.table(mf_table)
+mf_table <- mf_table[order(mf_table$N, decreasing = T), ]
+
+ggplot(mf_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 Molecular functions for RPMI8226-unique proteins",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+  
+Гистограммка по biological process 
+```{r}
+bp_table <- as.data.table(bp_table)
+bp_table <- bp_table[order(bp_table$N, decreasing = T), ]
+
+ggplot(bp_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 biological process for RPMI8226-unique proteins",
+       x = "Biological process", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+Гистограммка по cell_component
+```{r}
+cc_table <- as.data.table(cc_table)
+cc_table <- cc_table[order(cc_table$N, decreasing = T), ]
+
+ggplot(cc_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 Cellular compartments for RPMI8226-unique proteins",
+       x = "Subsellular compartment", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.9),
+        complete = TRUE)
+```
+  
+  
+Для IM9 линии:
+```{r}
+unique_IM9_UBD <- is.element(UBD[Cell_line == "Im9", hgnc_symbol], common_UBD$hgnc_symbol)
+unique_IM9_UBD <- UBD[Cell_line == "Im9", hgnc_symbol][-unique_IM9_UBD]
+unique_IM9_UBD
+```
+Для линии IM9 нашлось `length(unique_IM9_UBD)` уникальных белков
+
+Что это за ребята? 
+Смотри файл - msig_all_PSMA3_RPMI_unique.xlsx
+
+Гистограммки по GO
+```{r}
+unique_RPMI_UBD <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
+                 filters = "hgnc_symbol",
+                values = common_UBD, 
+                mart = mart,
+                uniqueRows = TRUE)
+
+
+GO_unique_RPMI_UBD <- merge(unique_RPMI_UBD, final_data[, .(hgnc_symbol, mol_function, bio_process, cell_component)], by = "hgnc_symbol",  all.x = T)
+
+GO_unique_RPMI_UBD <- GO_unique_RPMI_UBD[!duplicated(GO_unique_RPMI_UBD), ]
+mf_table <- table(unlist(GO_unique_RPMI_UBD$mol_function))
+bp_table <- table(unlist(GO_unique_RPMI_UBD$bio_process))
+cc_table <- table(unlist(GO_unique_RPMI_UBD$cell_component))
+```
+
+Гистограммка по mol_function
+```{r}
+mf_table <- as.data.table(mf_table)
+mf_table <- mf_table[order(mf_table$N, decreasing = T), ]
+
+ggplot(mf_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 Molecular functions for RPMI8226-unique proteins",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+  
+Гистограммка по biological process 
+```{r}
+bp_table <- as.data.table(bp_table)
+bp_table <- bp_table[order(bp_table$N, decreasing = T), ]
+
+ggplot(bp_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 biological process for RPMI8226-unique proteins",
+       x = "Biological process", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+Гистограммка по cell_component
+```{r}
+cc_table <- as.data.table(cc_table)
+cc_table <- cc_table[order(cc_table$N, decreasing = T), ]
+
+ggplot(cc_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 Cellular compartments for RPMI8226-unique proteins",
+       x = "Subsellular compartment", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.9),
+        complete = TRUE)
+```
+  
+  
 #Какие обработки были сделаны:
 RB и FC есть для обеих линий
 CmC для RPMI

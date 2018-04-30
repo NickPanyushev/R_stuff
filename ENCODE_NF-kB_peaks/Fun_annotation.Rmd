@@ -14,8 +14,6 @@ library(dplyr)
 library(data.table)
 ```
 
-#ВОТ ЭТОТ ДОКУМЕНТ ПОЛНОСТЬЮ ПРОЙТИ И ВСЕ ПЕРЕДЕЛАТЬ
-
 Проаннотируем, как в прошлый раз:
 Используем ту же аннотацию, которую распарсили
 
@@ -29,7 +27,7 @@ file.remove("Gencode_v24.bed")
 transcripts <- subset(annotation_v24, annotation_v24$Type == "transcript")
 transcripts$Type <- NULL
 fwrite(transcripts, "../BEDs/transcripts.bed", sep = "\t", col.names = FALSE)
-zip("../BEDs/transcripts.zip", "transcripts.bed")
+#zip("../BEDs/transcripts.zip", "transcripts.bed")
 
 rm(annotation_v24)
 ```
@@ -40,17 +38,18 @@ rm(annotation_v24)
 cd ~/R_stuff/ENCODE_NF-kB_peaks/BEDs
 #Отсортируем файл с транскриптами и с пиками
 sortBed -i transcripts.bed > sorted_transcripts.bed
-sortBed -i peaks.bed > sorted_peaks.bed
-rm peaks.bed && mv sorted_peaks.bed peaks.bed
+sortBed -i uncentered_peaks.bed > sorted_uncentered_peaks.bed
+rm uncentered_peaks.bed && mv sorted_uncentered_peaks.bed uncentered_peaks.bed
 rm transcripts.bed && mv sorted_transcripts.bed transcripts.bed
 
 #А теперь пошли фичи искать
-closestBed -D b -k 2 -a peaks.bed -b transcripts.bed > closest_transcripts.bed
+closestBed -D b -k 2 -a uncentered_peaks.bed -b transcripts.bed > closest_transcripts.bed
 ```
 
 Окей, нашли ближайшие транскрипты, отфильруем их и сожмем их в .zip
 
 ```{r}
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/BEDs")
 features <- fread("closest_transcripts.bed")
 names(features) <- c("Chromosome", "peak_Start", "peak_Stop", "Peak_name", 
                              "Fold_change", "p-value", "q-value", "Cell_line",

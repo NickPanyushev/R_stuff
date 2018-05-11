@@ -20,7 +20,7 @@ raw_data$`% Cov` <- as.numeric(sapply(raw_data$`% Cov`, function(x) sub(",", "."
 raw_data$`% Cov (95)` <- as.numeric(sapply(raw_data$`% Cov (95)`, function(x) sub(",", ".", x)))
 raw_data$Accession <- sapply(raw_data$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
 setnames(raw_data, "Accession", "Uniprot")
-#Удаляем белки с unused score < 1.3
+#Удаляем белки C unused score < 1.3
 raw_data <- raw_data[raw_data$Unused_score >= 1.3]
 ```
 ##Аннотация по Gene Ontology
@@ -67,43 +67,43 @@ final_data <- merge(raw_data, GO_data, by = "Uniprot")
 rm(BM_out, mol_function, cell_component, bio_process, GO_data, raw_data)
 ```
 
-Отфильтруем все то, что нас не интересует
+Отфильтруем вCе то, что наC не интереCует
 ```{r}
 unique(final_data$Cell_line)
 final_data <- final_data[Proteome_type == "PSMA3", ]
 final_data <- final_data[Cell_line == "Im9", ]
 ```
 
-Взглянем на то, что есть и осталось
+Взглянем на то, что еCть и оCталоCь
 ```{r}
 final_data[, .N, by =. (Treatment, Compartment)]
 ```
 
-Разделим датасет на 2 части - по обработке, чтоб в каждом был контроль и опыт
+Разделим датаCет на 2 чаCти - по обработке, чтоб в каждом был контроль и опыт
 
 ```{r}
-СmB_dataset <- final_data[Treatment != "RB", ]
+CmB_dataset <- final_data[Treatment != "RB", ]
 RB_dataset <- final_data[Treatment != "CmB", ]
 ```
 
-Списки почти что идентичные по количеству белков, потому что и в тот и в другой входят образцы из контроля, а их большинство
+CпиCки почти что идентичные по количеCтву белков, потому что и в тот и в другой входят образцы из контроля, а их большинCтво
 
 ##CmB обработка
 
 ###Общие для контроля и опыта белочки. 
 ```{r}
-common_СmB <- intersect(СmB_dataset[Treatment == "K", "Uniprot"], СmB_dataset[Treatment == "CmB", "Uniprot"]) #Пересекли
-common_СmB <- common_СmB[!duplicated(common_СmB)]
+common_CmB <- intersect(CmB_dataset[Treatment == "K", "Uniprot"], CmB_dataset[Treatment == "CmB", "Uniprot"]) #ПереCекли
+common_CmB <- common_CmB[!duplicated(common_CmB)]
 #Переведем идентификаторы Uniprot в NCBI gene symbols
 
-common_СmB <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
+common_CmB <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
                  filters = "uniprotswissprot",
-                values = common_СmB, 
+                values = common_CmB, 
                 mart = mart,
                 uniqueRows = TRUE)
-common_СmB$hgnc_symbol 
+common_CmB$hgnc_symbol 
 ```
-Кто они у нас по функциям - смотрим в msigDB - топ 10 функций 
+Кто они у наC по функциям - Cмотрим в msigDB - топ 10 функций 
 
 REACTOME_MRNA_SPLICING - 3.97E-18
 REACTOME_PROCESSING_OF_CAPPED_INTRON_CONTAINING_PRE_MRNA - 2.81E-17
@@ -121,30 +121,34 @@ REACTOME_TRANSLATION - 9.32E-10
 ###Уникальные для контроля белки
 
 ```{r}
-unique_K <- is.element(СmB_dataset$hgnc_symbol, common_СmB$hgnc_symbol)
-unique_K <- СmB_dataset[Treatment == "K", hgnc_symbol][-unique_K]
+unique_K <- is.element(CmB_dataset$hgnc_symbol, common_CmB$hgnc_symbol)
+unique_K <- CmB_dataset[Treatment == "K", hgnc_symbol][-unique_K]
 unique_K <- unique_K[!duplicated(unique_K)]
 unique_K
 ```
-Ого, сколько их! их аж `r length(unique_K)` штуки! 
+Ого, Cколько их! их аж `r length(unique_K)` штуки! 
 
-Я их по функциям гонять не буду через msig - там, скорее всего, протеосомальная деградация, как и должно быть
+Я их по функциям гонять не буду через msig - там, Cкорее вCего, протеоCомальная деградация, как и должно быть
 
 ###Уникальные для обработки белки
 
 ```{r}
-unique_Cmb <- is.element(СmB_dataset$hgnc_symbol, common_СmB$hgnc_symbol)
-unique_Cmb <- СmB_dataset[Treatment == "СmB", hgnc_symbol][-unique_Cmb]
+unique_Cmb <- is.element(CmB_dataset$hgnc_symbol, common_CmB$hgnc_symbol)
+unique_Cmb <- CmB_dataset[Treatment == "CmB", hgnc_symbol][-unique_Cmb]
 unique_Cmb <- unique_Cmb[!duplicated(unique_Cmb)]
 unique_Cmb
 ```
-Ого, а этих вообще не нашлось! Их всего - `r length(unique_СmB)`
+Их всего - `r length(unique_Cmb)`
 
-###Вывод
+Вот сеть взаимосвязей для них 
+https://string-db.org/cgi/network.pl?taskId=gumx3379uEA5
 
-Значит, агент CmB портит что-то в связи, и теперь в PSMA3 пути они не вытаскиваются.
 
-Смотрим, что у нас есть по msigdb для групп контрольных белков
+###Взаимодействия белков
+
+Значит, агент сmB портит что-то в связи, и теперь в PSMA3 пути они не вытаскиваются.
+
+смотрим, что у нас есть по msigdb для групп контрольных белков
 
 Gene Set Name						FDR q-value
 
@@ -163,19 +167,116 @@ CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN						8.56E-64
 
 Давай посмотрим, что у нас имеется по базам данных взаимодействий
 
-https://version-10-5.string-db.org/cgi/network.pl?networkId=TkKZuYZlXzEX  - по этой ссылке перейди и крути картинку, разбирайся! 
+https://version-10-5.string-db.org/сgi/network.pl?networkId=TkKZuYZlXzEX  - по этой ссылке перейди и крути картинку, разбирайся! 
 
-Там на картинке есть 2 кластера плотных во взаимодействиях, и это говорит о том, что у нас есть группы белков, которые участвуют в разных вещах
+Там на картинке есть 2 кластера плотных во взаимодействиях, и это говорит о том, что у нас есть группы белков, которые участвуют в разных вещах - это трансляция и сплайсинг - и то, и другое завязано на РНК. 
 
 Попробуем сделать только для цитоплазматических белочков
 
 ```{r}
-unique_K_cp <- is.element(СmB_dataset$hgnc_symbol, common_СmB$hgnc_symbol)
-unique_K_cp <-СmB_dataset[Compartment == "C"]
-unique_K_cp <- unique_K_cp[Treatment == "K", hgnc_symbol][unique_K_cp]
+unique_K_cp <- CmB_dataset[Compartment == "C"]
+unique_K_cp <- is.element(unique_K_cp$hgnc_symbol, common_CmB$hgnc_symbol)
+unique_K_cp <- CmB_dataset[Treatment == "K", hgnc_symbol][unique_K_cp]
 unique_K_cp <- unique_K_cp[!duplicated(unique_K_cp)]
 unique_K_cp
 ```
+Их всего - `r length(unique_K_cp)`
+
+Вот тебе картинка - тут точно 2 кластера, все как надо, которые даже не связаны между собой
+https://string-db.org/cgi/network.pl?taskId=JaQcXU289icQ
+
+
+Теперь cделаем только для ядерных белочков
+```{r}
+unique_K_nuc <- CmB_dataset[Compartment == "N"]
+unique_K_nuc <- is.element(unique_K_nuc$hgnc_symbol, common_CmB$hgnc_symbol)
+unique_K_nuc <- CmB_dataset[Treatment == "K", hgnc_symbol][unique_K_nuc]
+unique_K_nuc <- unique_K_nuc[!duplicated(unique_K_nuc)]
+unique_K_nuc
+```
+Их вcего - `r length(unique_K_cp)` -меньше, чем цитоплазматичеcких
+
+https://version-10-5.string-db.org/cgi/network.pl?networkId=cZkQPVQKK8OO - тут все печально почему-то, этих белков совсем мало
+И эти белки так же и в цп встречаются.
+
+###Вывод
+Можно сказать, что Cmb действует на процессы, проходящие в цитоплазме, и это скорее всего, трансляция.
+В ядре - на сплайсинг
+Разделилось ядро-цитоплазма грязно, потому что набор белков примерно одинаковый.  
+
+Как работает Cmb?
+Вся причина, скорее всего, в каком-то домене, общем для белков из одного из кластеров на графе. 
+Ищешь такой домен - читай литературу - пиши в обсуждение))
+
+
+##RB обработка
+
+###Общие для контроля и опыта белочки. 
+```{r}
+common_RB <- intersect(RB_dataset[Treatment == "K", "Uniprot"], RB_dataset[Treatment == "RB", "Uniprot"]) #Переcекли
+common_RB <- common_RB[!duplicated(common_RB)]
+#Переведем идентификаторы Uniprot в NCBI gene symbols
+
+common_RB <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
+                 filters = "uniprotswissprot",
+                values = common_RB, 
+                mart = mart,
+                uniqueRows = TRUE)
+common_RB$hgnc_symbol 
+```
+Их вcего - `r length(common_RB)` 
+Кто они у наc по функциям - cмотрим в msigDB - топ 10 функций 
+
+Gene Set Name					p-value 	FDR q-value
+GO_POLY_A_RNA_BINDING					5.8E-64	6.29E-60
+GO_RNA_BINDING					5.11E-60	2.77E-56
+GO_NEGATIVE_REGULATION_OF_MEGAKARYOCYTE_DIFFERENTIATION					3.42E-39	1.24E-35
+GO_NEGATIVE_REGULATION_OF_HEMATOPOIETIC_PROGENITOR_CELL_DIFFERENTIATION					2.18E-36	5.91E-33
+GO_REGULATION_OF_MEGAKARYOCYTE_DIFFERENTIATION					4.45E-35	9.65E-32
+GO_TELOMERE_CAPPING					8.59E-35	1.55E-31
+GO_DNA_REPLICATION_DEPENDENT_NUCLEOSOME_ORGANIZATION					5.21E-34	8.07E-31
+GO_CENTROMERE_COMPLEX_ASSEMBLY					1.01E-33	1.37E-30
+GO_ATP_DEPENDENT_CHROMATIN_REMODELING					5.06E-33	5.69E-30
+GO_DNA_REPLICATION_INDEPENDENT_NUCLEOSOME_ORGANIZATION					5.77E-33	5.69E-30
+
+Много генов гистонов, их явно много нацепилось
+Есть PSMA3- что тоже хорошо, говорит о том, что GST случился
+
+Тут снова сплайсинг и гистоны
+https://string-db.org/cgi/network.pl?taskId=K5tViLOUulCx
+
+###Уникальные для контроля белки
+
+```{r}
+unique_K_RB <- is.element(RB_dataset$hgnc_symbol, common_RB$hgnc_symbol)
+unique_K_RB <- RB_dataset[Treatment == "K", hgnc_symbol][-unique_K_RB]
+unique_K_RB <- unique_K_RB[!duplicated(unique_K_RB)]
+unique_K_RB
+```
+Ого, Cколько их! их аж `r length(unique_K_RB)` штуки! 
+
+Сделал на всякий случай сетку и для этих
+https://string-db.org/cgi/network.pl?taskId=bvOuwM7uHmEj
+
+###Уникальные для обработки белки
+
+```{r}
+unique_RB <- is.element(RB_dataset$hgnc_symbol, common_RB$hgnc_symbol)
+unique_RB <- RB_dataset[Treatment == "RB", hgnc_symbol][-unique_RB]
+unique_RB <- unique_RB[!duplicated(unique_RB)]
+unique_RB
+```
+Их всего - `r length(unique_RB)`
+
+Вот сеть взаимосвязей для них 
+https://string-db.org/cgi/network.pl?taskId=y8w0HZfTf3UC
+
+
+
+
+
+
+
 
 
 

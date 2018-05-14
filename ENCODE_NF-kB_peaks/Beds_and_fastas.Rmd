@@ -42,11 +42,11 @@ rm(all_intersect)
 ## Группировка бинов обратно в пики
 Сгруппируем общие бины в пики
 
-```{r}
+```{r Гнилой чанк-переделать}
 #Теперь переведем бины обратно в пики
 common_peaks <- data.table()
 common_peaks <- aggregate(common_bins$Peak_Bins,
-                          by = list(common_bins$Peak_name, common_bins$Cell_line),
+                          by = list(common_bins$Peak_name, common_bins$Cell_line)),
                           FUN = min)
 
 names(common_peaks) <- c("Peak_name", "Cell_line", "Start")

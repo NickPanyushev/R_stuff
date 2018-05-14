@@ -176,12 +176,12 @@ setnames(GO_data, &quot;uniprotswissprot&quot;, &quot;Uniprot&quot;)
 final_data &lt;- merge(raw_data, GO_data, by = &quot;Uniprot&quot;)
 
 rm(BM_out, mol_function, cell_component, bio_process, GO_data, raw_data)</code></pre>
-<p>Отфильтруем вCе то, что наC не интереCует</p>
+<p>Отфильтруем все то, что нас не интересует</p>
 <pre class="r"><code>unique(final_data$Cell_line)</code></pre>
 <pre><code>## [1] &quot;Im9&quot;      &quot;RPMI8226&quot;</code></pre>
 <pre class="r"><code>final_data &lt;- final_data[Proteome_type == &quot;PSMA3&quot;, ]
 final_data &lt;- final_data[Cell_line == &quot;Im9&quot;, ]</code></pre>
-<p>Взглянем на то, что еCть и оCталоCь</p>
+<p>Взглянем на то, что есть</p>
 <pre class="r"><code>final_data[, .N, by =. (Treatment, Compartment)]</code></pre>
 <pre><code>##    Treatment Compartment   N
 ## 1:         K           C 132
@@ -192,25 +192,24 @@ final_data &lt;- final_data[Cell_line == &quot;Im9&quot;, ]</code></pre>
 ## 6:        RB           N  39
 ## 7:       CmB           C  29
 ## 8:        RB           C  26</code></pre>
-<p>Разделим датаCет на 2 чаCти - по обработке, чтоб в каждом был контроль и опыт</p>
-<pre class="r"><code>CmB_dataset &lt;- final_data[Treatment != &quot;RB&quot;, ]
-RB_dataset &lt;- final_data[Treatment != &quot;CmB&quot;, ]</code></pre>
-<p>CпиCки почти что идентичные по количеCтву белков, потому что и в тот и в другой входят образцы из контроля, а их большинCтво</p>
+<p>Разделим датасет на 3 части - по обработке, чтоб в каждом был контроль и опыт</p>
+<pre class="r"><code>CmB_dataset &lt;- final_data[Treatment %in% c(&quot;CmB&quot;, &quot;K&quot;)]
+nrow(CmB_dataset)</code></pre>
+<pre><code>## [1] 493</code></pre>
+<pre class="r"><code>RB_dataset &lt;- final_data[Treatment %in% c(&quot;RB&quot;, &quot;K&quot;)]
+nrow(RB_dataset)</code></pre>
+<pre><code>## [1] 496</code></pre>
+<pre class="r"><code>FC_dataset &lt;- final_data[Treatment %in% c(&quot;FC&quot;, &quot;K&quot;)]
+nrow(FC_dataset)</code></pre>
+<pre><code>## [1] 665</code></pre>
 </div>
 <div id="cmb-" class="section level2">
 <h2>CmB обработка</h2>
 <div id="-----." class="section level3">
 <h3>Общие для контроля и опыта белочки.</h3>
-<pre class="r"><code>common_CmB &lt;- intersect(CmB_dataset[Treatment == &quot;K&quot;, &quot;Uniprot&quot;], CmB_dataset[Treatment == &quot;CmB&quot;, &quot;Uniprot&quot;]) #ПереCекли
-common_CmB &lt;- common_CmB[!duplicated(common_CmB)]
-#Переведем идентификаторы Uniprot в NCBI gene symbols
-
-common_CmB &lt;- getBM(attributes = c(&quot;hgnc_symbol&quot;,&quot;uniprotswissprot&quot;),
-                 filters = &quot;uniprotswissprot&quot;,
-                values = common_CmB, 
-                mart = mart,
-                uniqueRows = TRUE)
-common_CmB$hgnc_symbol </code></pre>
+<pre class="r"><code>common_CmB &lt;- intersect(CmB_dataset[Treatment == &quot;K&quot;, hgnc_symbol], 
+                        CmB_dataset[Treatment == &quot;CmB&quot;, hgnc_symbol])
+common_CmB</code></pre>
 <pre><code>##  [1] &quot;NUDT21&quot;    &quot;LANCL1&quot;    &quot;TUBB&quot;      &quot;HNRNPC&quot;    &quot;HSP90AB1&quot; 
 ##  [6] &quot;SNRNP70&quot;   &quot;RPSA&quot;      &quot;HNRNPA1&quot;   &quot;HSPA8&quot;     &quot;PABPC1&quot;   
 ## [11] &quot;CBR1&quot;      &quot;HNRNPA2B1&quot; &quot;PSMA3&quot;     &quot;EEF1G&quot;     &quot;HNRNPH3&quot;  
@@ -218,310 +217,626 @@ common_CmB$hgnc_symbol </code></pre>
 ## [21] &quot;RPS4X&quot;     &quot;ACTG1&quot;     &quot;EEF1A1&quot;    &quot;TUBB4B&quot;    &quot;HNRNPU&quot;   
 ## [26] &quot;EIF3A&quot;     &quot;SF3B3&quot;     &quot;UBAP2&quot;     &quot;CCAR2&quot;     &quot;HNRNPUL1&quot; 
 ## [31] &quot;SRRT&quot;      &quot;XRN2&quot;      &quot;EIF3L&quot;</code></pre>
-<p>Кто они у наC по функциям - Cмотрим в msigDB - топ 10 функций</p>
-<p>REACTOME_MRNA_SPLICING - 3.97E-18 REACTOME_PROCESSING_OF_CAPPED_INTRON_CONTAINING_PRE_MRNA - 2.81E-17 REACTOME_MRNA_PROCESSING - 9.11E-17 HSIAO_HOUSEKEEPING_GENES - 1.73E-14 PUJANA_BRCA1_PCC_NETWORK - 4.22E-14 HALLMARK_MYC_TARGETS_V1 - 6.6E-14 MARTENS_TRETINOIN_RESPONSE_DN - 2.55E-12 KEGG_SPLICEOSOME - 1.35E-11 CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN - 1.87E-10 REACTOME_TRANSLATION - 9.32E-10</p>
-<p>Что все эти функции значат - надо гуглить, но видно, что есть реально housekeeping, а есть что-то, связанное со сплайсингом</p>
+<p>Их мало - всего 33 штук!</p>
+<p>Кто они у нас по функциям - Cмотрим в msigDB - топ 10 функций</p>
+<p>33 белков совершенно несерьезно по взаимодействиям расписывать</p>
+<p>Gene Set Name FDR q-value HSIAO_HOUSEKEEPING_GENES 1.02E-15 GO_INTERSPECIES_INTERACTION_BETWEEN_ORGANISMS 1.99E-14 GO_RNA_BINDING 2.19E-14 PUJANA_BRCA1_PCC_NETWORK 3.03E-14 GO_POLY_A_RNA_BINDING 4.56E-14 CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN 2.85E-13 GO_RIBONUCLEOPROTEIN_COMPLEX 2.68E-11 GO_MRNA_METABOLIC_PROCESS 1.03E-10 HALLMARK_MYC_TARGETS_V1 1.05E-10 GO_MACROMOLECULAR_COMPLEX_BINDING 2.25E-10</p>
+<p>Видим housekeeping - в принципе, понятно, откуда он взялся</p>
 </div>
-<div id="---" class="section level3">
-<h3>Уникальные для контроля белки</h3>
-<pre class="r"><code>unique_K &lt;- is.element(CmB_dataset$hgnc_symbol, common_CmB$hgnc_symbol)
-unique_K &lt;- CmB_dataset[Treatment == &quot;K&quot;, hgnc_symbol][-unique_K]
-unique_K &lt;- unique_K[!duplicated(unique_K)]
+<div id="--" class="section level3">
+<h3>Пропадают после обработки</h3>
+<pre class="r"><code>unique_K &lt;- setdiff(CmB_dataset[Treatment == &quot;K&quot;, hgnc_symbol], CmB_dataset[Treatment == &quot;CmB&quot;, hgnc_symbol])
 unique_K</code></pre>
-<pre><code>##   [1] &quot;MYO1G&quot;     &quot;AIP&quot;       &quot;PGRMC1&quot;    &quot;DDX3X&quot;     &quot;COPE&quot;     
-##   [6] &quot;SCAMP3&quot;    &quot;UQCRQ&quot;     &quot;HNRNPDL&quot;   &quot;XPO1&quot;      &quot;PGRMC2&quot;   
-##  [11] &quot;DHX15&quot;     &quot;CYB5B&quot;     &quot;PHGDH&quot;     &quot;HNRNPR&quot;    &quot;NDUFA2&quot;   
-##  [16] &quot;NUDT21&quot;    &quot;LANCL1&quot;    &quot;IDH3B&quot;     &quot;PLIN3&quot;     &quot;LPXN&quot;     
-##  [21] &quot;CTNND1&quot;    &quot;NDUFS2&quot;    &quot;H2AFY&quot;     &quot;SEC22B&quot;    &quot;PSIP1&quot;    
-##  [26] &quot;NDUFS3&quot;    &quot;SF3B1&quot;     &quot;SNRNP200&quot;  &quot;NUP155&quot;    &quot;RSL1D1&quot;   
-##  [31] &quot;MTA2&quot;      &quot;TOMM70&quot;    &quot;PRPF6&quot;     &quot;LETM1&quot;     &quot;AP2A1&quot;    
-##  [36] &quot;AIFM1&quot;     &quot;NDUFB10&quot;   &quot;TOMM40&quot;    &quot;CYB5A&quot;     &quot;GLUD1&quot;    
-##  [41] &quot;MT-CO2&quot;    &quot;PGK1&quot;      &quot;HLA-A&quot;     &quot;HLA-DRA&quot;   &quot;LMNA&quot;     
-##  [46] &quot;TFRC&quot;      &quot;VTN&quot;       &quot;HLA-DPB1&quot;  &quot;HSPB1&quot;     &quot;RPN1&quot;     
-##  [51] &quot;RPN2&quot;      &quot;GNAI2&quot;     &quot;ATP1A1&quot;    &quot;SLC25A5&quot;   &quot;RPLP1&quot;    
-##  [56] &quot;ATP5F1B&quot;   &quot;ENO1&quot;      &quot;FCER2&quot;     &quot;NPM1&quot;      &quot;TUBB&quot;     
-##  [61] &quot;EPRS&quot;      &quot;HSP90AA1&quot;  &quot;HNRNPC&quot;    &quot;ANXA6&quot;     &quot;SLC3A2&quot;   
-##  [66] &quot;HSP90AB1&quot;  &quot;CYC1&quot;      &quot;PTPRC&quot;     &quot;SNRPB2&quot;    &quot;SNRNP70&quot;  
-##  [71] &quot;VIM&quot;       &quot;RPSA&quot;      &quot;CD48&quot;      &quot;HNRNPA1&quot;   &quot;PARP1&quot;    
-##  [76] &quot;ALDOC&quot;     &quot;HIST1H1E&quot;  &quot;HSPD1&quot;     &quot;HSPA5&quot;     &quot;HSPA8&quot;    
-##  [81] &quot;MTHFD1&quot;    &quot;PABPC1&quot;    &quot;XRCC6&quot;     &quot;XRCC5&quot;     &quot;COX4I1&quot;   
-##  [86] &quot;EEF2&quot;      &quot;HLA-DRB1&quot;  &quot;LCP1&quot;      &quot;CD59&quot;      &quot;PKM&quot;      
-##  [91] &quot;HSP90B1&quot;   &quot;HNRNPL&quot;    &quot;RPS2&quot;      &quot;CBR1&quot;      &quot;HIST1H1B&quot; 
-##  [96] &quot;POR&quot;       &quot;ATP2A2&quot;    &quot;YBX3&quot;      &quot;DDX5&quot;      &quot;PSMC3&quot;    
-## [101] &quot;RPL7&quot;      &quot;HLA-B&quot;     &quot;RCC1&quot;      &quot;MYL12A&quot;    &quot;NCL&quot;      
-## [106] &quot;NDUFV2&quot;    &quot;MX1&quot;       &quot;M6PR&quot;      &quot;LMNB1&quot;     &quot;FLNA&quot;     
-## [111] &quot;VDAC1&quot;     &quot;FGFR2&quot;     &quot;SDHB&quot;      &quot;FBL&quot;       &quot;PAICS&quot;    
-## [116] &quot;UBA1&quot;      &quot;HNRNPA2B1&quot; &quot;UQCRC2&quot;    &quot;SFPQ&quot;      &quot;ATP5PB&quot;   
-## [121] &quot;ATP5F1A&quot;   &quot;PSMA1&quot;     &quot;PSMA3&quot;     &quot;U2AF2&quot;     &quot;RPL13&quot;    
-## [126] &quot;PTBP1&quot;     &quot;EEF1G&quot;     &quot;RPL10&quot;     &quot;CAD&quot;       &quot;CALR&quot;     
-## [131] &quot;CANX&quot;      &quot;NDUFS1&quot;    &quot;PML&quot;       &quot;PRDX3&quot;     &quot;RPL12&quot;    
-## [136] &quot;PDIA3&quot;     &quot;HLA-F&quot;     &quot;HMOX2&quot;     &quot;SDHA&quot;      &quot;DNAJA1&quot;   
-## [141] &quot;UQCRC1&quot;    &quot;HNRNPH3&quot;   &quot;HNRNPH1&quot;   &quot;YWHAB&quot;     &quot;PYCR1&quot;    
-## [146] &quot;CD70&quot;      &quot;LSP1&quot;      &quot;PHB&quot;       &quot;RFC4&quot;      &quot;MYH9&quot;     
-## [151] &quot;COPB2&quot;     &quot;ATP5F1C&quot;   &quot;RPL4&quot;      &quot;LONP1&quot;     &quot;PPP1CC&quot;   
-## [156] &quot;FDFT1&quot;     &quot;RBMX&quot;      &quot;HSPA9&quot;     &quot;EIF4A3&quot;    &quot;RPS19&quot;    
-## [161] &quot;RPL3&quot;      &quot;DDOST&quot;     &quot;HADHA&quot;     &quot;TMPO&quot;      &quot;MTREX&quot;    
-## [166] &quot;LRPPRC&quot;    &quot;RPL35&quot;     &quot;SLC1A4&quot;    &quot;MATR3&quot;     &quot;SSR1&quot;     
-## [171] &quot;VDAC2&quot;     &quot;NOP2&quot;      &quot;RPL5&quot;      &quot;RPS9&quot;      &quot;RPS5&quot;     
-## [176] &quot;RPS10&quot;     &quot;STT3A&quot;     &quot;CAPZB&quot;     &quot;UQCRFS1&quot;   &quot;ATP5PO&quot;   
-## [181] &quot;PRRC2A&quot;    &quot;LMAN1&quot;     &quot;NASP&quot;      &quot;FASN&quot;      &quot;CCT3&quot;     
-## [186] &quot;MRPL19&quot;    &quot;TUFM&quot;      &quot;ACADVL&quot;    &quot;ENTPD1&quot;    &quot;IDH3A&quot;    
-## [191] &quot;RPL14&quot;     &quot;CCT8&quot;      &quot;RAB7A&quot;     &quot;RAB27A&quot;    &quot;BCAP31&quot;   
-## [196] &quot;HSD17B4&quot;   &quot;HNRNPA3&quot;   &quot;HNRNPM&quot;    &quot;COPA&quot;      &quot;AK2&quot;      
-## [201] &quot;ALDH18A1&quot;  &quot;NAPA&quot;      &quot;CSE1L&quot;     &quot;HADHB&quot;     &quot;ADAR&quot;     
-## [206] &quot;EIF3B&quot;     &quot;ATP5MF&quot;    &quot;TMEM33&quot;    &quot;TPI1&quot;      &quot;ACTB&quot;     
-## [211] &quot;EIF4A1&quot;    &quot;RAB10&quot;     &quot;RAB14&quot;     &quot;RAP1B&quot;     &quot;RPS3A&quot;    
-## [216] &quot;RPL26&quot;     &quot;HNRNPK&quot;    &quot;YWHAG&quot;     &quot;RPS16&quot;     &quot;RPS18&quot;    
-## [221] &quot;RPS13&quot;     &quot;SNRPD3&quot;    &quot;RPL7A&quot;     &quot;RPS4X&quot;     &quot;HIST1H4I&quot; 
-## [226] &quot;RAN&quot;       &quot;RAP1A&quot;     &quot;RPS28&quot;     &quot;UBA52&quot;     &quot;TRA2B&quot;    
-## [231] &quot;RACK1&quot;     &quot;ACTG1&quot;     &quot;EEF1A1&quot;    &quot;TUBA4A&quot;    &quot;TUBB4B&quot;   
-## [236] &quot;HBA2&quot;      &quot;EIF4G2&quot;    &quot;GTF2I&quot;     &quot;PRKDC&quot;     &quot;RPL24&quot;    
-## [241] &quot;SRSF3&quot;     &quot;TFAM&quot;      &quot;SLC25A3&quot;   &quot;PURA&quot;      &quot;CLTC&quot;     
-## [246] &quot;HNRNPU&quot;    &quot;SPTBN1&quot;    &quot;SRSF2&quot;     &quot;RPL6&quot;      &quot;SLC25A11&quot; 
-## [251] &quot;TAP1&quot;      &quot;EIF4G1&quot;    &quot;EXOSC9&quot;    &quot;PRDX1&quot;     &quot;KHDRBS1&quot;  
-## [256] &quot;BAX&quot;       &quot;SRSF1&quot;     &quot;DHX9&quot;      &quot;SSRP1&quot;     &quot;RBBP4&quot;    
-## [261] &quot;GALNT2&quot;    &quot;TBL3&quot;      &quot;ILF2&quot;      &quot;ILF3&quot;      &quot;LMAN2&quot;    
-## [266] &quot;TRAP1&quot;     &quot;TARDBP&quot;    &quot;HNRNPA0&quot;   &quot;PSMD2&quot;     &quot;SRSF6&quot;    
-## [271] &quot;TRIM28&quot;    &quot;TUBA3C&quot;    &quot;SPTAN1&quot;    &quot;DDX39B&quot;    &quot;EIF3A&quot;    
-## [276] &quot;MLEC&quot;      &quot;EIF4A2&quot;    &quot;RBM39&quot;     &quot;SMC1A&quot;     &quot;LBR&quot;      
-## [281] &quot;CHD4&quot;      &quot;KPNB1&quot;     &quot;PSMD6&quot;     &quot;EFTUD2&quot;    &quot;PDIA6&quot;    
-## [286] &quot;PMVK&quot;      &quot;NONO&quot;      &quot;IRF4&quot;      &quot;PCBP2&quot;     &quot;SF3B3&quot;    
-## [291] &quot;ELAVL1&quot;    &quot;NSDHL&quot;     &quot;RAB11B&quot;    &quot;IFI16&quot;     &quot;DECR1&quot;    
-## [296] &quot;PDCD4&quot;     &quot;NOMO2&quot;     &quot;HP1BP3&quot;    &quot;UBAP2&quot;     &quot;ECPAS&quot;    
-## [301] &quot;ATL3&quot;      &quot;PRPF8&quot;     &quot;HIST2H3D&quot;  &quot;TUBA1A&quot;    &quot;SND1&quot;     
-## [306] &quot;MTDH&quot;      &quot;FERMT3&quot;    &quot;CARM1&quot;     &quot;NUDCD3&quot;    &quot;CCAR2&quot;    
-## [311] &quot;WDR36&quot;     &quot;SMARCC2&quot;   &quot;RDH11&quot;     &quot;STT3B&quot;     &quot;DDX54&quot;    
-## [316] &quot;NUP210&quot;    &quot;LPGAT1&quot;    &quot;GCN1&quot;      &quot;RAB8B&quot;     &quot;HIST1H2AC&quot;
-## [321] &quot;CCDC47&quot;    &quot;PYCR2&quot;     &quot;CYFIP2&quot;    &quot;DDX27&quot;     &quot;DDRGK1&quot;   
-## [326] &quot;ABHD14B&quot;   &quot;CDK5RAP3&quot;  &quot;EIF3C&quot;     &quot;PHB2&quot;      &quot;HNRNPAB&quot;  
-## [331] &quot;VRK1&quot;      &quot;NIPSNAP1&quot;  &quot;APOL2&quot;     &quot;MYBBP1A&quot;   &quot;ESYT1&quot;    
-## [336] &quot;HNRNPUL1&quot;  &quot;DERL1&quot;     &quot;TMEM109&quot;   &quot;TMED9&quot;     &quot;SRRT&quot;     
-## [341] &quot;API5&quot;      &quot;NAT10&quot;     &quot;XRN2&quot;      &quot;DDX47&quot;     &quot;LDAH&quot;     
-## [346] &quot;SFXN1&quot;     &quot;DDX21&quot;     &quot;TOMM22&quot;    &quot;PDS5B&quot;     &quot;AGPAT5&quot;   
-## [351] &quot;TECR&quot;      &quot;ATXN10&quot;    &quot;SRP68&quot;     &quot;NDUFA12&quot;   &quot;SLC25A13&quot; 
-## [356] &quot;CPSF3&quot;     &quot;PSME2&quot;     &quot;CORO1C&quot;    &quot;PA2G4&quot;     &quot;RUVBL2&quot;   
-## [361] &quot;EIF3L&quot;     &quot;RUVBL1&quot;    &quot;NUDC&quot;      &quot;VDAC3&quot;     &quot;THRAP3&quot;   
-## [366] &quot;WBP11&quot;     &quot;NOP58&quot;     &quot;LUC7L2&quot;    &quot;HYOU1&quot;     &quot;SUPT16H&quot;  
-## [371] &quot;TRPV2&quot;     &quot;COPG1&quot;     &quot;SQOR&quot;</code></pre>
-<p>Ого, Cколько их! их аж 373 штуки!</p>
-<p>Я их по функциям гонять не буду через msig - там, Cкорее вCего, протеоCомальная деградация, как и должно быть</p>
+<pre><code>##   [1] &quot;RBM47&quot;     &quot;MYO1G&quot;     &quot;AIP&quot;       &quot;PGRMC1&quot;    &quot;DDX3X&quot;    
+##   [6] &quot;COPE&quot;      &quot;SCAMP3&quot;    &quot;UQCRQ&quot;     &quot;HNRNPDL&quot;   &quot;XPO1&quot;     
+##  [11] &quot;PGRMC2&quot;    &quot;DHX15&quot;     &quot;CYB5B&quot;     &quot;PHGDH&quot;     &quot;HNRNPR&quot;   
+##  [16] &quot;NDUFA2&quot;    &quot;IDH3B&quot;     &quot;PLIN3&quot;     &quot;LPXN&quot;      &quot;CTNND1&quot;   
+##  [21] &quot;NDUFS2&quot;    &quot;H2AFY&quot;     &quot;SEC22B&quot;    &quot;PSIP1&quot;     &quot;NDUFS3&quot;   
+##  [26] &quot;SF3B1&quot;     &quot;SNRNP200&quot;  &quot;NUP155&quot;    &quot;RSL1D1&quot;    &quot;MTA2&quot;     
+##  [31] &quot;TOMM70&quot;    &quot;PRPF6&quot;     &quot;LETM1&quot;     &quot;AP2A1&quot;     &quot;AIFM1&quot;    
+##  [36] &quot;NDUFB10&quot;   &quot;TOMM40&quot;    &quot;CYB5A&quot;     &quot;GLUD1&quot;     &quot;MT-CO2&quot;   
+##  [41] &quot;PGK1&quot;      &quot;HLA-A&quot;     &quot;HLA-DRA&quot;   &quot;LMNA&quot;      &quot;TFRC&quot;     
+##  [46] &quot;VTN&quot;       &quot;HLA-DPB1&quot;  &quot;HSPB1&quot;     &quot;RPN1&quot;      &quot;RPN2&quot;     
+##  [51] &quot;GNAI2&quot;     &quot;ATP1A1&quot;    &quot;SLC25A5&quot;   &quot;RPLP1&quot;     &quot;ATP5F1B&quot;  
+##  [56] &quot;ENO1&quot;      &quot;FCER2&quot;     &quot;NPM1&quot;      &quot;EPRS&quot;      &quot;HSP90AA1&quot; 
+##  [61] &quot;ANXA6&quot;     &quot;SLC3A2&quot;    &quot;CYC1&quot;      &quot;PTPRC&quot;     &quot;SNRPB2&quot;   
+##  [66] &quot;VIM&quot;       &quot;CD48&quot;      &quot;PARP1&quot;     &quot;ALDOC&quot;     &quot;HIST1H1E&quot; 
+##  [71] &quot;HSPD1&quot;     &quot;HSPA5&quot;     &quot;MTHFD1&quot;    &quot;XRCC6&quot;     &quot;XRCC5&quot;    
+##  [76] &quot;COX4I1&quot;    &quot;EEF2&quot;      &quot;HLA-DRB1&quot;  &quot;LCP1&quot;      &quot;CD59&quot;     
+##  [81] &quot;PKM&quot;       &quot;HSP90B1&quot;   &quot;HNRNPL&quot;    &quot;RPS2&quot;      &quot;HIST1H1B&quot; 
+##  [86] &quot;POR&quot;       &quot;ATP2A2&quot;    &quot;YBX3&quot;      &quot;DDX5&quot;      &quot;PSMC3&quot;    
+##  [91] &quot;RPL7&quot;      &quot;HLA-B&quot;     &quot;RCC1&quot;      &quot;MYL12A&quot;    &quot;NCL&quot;      
+##  [96] &quot;NDUFV2&quot;    &quot;MX1&quot;       &quot;M6PR&quot;      &quot;LMNB1&quot;     &quot;FLNA&quot;     
+## [101] &quot;VDAC1&quot;     &quot;FGFR2&quot;     &quot;SDHB&quot;      &quot;FBL&quot;       &quot;PAICS&quot;    
+## [106] &quot;UBA1&quot;      &quot;UQCRC2&quot;    &quot;SFPQ&quot;      &quot;ATP5PB&quot;    &quot;ATP5F1A&quot;  
+## [111] &quot;PSMA1&quot;     &quot;U2AF2&quot;     &quot;RPL13&quot;     &quot;PTBP1&quot;     &quot;RPL10&quot;    
+## [116] &quot;CAD&quot;       &quot;CALR&quot;      &quot;CANX&quot;      &quot;NDUFS1&quot;    &quot;PML&quot;      
+## [121] &quot;PRDX3&quot;     &quot;RPL12&quot;     &quot;PDIA3&quot;     &quot;HLA-F&quot;     &quot;HMOX2&quot;    
+## [126] &quot;SDHA&quot;      &quot;DNAJA1&quot;    &quot;UQCRC1&quot;    &quot;YWHAB&quot;     &quot;PYCR1&quot;    
+## [131] &quot;CD70&quot;      &quot;LSP1&quot;      &quot;PHB&quot;       &quot;RFC4&quot;      &quot;MYH9&quot;     
+## [136] &quot;COPB2&quot;     &quot;ATP5F1C&quot;   &quot;RPL4&quot;      &quot;LONP1&quot;     &quot;PPP1CC&quot;   
+## [141] &quot;FDFT1&quot;     &quot;RBMX&quot;      &quot;HSPA9&quot;     &quot;EIF4A3&quot;    &quot;RPS19&quot;    
+## [146] &quot;RPL3&quot;      &quot;DDOST&quot;     &quot;HADHA&quot;     &quot;TMPO&quot;      &quot;MTREX&quot;    
+## [151] &quot;LRPPRC&quot;    &quot;RPL35&quot;     &quot;SLC1A4&quot;    &quot;MATR3&quot;     &quot;SSR1&quot;     
+## [156] &quot;VDAC2&quot;     &quot;NOP2&quot;      &quot;RPL5&quot;      &quot;RPS9&quot;      &quot;RPS5&quot;     
+## [161] &quot;RPS10&quot;     &quot;STT3A&quot;     &quot;CAPZB&quot;     &quot;UQCRFS1&quot;   &quot;ATP5PO&quot;   
+## [166] &quot;PRRC2A&quot;    &quot;LMAN1&quot;     &quot;NASP&quot;      &quot;FASN&quot;      &quot;CCT3&quot;     
+## [171] &quot;MRPL19&quot;    &quot;TUFM&quot;      &quot;ACADVL&quot;    &quot;ENTPD1&quot;    &quot;IDH3A&quot;    
+## [176] &quot;RPL14&quot;     &quot;CCT8&quot;      &quot;RAB7A&quot;     &quot;RAB27A&quot;    &quot;BCAP31&quot;   
+## [181] &quot;HSD17B4&quot;   &quot;HNRNPA3&quot;   &quot;HNRNPM&quot;    &quot;COPA&quot;      &quot;AK2&quot;      
+## [186] &quot;ALDH18A1&quot;  &quot;NAPA&quot;      &quot;CSE1L&quot;     &quot;HADHB&quot;     &quot;ADAR&quot;     
+## [191] &quot;ATP5MF&quot;    &quot;TMEM33&quot;    &quot;TPI1&quot;      &quot;ACTB&quot;      &quot;RAB10&quot;    
+## [196] &quot;RAB14&quot;     &quot;RAP1B&quot;     &quot;RPS3A&quot;     &quot;RPL26&quot;     &quot;YWHAG&quot;    
+## [201] &quot;RPS16&quot;     &quot;RPS18&quot;     &quot;RPS13&quot;     &quot;RPL7A&quot;     &quot;HIST1H4I&quot; 
+## [206] &quot;RAN&quot;       &quot;RAP1A&quot;     &quot;RPS28&quot;     &quot;UBA52&quot;     &quot;TRA2B&quot;    
+## [211] &quot;RACK1&quot;     &quot;TUBA4A&quot;    &quot;HBA2&quot;      &quot;EIF4G2&quot;    &quot;GTF2I&quot;    
+## [216] &quot;PRKDC&quot;     &quot;RPL24&quot;     &quot;SRSF3&quot;     &quot;TFAM&quot;      &quot;SLC25A3&quot;  
+## [221] &quot;PURA&quot;      &quot;CLTC&quot;      &quot;SPTBN1&quot;    &quot;SRSF2&quot;     &quot;RPL6&quot;     
+## [226] &quot;SLC25A11&quot;  &quot;TAP1&quot;      &quot;EIF4G1&quot;    &quot;EXOSC9&quot;    &quot;PRDX1&quot;    
+## [231] &quot;KHDRBS1&quot;   &quot;BAX&quot;       &quot;SRSF1&quot;     &quot;DHX9&quot;      &quot;SSRP1&quot;    
+## [236] &quot;RBBP4&quot;     &quot;GALNT2&quot;    &quot;TBL3&quot;      &quot;ILF2&quot;      &quot;ILF3&quot;     
+## [241] &quot;LMAN2&quot;     &quot;TRAP1&quot;     &quot;TARDBP&quot;    &quot;HNRNPA0&quot;   &quot;PSMD2&quot;    
+## [246] &quot;SRSF6&quot;     &quot;TRIM28&quot;    &quot;TUBA3C&quot;    &quot;SPTAN1&quot;    &quot;DDX39B&quot;   
+## [251] &quot;MLEC&quot;      &quot;EIF4A2&quot;    &quot;RBM39&quot;     &quot;SMC1A&quot;     &quot;LBR&quot;      
+## [256] &quot;CHD4&quot;      &quot;KPNB1&quot;     &quot;PSMD6&quot;     &quot;EFTUD2&quot;    &quot;PDIA6&quot;    
+## [261] &quot;PMVK&quot;      &quot;NONO&quot;      &quot;IRF4&quot;      &quot;PCBP2&quot;     &quot;ELAVL1&quot;   
+## [266] &quot;NSDHL&quot;     &quot;RAB11B&quot;    &quot;IFI16&quot;     &quot;DECR1&quot;     &quot;PDCD4&quot;    
+## [271] &quot;NOMO2&quot;     &quot;HP1BP3&quot;    &quot;ECPAS&quot;     &quot;ATL3&quot;      &quot;PRPF8&quot;    
+## [276] &quot;HIST2H3D&quot;  &quot;TUBA1A&quot;    &quot;SND1&quot;      &quot;MTDH&quot;      &quot;FERMT3&quot;   
+## [281] &quot;CARM1&quot;     &quot;NUDCD3&quot;    &quot;WDR36&quot;     &quot;SMARCC2&quot;   &quot;RDH11&quot;    
+## [286] &quot;STT3B&quot;     &quot;DDX54&quot;     &quot;NUP210&quot;    &quot;LPGAT1&quot;    &quot;GCN1&quot;     
+## [291] &quot;RAB8B&quot;     &quot;HIST1H2AC&quot; &quot;CCDC47&quot;    &quot;PYCR2&quot;     &quot;CYFIP2&quot;   
+## [296] &quot;DDX27&quot;     &quot;DDRGK1&quot;    &quot;ABHD14B&quot;   &quot;CDK5RAP3&quot;  &quot;EIF3C&quot;    
+## [301] &quot;PHB2&quot;      &quot;HNRNPAB&quot;   &quot;VRK1&quot;      &quot;NIPSNAP1&quot;  &quot;APOL2&quot;    
+## [306] &quot;MYBBP1A&quot;   &quot;ESYT1&quot;     &quot;DERL1&quot;     &quot;TMEM109&quot;   &quot;TMED9&quot;    
+## [311] &quot;API5&quot;      &quot;NAT10&quot;     &quot;DDX47&quot;     &quot;LDAH&quot;      &quot;SFXN1&quot;    
+## [316] &quot;DDX21&quot;     &quot;TOMM22&quot;    &quot;PDS5B&quot;     &quot;AGPAT5&quot;    &quot;TECR&quot;     
+## [321] &quot;ATXN10&quot;    &quot;SRP68&quot;     &quot;NDUFA12&quot;   &quot;SLC25A13&quot;  &quot;CPSF3&quot;    
+## [326] &quot;PSME2&quot;     &quot;CORO1C&quot;    &quot;PA2G4&quot;     &quot;RUVBL2&quot;    &quot;RUVBL1&quot;   
+## [331] &quot;NUDC&quot;      &quot;VDAC3&quot;     &quot;THRAP3&quot;    &quot;WBP11&quot;     &quot;NOP58&quot;    
+## [336] &quot;LUC7L2&quot;    &quot;HYOU1&quot;     &quot;SUPT16H&quot;   &quot;TRPV2&quot;     &quot;COPG1&quot;    
+## [341] &quot;SQOR&quot;</code></pre>
+<p>Ого, Cколько их! их аж 341 штуки!</p>
+<p>Что у нас в STRING для этих ребят есть?</p>
+<p><a href="https://string-db.org/cgi/network.pl?taskId=HKtEUUSMTuSJ" class="uri">https://string-db.org/cgi/network.pl?taskId=HKtEUUSMTuSJ</a></p>
+<p>Их много, много РНК-связывания. Надо смотреть на белки, которые и там и там участвуют. Тут это EIF4A3 и UBA52</p>
+<p>Сколько в среднем пептидов для всех этих белков нашлось?</p>
+<pre class="r"><code>summary(CmB_dataset[hgnc_symbol %in% unique_K, `Peptides(95%)`]) #для большинства - по одному пептидику, но есть те, кого прям совсем много, кто же это?</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00    1.00    1.00    2.46    3.00   29.00</code></pre>
+<pre class="r"><code>CmB_dataset[`Peptides(95%)` == 29, hgnc_symbol]</code></pre>
+<pre><code>## [1] &quot;ACTB&quot;</code></pre>
+<p>Все понятно, едем дальше</p>
 </div>
-<div id="---" class="section level3">
-<h3>Уникальные для обработки белки</h3>
-<pre class="r"><code>unique_Cmb &lt;- is.element(CmB_dataset$hgnc_symbol, common_CmB$hgnc_symbol)
-unique_Cmb &lt;- CmB_dataset[Treatment == &quot;CmB&quot;, hgnc_symbol][-unique_Cmb]
-unique_Cmb &lt;- unique_Cmb[!duplicated(unique_Cmb)]
+<div id="--" class="section level3">
+<h3>Появляются после обработки</h3>
+<pre class="r"><code>unique_Cmb &lt;- setdiff(CmB_dataset[Treatment == &quot;CmB&quot;, hgnc_symbol], CmB_dataset[Treatment == &quot;K&quot;, hgnc_symbol])
 unique_Cmb</code></pre>
-<pre><code>##  [1] &quot;ZNF207&quot;    &quot;NUDT21&quot;    &quot;LANCL1&quot;    &quot;UGDH&quot;      &quot;TUBB&quot;     
-##  [6] &quot;HNRNPC&quot;    &quot;HSP90AB1&quot;  &quot;SNRNP70&quot;   &quot;RPSA&quot;      &quot;HNRNPA1&quot;  
-## [11] &quot;HSPA8&quot;     &quot;PABPC1&quot;    &quot;CBR1&quot;      &quot;HNRNPA2B1&quot; &quot;PSMA3&quot;    
-## [16] &quot;EEF1G&quot;     &quot;HNRNPH3&quot;   &quot;HNRNPH1&quot;   &quot;EIF3B&quot;     &quot;EIF4A1&quot;   
-## [21] &quot;HNRNPK&quot;    &quot;SNRPE&quot;     &quot;SNRPD1&quot;    &quot;SNRPD3&quot;    &quot;RPS4X&quot;    
-## [26] &quot;ACTG1&quot;     &quot;EEF1A1&quot;    &quot;TUBA1B&quot;    &quot;TUBB4B&quot;    &quot;HNRNPU&quot;   
-## [31] &quot;EWSR1&quot;     &quot;EIF3A&quot;     &quot;SF3B3&quot;     &quot;SF1&quot;       &quot;UBAP2&quot;    
-## [36] &quot;HRNR&quot;      &quot;CCAR2&quot;     &quot;HNRNPUL1&quot;  &quot;SRRT&quot;      &quot;XRN2&quot;     
-## [41] &quot;EIF3L&quot;</code></pre>
-<p>Их всего - 41</p>
-<p>Вот сеть взаимосвязей для них <a href="https://string-db.org/cgi/network.pl?taskId=gumx3379uEA5" class="uri">https://string-db.org/cgi/network.pl?taskId=gumx3379uEA5</a></p>
+<pre><code>## [1] &quot;PAX4&quot;   &quot;ZNF207&quot; &quot;UGDH&quot;   &quot;SNRPE&quot;  &quot;SNRPD1&quot; &quot;TUBA1B&quot; &quot;EWSR1&quot;  &quot;SF1&quot;   
+## [9] &quot;HRNR&quot;</code></pre>
+<p>Их всего - 9 - это вообще несерьезно</p>
+<p>Сколько для них пептидов?</p>
+<pre class="r"><code>CmB_dataset[hgnc_symbol %in% unique_Cmb, `Peptides(95%)`] #разве что один нормально, да и тот тубулин</code></pre>
+<pre><code>##  [1] 1 1 2 1 1 8 1 1 1 1 1</code></pre>
+<p>Поэтому, будем считать, что их просто нет.</p>
 </div>
 <div id="-" class="section level3">
-<h3>Взаимодействия белков</h3>
-<p>Значит, агент сmB портит что-то в связи, и теперь в PSMA3 пути они не вытаскиваются.</p>
-<p>смотрим, что у нас есть по msigdb для групп контрольных белков</p>
-<p>Gene Set Name FDR q-value</p>
-<p>GO_POLY_A_RNA_BINDING 1.17E-152 GO_RNA_BINDING 1.55E-149 PUJANA_BRCA1_PCC_NETWORK 1.42E-108 GO_RIBONUCLEOPROTEIN_COMPLEX 2.41E-89 HSIAO_HOUSEKEEPING_GENES 1.63E-80 GO_MRNA_METABOLIC_PROCESS 1.38E-77 GO_RNA_PROCESSING 4.34E-75 DIAZ_CHRONIC_MEYLOGENOUS_LEUKEMIA_UP 5.85E-69 PUJANA_CHEK2_PCC_NETWORK 2.57E-67 CASORELLI_ACUTE_PROMYELOCYTIC_LEUKEMIA_DN 8.56E-64</p>
-<p>Каким-то образом белки эти связаны с процессингом РНК, как - без понятия пока.</p>
-<p>Давай посмотрим, что у нас имеется по базам данных взаимодействий</p>
-<p><a href="https://version-10-5.string-db.org/сgi/network.pl?networkId=TkKZuYZlXzEX" class="uri">https://version-10-5.string-db.org/сgi/network.pl?networkId=TkKZuYZlXzEX</a> - по этой ссылке перейди и крути картинку, разбирайся!</p>
+<h3>Ядро-цитоплазма</h3>
+<p>Значит, агент сmB портит что-то в связи, и теперь за PSMA3 пути они не вытаскиваются.</p>
 <p>Там на картинке есть 2 кластера плотных во взаимодействиях, и это говорит о том, что у нас есть группы белков, которые участвуют в разных вещах - это трансляция и сплайсинг - и то, и другое завязано на РНК.</p>
-<p>Попробуем сделать только для цитоплазматических белочков</p>
-<pre class="r"><code>unique_K_cp &lt;- CmB_dataset[Compartment == &quot;C&quot;]
-unique_K_cp &lt;- is.element(unique_K_cp$hgnc_symbol, common_CmB$hgnc_symbol)
-unique_K_cp &lt;- CmB_dataset[Treatment == &quot;K&quot;, hgnc_symbol][unique_K_cp]
-unique_K_cp &lt;- unique_K_cp[!duplicated(unique_K_cp)]
+<p>Попробуем посмотреть только для цитоплазматические белочки из тех, которые пропадают</p>
+<pre class="r"><code>temp_K &lt;- CmB_dataset[Treatment == &quot;K&quot;]
+temp_K &lt;- temp_K[Compartment == &quot;C&quot;, hgnc_symbol]
+
+temp_CmB &lt;- CmB_dataset[Treatment == &quot;CmB&quot;]
+temp_CmB &lt;- temp_CmB[Compartment == &quot;C&quot;, hgnc_symbol]
+
+unique_K_cp &lt;- setdiff(temp_K, temp_CmB)
+rm(temp_K, temp_CmB)
 unique_K_cp</code></pre>
-<pre><code>##   [1] &quot;HNRNPDL&quot;  &quot;PLIN3&quot;    &quot;LPXN&quot;     &quot;CTNND1&quot;   &quot;PSIP1&quot;    &quot;NDUFS3&quot;  
-##   [7] &quot;SF3B1&quot;    &quot;RSL1D1&quot;   &quot;MTA2&quot;     &quot;TOMM70&quot;   &quot;PRPF6&quot;    &quot;LETM1&quot;   
-##  [13] &quot;TOMM40&quot;   &quot;CYB5A&quot;    &quot;GLUD1&quot;    &quot;PGK1&quot;     &quot;HLA-A&quot;    &quot;GNAI2&quot;   
-##  [19] &quot;ATP1A1&quot;   &quot;ANXA6&quot;    &quot;HSP90AB1&quot; &quot;CYC1&quot;     &quot;PTPRC&quot;    &quot;SNRPB2&quot;  
-##  [25] &quot;SNRNP70&quot;  &quot;CD48&quot;     &quot;HNRNPA1&quot;  &quot;HSP90B1&quot;  &quot;HNRNPL&quot;   &quot;RPS2&quot;    
-##  [31] &quot;ATP2A2&quot;   &quot;YBX3&quot;     &quot;DDX5&quot;     &quot;RCC1&quot;     &quot;MYL12A&quot;   &quot;MX1&quot;     
-##  [37] &quot;M6PR&quot;     &quot;VDAC1&quot;    &quot;FGFR2&quot;    &quot;FBL&quot;      &quot;PAICS&quot;    &quot;UBA1&quot;    
-##  [43] &quot;ATP5PB&quot;   &quot;ATP5F1A&quot;  &quot;RPL13&quot;    &quot;PTBP1&quot;    &quot;EEF1G&quot;    &quot;NDUFS1&quot;  
-##  [49] &quot;PML&quot;      &quot;UQCRC1&quot;   &quot;LSP1&quot;     &quot;PHB&quot;      &quot;RFC4&quot;     &quot;RBMX&quot;    
-##  [55] &quot;HSPA9&quot;    &quot;DDOST&quot;    &quot;HADHA&quot;    &quot;TMPO&quot;     &quot;MTREX&quot;    &quot;NOP2&quot;    
-##  [61] &quot;RPL5&quot;     &quot;FASN&quot;     &quot;RAB27A&quot;   &quot;BCAP31&quot;   &quot;HSD17B4&quot;  &quot;COPA&quot;    
-##  [67] &quot;AK2&quot;      &quot;ALDH18A1&quot; &quot;HADHB&quot;    &quot;ADAR&quot;     &quot;EIF3B&quot;    &quot;ATP5MF&quot;  
-##  [73] &quot;TMEM33&quot;   &quot;RAB10&quot;    &quot;RAB14&quot;    &quot;RAP1B&quot;    &quot;RPS3A&quot;    &quot;RPL26&quot;   
-##  [79] &quot;RPS4X&quot;    &quot;HIST1H4I&quot; &quot;HBA2&quot;     &quot;GTF2I&quot;    &quot;PRKDC&quot;    &quot;RPL24&quot;   
-##  [85] &quot;SRSF3&quot;    &quot;TFAM&quot;     &quot;SLC25A3&quot;  &quot;SPTBN1&quot;   &quot;SRSF2&quot;    &quot;TUBA3C&quot;  
-##  [91] &quot;SPTAN1&quot;   &quot;DDX39B&quot;   &quot;RBM39&quot;    &quot;SMC1A&quot;    &quot;LBR&quot;      &quot;EFTUD2&quot;  
-##  [97] &quot;PDIA6&quot;    &quot;SF3B3&quot;    &quot;ELAVL1&quot;   &quot;NSDHL&quot;    &quot;IFI16&quot;    &quot;DECR1&quot;   
-## [103] &quot;NOMO2&quot;    &quot;HP1BP3&quot;   &quot;UBAP2&quot;    &quot;HIST2H3D&quot; &quot;TUBA1A&quot;   &quot;FERMT3&quot;  
-## [109] &quot;CARM1&quot;    &quot;NUDCD3&quot;   &quot;LPGAT1&quot;   &quot;GCN1&quot;     &quot;ABHD14B&quot;  &quot;APOL2&quot;   
-## [115] &quot;MYBBP1A&quot;  &quot;ESYT1&quot;    &quot;DDX47&quot;    &quot;LDAH&quot;     &quot;SFXN1&quot;    &quot;TECR&quot;    
-## [121] &quot;ATXN10&quot;   &quot;SRP68&quot;    &quot;NDUFA12&quot;  &quot;EIF3L&quot;    &quot;RUVBL1&quot;</code></pre>
-<p>Их всего - 125</p>
-<p>Вот тебе картинка - тут точно 2 кластера, все как надо, которые даже не связаны между собой <a href="https://string-db.org/cgi/network.pl?taskId=JaQcXU289icQ" class="uri">https://string-db.org/cgi/network.pl?taskId=JaQcXU289icQ</a></p>
+<pre><code>##   [1] &quot;RBM47&quot;    &quot;AIP&quot;      &quot;DDX3X&quot;    &quot;COPE&quot;     &quot;SCAMP3&quot;   &quot;HNRNPDL&quot; 
+##   [7] &quot;XPO1&quot;     &quot;PLIN3&quot;    &quot;LPXN&quot;     &quot;PGK1&quot;     &quot;HLA-A&quot;    &quot;HLA-DRA&quot; 
+##  [13] &quot;HSPB1&quot;    &quot;GNAI2&quot;    &quot;ENO1&quot;     &quot;EPRS&quot;     &quot;HSP90AA1&quot; &quot;ANXA6&quot;   
+##  [19] &quot;VIM&quot;      &quot;HNRNPA1&quot;  &quot;ALDOC&quot;    &quot;HSPD1&quot;    &quot;HSPA5&quot;    &quot;MTHFD1&quot;  
+##  [25] &quot;XRCC5&quot;    &quot;EEF2&quot;     &quot;HLA-DRB1&quot; &quot;LCP1&quot;     &quot;PKM&quot;      &quot;RPS2&quot;    
+##  [31] &quot;YBX3&quot;     &quot;PSMC3&quot;    &quot;RPL7&quot;     &quot;MYL12A&quot;   &quot;NCL&quot;      &quot;MX1&quot;     
+##  [37] &quot;PAICS&quot;    &quot;UBA1&quot;     &quot;PSMA1&quot;    &quot;RPL10&quot;    &quot;CAD&quot;      &quot;CANX&quot;    
+##  [43] &quot;DNAJA1&quot;   &quot;YWHAB&quot;    &quot;MYH9&quot;     &quot;COPB2&quot;    &quot;HSPA9&quot;    &quot;RPS19&quot;   
+##  [49] &quot;RPL35&quot;    &quot;RPS9&quot;     &quot;RPS5&quot;     &quot;CAPZB&quot;    &quot;PRRC2A&quot;   &quot;LMAN1&quot;   
+##  [55] &quot;NASP&quot;     &quot;FASN&quot;     &quot;CCT8&quot;     &quot;RAB7A&quot;    &quot;COPA&quot;     &quot;CSE1L&quot;   
+##  [61] &quot;TPI1&quot;     &quot;ACTB&quot;     &quot;RAB14&quot;    &quot;RAP1B&quot;    &quot;RPS3A&quot;    &quot;RPL26&quot;   
+##  [67] &quot;YWHAG&quot;    &quot;RPS16&quot;    &quot;RPS18&quot;    &quot;RPS13&quot;    &quot;RAN&quot;      &quot;TUBA4A&quot;  
+##  [73] &quot;HBA2&quot;     &quot;EIF4G2&quot;   &quot;PURA&quot;     &quot;EIF4G1&quot;   &quot;PRDX1&quot;    &quot;BAX&quot;     
+##  [79] &quot;TRAP1&quot;    &quot;PSMD2&quot;    &quot;TRIM28&quot;   &quot;TUBA3C&quot;   &quot;EIF4A2&quot;   &quot;KPNB1&quot;   
+##  [85] &quot;PSMD6&quot;    &quot;PDIA6&quot;    &quot;PMVK&quot;     &quot;PCBP2&quot;    &quot;NSDHL&quot;    &quot;RAB11B&quot;  
+##  [91] &quot;PDCD4&quot;    &quot;ECPAS&quot;    &quot;ATL3&quot;     &quot;TUBA1A&quot;   &quot;FERMT3&quot;   &quot;CARM1&quot;   
+##  [97] &quot;NUDCD3&quot;   &quot;GCN1&quot;     &quot;ABHD14B&quot;  &quot;EIF3C&quot;    &quot;SRRT&quot;     &quot;LDAH&quot;    
+## [103] &quot;ATXN10&quot;   &quot;PSME2&quot;    &quot;CORO1C&quot;   &quot;RUVBL2&quot;   &quot;RUVBL1&quot;   &quot;NUDC&quot;    
+## [109] &quot;LUC7L2&quot;   &quot;COPG1&quot;</code></pre>
+<p>Их всего - 110</p>
+<p>Вот тебе картинка - тут несколько кластеров, но дельный - только трансляция</p>
+<p><a href="https://string-db.org/cgi/network.pl?taskId=5lXzAOtydvu0" class="uri">https://string-db.org/cgi/network.pl?taskId=5lXzAOtydvu0</a></p>
 <p>Теперь cделаем только для ядерных белочков</p>
-<pre class="r"><code>unique_K_nuc &lt;- CmB_dataset[Compartment == &quot;N&quot;]
-unique_K_nuc &lt;- is.element(unique_K_nuc$hgnc_symbol, common_CmB$hgnc_symbol)
-unique_K_nuc &lt;- CmB_dataset[Treatment == &quot;K&quot;, hgnc_symbol][unique_K_nuc]
-unique_K_nuc &lt;- unique_K_nuc[!duplicated(unique_K_nuc)]
+<pre class="r"><code>temp_K &lt;- CmB_dataset[Treatment == &quot;K&quot;]
+temp_K &lt;- temp_K[Compartment == &quot;N&quot;, hgnc_symbol]
+
+temp_CmB &lt;- CmB_dataset[Treatment == &quot;CmB&quot;]
+temp_CmB &lt;- temp_CmB[Compartment == &quot;N&quot;, hgnc_symbol]
+
+unique_K_nuc &lt;- setdiff(temp_K, temp_CmB)
+rm(temp_K, temp_CmB)
 unique_K_nuc</code></pre>
-<pre><code>##  [1] &quot;PLIN3&quot;    &quot;LPXN&quot;     &quot;CTNND1&quot;   &quot;NDUFS2&quot;   &quot;H2AFY&quot;    &quot;ALDOC&quot;   
-##  [7] &quot;HIST1H1E&quot; &quot;HSPD1&quot;    &quot;HSPA5&quot;    &quot;HSPA8&quot;    &quot;MTHFD1&quot;   &quot;PABPC1&quot;  
-## [13] &quot;COX4I1&quot;   &quot;EEF2&quot;     &quot;LCP1&quot;     &quot;HSP90B1&quot;  &quot;HNRNPL&quot;   &quot;RPS2&quot;    
-## [19] &quot;CBR1&quot;     &quot;HLA-B&quot;    &quot;RCC1&quot;     &quot;MYL12A&quot;   &quot;NCL&quot;      &quot;PSMA1&quot;   
-## [25] &quot;CD70&quot;     &quot;LSP1&quot;     &quot;PHB&quot;      &quot;RFC4&quot;     &quot;HSPA9&quot;    &quot;EIF4A3&quot;  
-## [31] &quot;RPS19&quot;    &quot;MTREX&quot;    &quot;LRPPRC&quot;   &quot;RPL35&quot;    &quot;LMAN1&quot;    &quot;NASP&quot;    
-## [37] &quot;FASN&quot;     &quot;CCT3&quot;     &quot;MRPL19&quot;   &quot;TUFM&quot;     &quot;MLEC&quot;     &quot;EIF4A2&quot;  
-## [43] &quot;RBM39&quot;    &quot;SMC1A&quot;    &quot;KPNB1&quot;    &quot;PSMD6&quot;    &quot;EFTUD2&quot;   &quot;PDIA6&quot;   
-## [49] &quot;NONO&quot;     &quot;IRF4&quot;     &quot;PDCD4&quot;    &quot;NOMO2&quot;    &quot;NUDCD3&quot;   &quot;CCAR2&quot;   
-## [55] &quot;WDR36&quot;    &quot;RUVBL1&quot;   &quot;NUDC&quot;     NA</code></pre>
-<p>Их вcего - 125 -меньше, чем цитоплазматичеcких</p>
-<p><a href="https://version-10-5.string-db.org/cgi/network.pl?networkId=cZkQPVQKK8OO" class="uri">https://version-10-5.string-db.org/cgi/network.pl?networkId=cZkQPVQKK8OO</a> - тут все печально почему-то, этих белков совсем мало И эти белки так же и в цп встречаются.</p>
+<pre><code>##   [1] &quot;MYO1G&quot;     &quot;PGRMC1&quot;    &quot;SCAMP3&quot;    &quot;UQCRQ&quot;     &quot;HNRNPDL&quot;  
+##   [6] &quot;PGRMC2&quot;    &quot;DHX15&quot;     &quot;CYB5B&quot;     &quot;PHGDH&quot;     &quot;HNRNPR&quot;   
+##  [11] &quot;NDUFA2&quot;    &quot;IDH3B&quot;     &quot;CTNND1&quot;    &quot;NDUFS2&quot;    &quot;H2AFY&quot;    
+##  [16] &quot;SEC22B&quot;    &quot;PSIP1&quot;     &quot;NDUFS3&quot;    &quot;SF3B1&quot;     &quot;SNRNP200&quot; 
+##  [21] &quot;NUP155&quot;    &quot;RSL1D1&quot;    &quot;MTA2&quot;      &quot;TOMM70&quot;    &quot;PRPF6&quot;    
+##  [26] &quot;LETM1&quot;     &quot;AP2A1&quot;     &quot;AIFM1&quot;     &quot;NDUFB10&quot;   &quot;TOMM40&quot;   
+##  [31] &quot;CYB5A&quot;     &quot;GLUD1&quot;     &quot;MT-CO2&quot;    &quot;HLA-A&quot;     &quot;HLA-DRA&quot;  
+##  [36] &quot;LMNA&quot;      &quot;TFRC&quot;      &quot;VTN&quot;       &quot;HLA-DPB1&quot;  &quot;RPN1&quot;     
+##  [41] &quot;RPN2&quot;      &quot;GNAI2&quot;     &quot;ATP1A1&quot;    &quot;SLC25A5&quot;   &quot;RPLP1&quot;    
+##  [46] &quot;ATP5F1B&quot;   &quot;FCER2&quot;     &quot;NPM1&quot;      &quot;TUBB&quot;      &quot;SLC3A2&quot;   
+##  [51] &quot;HSP90AB1&quot;  &quot;CYC1&quot;      &quot;PTPRC&quot;     &quot;SNRPB2&quot;    &quot;VIM&quot;      
+##  [56] &quot;RPSA&quot;      &quot;CD48&quot;      &quot;PARP1&quot;     &quot;HIST1H1E&quot;  &quot;HSPD1&quot;    
+##  [61] &quot;HSPA5&quot;     &quot;HSPA8&quot;     &quot;XRCC6&quot;     &quot;XRCC5&quot;     &quot;COX4I1&quot;   
+##  [66] &quot;EEF2&quot;      &quot;HLA-DRB1&quot;  &quot;LCP1&quot;      &quot;CD59&quot;      &quot;HSP90B1&quot;  
+##  [71] &quot;HNRNPL&quot;    &quot;HIST1H1B&quot;  &quot;POR&quot;       &quot;ATP2A2&quot;    &quot;DDX5&quot;     
+##  [76] &quot;RPL7&quot;      &quot;HLA-B&quot;     &quot;RCC1&quot;      &quot;MYL12A&quot;    &quot;NCL&quot;      
+##  [81] &quot;NDUFV2&quot;    &quot;MX1&quot;       &quot;M6PR&quot;      &quot;LMNB1&quot;     &quot;FLNA&quot;     
+##  [86] &quot;VDAC1&quot;     &quot;FGFR2&quot;     &quot;SDHB&quot;      &quot;FBL&quot;       &quot;UQCRC2&quot;   
+##  [91] &quot;SFPQ&quot;      &quot;ATP5PB&quot;    &quot;ATP5F1A&quot;   &quot;U2AF2&quot;     &quot;RPL13&quot;    
+##  [96] &quot;PTBP1&quot;     &quot;RPL10&quot;     &quot;CALR&quot;      &quot;CANX&quot;      &quot;NDUFS1&quot;   
+## [101] &quot;PML&quot;       &quot;PRDX3&quot;     &quot;RPL12&quot;     &quot;PDIA3&quot;     &quot;HLA-F&quot;    
+## [106] &quot;HMOX2&quot;     &quot;SDHA&quot;      &quot;UQCRC1&quot;    &quot;PYCR1&quot;     &quot;CD70&quot;     
+## [111] &quot;LSP1&quot;      &quot;PHB&quot;       &quot;RFC4&quot;      &quot;MYH9&quot;      &quot;COPB2&quot;    
+## [116] &quot;ATP5F1C&quot;   &quot;RPL4&quot;      &quot;LONP1&quot;     &quot;PPP1CC&quot;    &quot;FDFT1&quot;    
+## [121] &quot;RBMX&quot;      &quot;HSPA9&quot;     &quot;EIF4A3&quot;    &quot;RPS19&quot;     &quot;RPL3&quot;     
+## [126] &quot;DDOST&quot;     &quot;HADHA&quot;     &quot;TMPO&quot;      &quot;MTREX&quot;     &quot;LRPPRC&quot;   
+## [131] &quot;RPL35&quot;     &quot;SLC1A4&quot;    &quot;MATR3&quot;     &quot;SSR1&quot;      &quot;VDAC2&quot;    
+## [136] &quot;NOP2&quot;      &quot;RPL5&quot;      &quot;RPS9&quot;      &quot;RPS5&quot;      &quot;RPS10&quot;    
+## [141] &quot;STT3A&quot;     &quot;UQCRFS1&quot;   &quot;ATP5PO&quot;    &quot;LMAN1&quot;     &quot;CCT3&quot;     
+## [146] &quot;MRPL19&quot;    &quot;TUFM&quot;      &quot;ACADVL&quot;    &quot;ENTPD1&quot;    &quot;IDH3A&quot;    
+## [151] &quot;RPL14&quot;     &quot;CCT8&quot;      &quot;RAB7A&quot;     &quot;RAB27A&quot;    &quot;BCAP31&quot;   
+## [156] &quot;HSD17B4&quot;   &quot;HNRNPA3&quot;   &quot;HNRNPM&quot;    &quot;COPA&quot;      &quot;AK2&quot;      
+## [161] &quot;ALDH18A1&quot;  &quot;NAPA&quot;      &quot;HADHB&quot;     &quot;ADAR&quot;      &quot;ATP5MF&quot;   
+## [166] &quot;TMEM33&quot;    &quot;RAB10&quot;     &quot;RPS3A&quot;     &quot;RPL26&quot;     &quot;RPS18&quot;    
+## [171] &quot;RPL7A&quot;     &quot;RPS4X&quot;     &quot;HIST1H4I&quot;  &quot;RAP1A&quot;     &quot;RPS28&quot;    
+## [176] &quot;UBA52&quot;     &quot;TRA2B&quot;     &quot;RACK1&quot;     &quot;ACTG1&quot;     &quot;HBA2&quot;     
+## [181] &quot;GTF2I&quot;     &quot;PRKDC&quot;     &quot;RPL24&quot;     &quot;SRSF3&quot;     &quot;TFAM&quot;     
+## [186] &quot;SLC25A3&quot;   &quot;CLTC&quot;      &quot;SPTBN1&quot;    &quot;SRSF2&quot;     &quot;RPL6&quot;     
+## [191] &quot;SLC25A11&quot;  &quot;TAP1&quot;      &quot;EXOSC9&quot;    &quot;KHDRBS1&quot;   &quot;BAX&quot;      
+## [196] &quot;SRSF1&quot;     &quot;DHX9&quot;      &quot;SSRP1&quot;     &quot;RBBP4&quot;     &quot;GALNT2&quot;   
+## [201] &quot;TBL3&quot;      &quot;ILF2&quot;      &quot;ILF3&quot;      &quot;LMAN2&quot;     &quot;TRAP1&quot;    
+## [206] &quot;TARDBP&quot;    &quot;HNRNPA0&quot;   &quot;SRSF6&quot;     &quot;SPTAN1&quot;    &quot;DDX39B&quot;   
+## [211] &quot;MLEC&quot;      &quot;RBM39&quot;     &quot;SMC1A&quot;     &quot;LBR&quot;       &quot;CHD4&quot;     
+## [216] &quot;KPNB1&quot;     &quot;EFTUD2&quot;    &quot;PDIA6&quot;     &quot;NONO&quot;      &quot;IRF4&quot;     
+## [221] &quot;SF3B3&quot;     &quot;ELAVL1&quot;    &quot;RAB11B&quot;    &quot;IFI16&quot;     &quot;DECR1&quot;    
+## [226] &quot;NOMO2&quot;     &quot;HP1BP3&quot;    &quot;PRPF8&quot;     &quot;HIST2H3D&quot;  &quot;TUBA1A&quot;   
+## [231] &quot;SND1&quot;      &quot;MTDH&quot;      &quot;FERMT3&quot;    &quot;WDR36&quot;     &quot;SMARCC2&quot;  
+## [236] &quot;RDH11&quot;     &quot;STT3B&quot;     &quot;DDX54&quot;     &quot;NUP210&quot;    &quot;LPGAT1&quot;   
+## [241] &quot;RAB8B&quot;     &quot;HIST1H2AC&quot; &quot;CCDC47&quot;    &quot;PYCR2&quot;     &quot;CYFIP2&quot;   
+## [246] &quot;DDX27&quot;     &quot;DDRGK1&quot;    &quot;CDK5RAP3&quot;  &quot;PHB2&quot;      &quot;HNRNPAB&quot;  
+## [251] &quot;VRK1&quot;      &quot;NIPSNAP1&quot;  &quot;APOL2&quot;     &quot;MYBBP1A&quot;   &quot;ESYT1&quot;    
+## [256] &quot;DERL1&quot;     &quot;TMEM109&quot;   &quot;TMED9&quot;     &quot;API5&quot;      &quot;NAT10&quot;    
+## [261] &quot;DDX47&quot;     &quot;SFXN1&quot;     &quot;DDX21&quot;     &quot;TOMM22&quot;    &quot;PDS5B&quot;    
+## [266] &quot;AGPAT5&quot;    &quot;TECR&quot;      &quot;SRP68&quot;     &quot;NDUFA12&quot;   &quot;SLC25A13&quot; 
+## [271] &quot;CPSF3&quot;     &quot;PSME2&quot;     &quot;PA2G4&quot;     &quot;RUVBL1&quot;    &quot;VDAC3&quot;    
+## [276] &quot;THRAP3&quot;    &quot;WBP11&quot;     &quot;NOP58&quot;     &quot;LUC7L2&quot;    &quot;HYOU1&quot;    
+## [281] &quot;SUPT16H&quot;   &quot;TRPV2&quot;     &quot;SQOR&quot;</code></pre>
+<p>Их вcего - 283 - больше, чем цитоплазматичеcких</p>
+<p><a href="https://string-db.org/cgi/network.pl?taskId=CUGnfHTXeqkq" class="uri">https://string-db.org/cgi/network.pl?taskId=CUGnfHTXeqkq</a> - я удалил из состава вершин убиквитин, потому что он ко всему лепится Обрати внимание на EIF4A3</p>
 </div>
 <div class="section level3">
 <h3>Вывод</h3>
-<p>Можно сказать, что Cmb действует на процессы, проходящие в цитоплазме, и это скорее всего, трансляция. В ядре - на сплайсинг Разделилось ядро-цитоплазма грязно, потому что набор белков примерно одинаковый.</p>
-<p>Как работает Cmb? Вся причина, скорее всего, в каком-то домене, общем для белков из одного из кластеров на графе. Ищешь такой домен - читай литературу - пиши в обсуждение))</p>
+<p>Можно сказать, что Cmb действует на трансляцию в цитоплазме</p>
+<p>И, видимо, на ядрышко, потому видим с кучу HNRNP и рибосомных белков</p>
+<p>Как работает Cmb? Вся причина, скорее всего, в каком-то белке, который входит в оба плотных скопления на графе и когда в нем что-то портится, связывание теряется и белков больше нет в пробе. Для этого вещества этот белок - EIF4A3, скорее всего</p>
+<p>Ищешь домен, с кем именно Cmb вяжется - читаешь литературу - пишешь в обсуждение))</p>
 </div>
 </div>
 <div id="rb-" class="section level2">
 <h2>RB обработка</h2>
-<div id="-----.-1" class="section level3">
-<h3>Общие для контроля и опыта белочки.</h3>
-<pre class="r"><code>common_RB &lt;- intersect(RB_dataset[Treatment == &quot;K&quot;, &quot;Uniprot&quot;], RB_dataset[Treatment == &quot;RB&quot;, &quot;Uniprot&quot;]) #Переcекли
-common_RB &lt;- common_RB[!duplicated(common_RB)]
-#Переведем идентификаторы Uniprot в NCBI gene symbols
-
-common_RB &lt;- getBM(attributes = c(&quot;hgnc_symbol&quot;,&quot;uniprotswissprot&quot;),
-                 filters = &quot;uniprotswissprot&quot;,
-                values = common_RB, 
-                mart = mart,
-                uniqueRows = TRUE)
-common_RB$hgnc_symbol </code></pre>
+<div id="----------." class="section level3">
+<h3>Белочки, встречающиеся и там и там, с ними связывание не теряется.</h3>
+<pre class="r"><code>common_RB &lt;- intersect(RB_dataset[Treatment == &quot;K&quot;, hgnc_symbol], 
+                        RB_dataset[Treatment == &quot;RB&quot;, hgnc_symbol])
+common_RB</code></pre>
 <pre><code>##  [1] &quot;HNRNPR&quot;    &quot;NUDT21&quot;    &quot;LMNA&quot;      &quot;NPM1&quot;      &quot;TUBB&quot;     
 ##  [6] &quot;HSP90AA1&quot;  &quot;HNRNPC&quot;    &quot;HSP90AB1&quot;  &quot;SNRNP70&quot;   &quot;HNRNPA1&quot;  
 ## [11] &quot;HSPA8&quot;     &quot;PABPC1&quot;    &quot;RPS2&quot;      &quot;CBR1&quot;      &quot;HNRNPA2B1&quot;
 ## [16] &quot;SFPQ&quot;      &quot;PSMA3&quot;     &quot;HNRNPH3&quot;   &quot;HNRNPH1&quot;   &quot;MYH9&quot;     
 ## [21] &quot;RBMX&quot;      &quot;HNRNPA3&quot;   &quot;EIF3B&quot;     &quot;EIF4A1&quot;    &quot;HNRNPK&quot;   
-## [26] &quot;SNRPD3&quot;    &quot;HIST1H4I&quot;  &quot;HIST1H4A&quot;  &quot;HIST1H4B&quot;  &quot;HIST1H4C&quot; 
-## [31] &quot;HIST1H4K&quot;  &quot;HIST1H4J&quot;  &quot;HIST1H4L&quot;  &quot;HIST1H4D&quot;  &quot;HIST1H4E&quot; 
-## [36] &quot;HIST1H4F&quot;  &quot;HIST1H4H&quot;  &quot;HIST4H4&quot;   &quot;HIST2H4A&quot;  &quot;HIST2H4B&quot; 
-## [41] &quot;ACTG1&quot;     &quot;TUBB4B&quot;    &quot;EIF4G2&quot;    &quot;SRSF3&quot;     &quot;HNRNPU&quot;   
-## [46] &quot;TUBA3C&quot;    &quot;TUBA3D&quot;    &quot;EIF3A&quot;     &quot;ELAVL1&quot;    &quot;CCAR2&quot;    
-## [51] &quot;EIF3C&quot;     &quot;HNRNPAB&quot;   &quot;HNRNPUL1&quot;  &quot;SRRT&quot;      &quot;XRN2&quot;</code></pre>
-<p>Их вcего - 2 Кто они у наc по функциям - cмотрим в msigDB - топ 10 функций</p>
-<p>Gene Set Name p-value FDR q-value GO_POLY_A_RNA_BINDING 5.8E-64 6.29E-60 GO_RNA_BINDING 5.11E-60 2.77E-56 GO_NEGATIVE_REGULATION_OF_MEGAKARYOCYTE_DIFFERENTIATION 3.42E-39 1.24E-35 GO_NEGATIVE_REGULATION_OF_HEMATOPOIETIC_PROGENITOR_CELL_DIFFERENTIATION 2.18E-36 5.91E-33 GO_REGULATION_OF_MEGAKARYOCYTE_DIFFERENTIATION 4.45E-35 9.65E-32 GO_TELOMERE_CAPPING 8.59E-35 1.55E-31 GO_DNA_REPLICATION_DEPENDENT_NUCLEOSOME_ORGANIZATION 5.21E-34 8.07E-31 GO_CENTROMERE_COMPLEX_ASSEMBLY 1.01E-33 1.37E-30 GO_ATP_DEPENDENT_CHROMATIN_REMODELING 5.06E-33 5.69E-30 GO_DNA_REPLICATION_INDEPENDENT_NUCLEOSOME_ORGANIZATION 5.77E-33 5.69E-30</p>
-<p>Много генов гистонов, их явно много нацепилось Есть PSMA3- что тоже хорошо, говорит о том, что GST случился</p>
-<p>Тут снова сплайсинг и гистоны <a href="https://string-db.org/cgi/network.pl?taskId=K5tViLOUulCx" class="uri">https://string-db.org/cgi/network.pl?taskId=K5tViLOUulCx</a></p>
+## [26] &quot;SNRPD3&quot;    &quot;HIST1H4I&quot;  &quot;ACTG1&quot;     &quot;TUBB4B&quot;    &quot;EIF4G2&quot;   
+## [31] &quot;SRSF3&quot;     &quot;HNRNPU&quot;    &quot;TUBA3C&quot;    &quot;EIF3A&quot;     &quot;ELAVL1&quot;   
+## [36] &quot;CCAR2&quot;     &quot;EIF3C&quot;     &quot;HNRNPAB&quot;   &quot;HNRNPUL1&quot;  &quot;SRRT&quot;     
+## [41] &quot;XRN2&quot;</code></pre>
+<p>Их вcего - 41</p>
+<p>Вот что по msigdb</p>
+<p>Gene Set Name FDR q-value GO_POLY_A_RNA_BINDING 8.88E-41 GO_RNA_BINDING 7.51E-39 GO_RNA_SPLICING_VIA_TRANSESTERIFICATION_REACTIONS 2.07E-31 GO_MRNA_METABOLIC_PROCESS 3.83E-30 GO_MRNA_PROCESSING 1.91E-29 GO_RNA_SPLICING 7.07E-29 GO_RIBONUCLEOPROTEIN_COMPLEX 8.89E-27 GO_RNA_PROCESSING 1.97E-25 REACTOME_MRNA_SPLICING 1.67E-24 REACTOME_PROCESSING_OF_CAPPED_INTRON_CONTAINING_PRE_MRNA 4.6E-23</p>
+<p>Все, кроме явной контаминации - типа тубулина, актина, ламинов и PSMA3 - имеют РНК-связывающую функцию</p>
+<p>Есть PSMA3- что тоже хорошо, говорит о том, что GST случился</p>
+<p>Сеть говорит о том, что у нас здесь только процесс процессинга РНК в общем-то <a href="https://string-db.org/cgi/network.pl?taskId=LKQLplgeoqQc" class="uri">https://string-db.org/cgi/network.pl?taskId=LKQLplgeoqQc</a></p>
+<p>Раз он и там и там есть есть, то, значит, RB на связывание не очень влияет</p>
 </div>
-<div id="----1" class="section level3">
-<h3>Уникальные для контроля белки</h3>
-<pre class="r"><code>unique_K_RB &lt;- is.element(RB_dataset$hgnc_symbol, common_RB$hgnc_symbol)
-unique_K_RB &lt;- RB_dataset[Treatment == &quot;K&quot;, hgnc_symbol][-unique_K_RB]
-unique_K_RB &lt;- unique_K_RB[!duplicated(unique_K_RB)]
+<div id="---1" class="section level3">
+<h3>Пропадают после обработки</h3>
+<pre class="r"><code>unique_K_RB &lt;- setdiff(RB_dataset[Treatment == &quot;K&quot;, hgnc_symbol], RB_dataset[Treatment == &quot;RB&quot;, hgnc_symbol])
 unique_K_RB</code></pre>
-<pre><code>##   [1] &quot;MYO1G&quot;     &quot;AIP&quot;       &quot;PGRMC1&quot;    &quot;DDX3X&quot;     &quot;COPE&quot;     
-##   [6] &quot;SCAMP3&quot;    &quot;UQCRQ&quot;     &quot;HNRNPDL&quot;   &quot;XPO1&quot;      &quot;PGRMC2&quot;   
-##  [11] &quot;DHX15&quot;     &quot;CYB5B&quot;     &quot;PHGDH&quot;     &quot;HNRNPR&quot;    &quot;NDUFA2&quot;   
-##  [16] &quot;NUDT21&quot;    &quot;LANCL1&quot;    &quot;IDH3B&quot;     &quot;PLIN3&quot;     &quot;LPXN&quot;     
-##  [21] &quot;CTNND1&quot;    &quot;NDUFS2&quot;    &quot;H2AFY&quot;     &quot;SEC22B&quot;    &quot;PSIP1&quot;    
-##  [26] &quot;NDUFS3&quot;    &quot;SF3B1&quot;     &quot;SNRNP200&quot;  &quot;NUP155&quot;    &quot;RSL1D1&quot;   
-##  [31] &quot;MTA2&quot;      &quot;TOMM70&quot;    &quot;PRPF6&quot;     &quot;LETM1&quot;     &quot;AP2A1&quot;    
-##  [36] &quot;AIFM1&quot;     &quot;NDUFB10&quot;   &quot;TOMM40&quot;    &quot;CYB5A&quot;     &quot;GLUD1&quot;    
-##  [41] &quot;MT-CO2&quot;    &quot;PGK1&quot;      &quot;HLA-A&quot;     &quot;HLA-DRA&quot;   &quot;LMNA&quot;     
-##  [46] &quot;TFRC&quot;      &quot;VTN&quot;       &quot;HLA-DPB1&quot;  &quot;HSPB1&quot;     &quot;RPN1&quot;     
-##  [51] &quot;RPN2&quot;      &quot;GNAI2&quot;     &quot;ATP1A1&quot;    &quot;SLC25A5&quot;   &quot;RPLP1&quot;    
-##  [56] &quot;ATP5F1B&quot;   &quot;ENO1&quot;      &quot;FCER2&quot;     &quot;NPM1&quot;      &quot;TUBB&quot;     
-##  [61] &quot;EPRS&quot;      &quot;HSP90AA1&quot;  &quot;HNRNPC&quot;    &quot;ANXA6&quot;     &quot;SLC3A2&quot;   
-##  [66] &quot;HSP90AB1&quot;  &quot;CYC1&quot;      &quot;PTPRC&quot;     &quot;SNRPB2&quot;    &quot;SNRNP70&quot;  
-##  [71] &quot;VIM&quot;       &quot;RPSA&quot;      &quot;CD48&quot;      &quot;HNRNPA1&quot;   &quot;PARP1&quot;    
-##  [76] &quot;ALDOC&quot;     &quot;HIST1H1E&quot;  &quot;HSPD1&quot;     &quot;HSPA5&quot;     &quot;HSPA8&quot;    
-##  [81] &quot;MTHFD1&quot;    &quot;PABPC1&quot;    &quot;XRCC6&quot;     &quot;XRCC5&quot;     &quot;COX4I1&quot;   
-##  [86] &quot;EEF2&quot;      &quot;HLA-DRB1&quot;  &quot;LCP1&quot;      &quot;CD59&quot;      &quot;PKM&quot;      
-##  [91] &quot;HSP90B1&quot;   &quot;HNRNPL&quot;    &quot;RPS2&quot;      &quot;CBR1&quot;      &quot;HIST1H1B&quot; 
-##  [96] &quot;POR&quot;       &quot;ATP2A2&quot;    &quot;YBX3&quot;      &quot;DDX5&quot;      &quot;PSMC3&quot;    
-## [101] &quot;RPL7&quot;      &quot;HLA-B&quot;     &quot;RCC1&quot;      &quot;MYL12A&quot;    &quot;NCL&quot;      
-## [106] &quot;NDUFV2&quot;    &quot;MX1&quot;       &quot;M6PR&quot;      &quot;LMNB1&quot;     &quot;FLNA&quot;     
-## [111] &quot;VDAC1&quot;     &quot;FGFR2&quot;     &quot;SDHB&quot;      &quot;FBL&quot;       &quot;PAICS&quot;    
-## [116] &quot;UBA1&quot;      &quot;HNRNPA2B1&quot; &quot;UQCRC2&quot;    &quot;SFPQ&quot;      &quot;ATP5PB&quot;   
-## [121] &quot;ATP5F1A&quot;   &quot;PSMA1&quot;     &quot;PSMA3&quot;     &quot;U2AF2&quot;     &quot;RPL13&quot;    
-## [126] &quot;PTBP1&quot;     &quot;EEF1G&quot;     &quot;RPL10&quot;     &quot;CAD&quot;       &quot;CALR&quot;     
-## [131] &quot;CANX&quot;      &quot;NDUFS1&quot;    &quot;PML&quot;       &quot;PRDX3&quot;     &quot;RPL12&quot;    
-## [136] &quot;PDIA3&quot;     &quot;HLA-F&quot;     &quot;HMOX2&quot;     &quot;SDHA&quot;      &quot;DNAJA1&quot;   
-## [141] &quot;UQCRC1&quot;    &quot;HNRNPH3&quot;   &quot;HNRNPH1&quot;   &quot;YWHAB&quot;     &quot;PYCR1&quot;    
-## [146] &quot;CD70&quot;      &quot;LSP1&quot;      &quot;PHB&quot;       &quot;RFC4&quot;      &quot;MYH9&quot;     
-## [151] &quot;COPB2&quot;     &quot;ATP5F1C&quot;   &quot;RPL4&quot;      &quot;LONP1&quot;     &quot;PPP1CC&quot;   
-## [156] &quot;FDFT1&quot;     &quot;RBMX&quot;      &quot;HSPA9&quot;     &quot;EIF4A3&quot;    &quot;RPS19&quot;    
-## [161] &quot;RPL3&quot;      &quot;DDOST&quot;     &quot;HADHA&quot;     &quot;TMPO&quot;      &quot;MTREX&quot;    
-## [166] &quot;LRPPRC&quot;    &quot;RPL35&quot;     &quot;SLC1A4&quot;    &quot;MATR3&quot;     &quot;SSR1&quot;     
-## [171] &quot;VDAC2&quot;     &quot;NOP2&quot;      &quot;RPL5&quot;      &quot;RPS9&quot;      &quot;RPS5&quot;     
-## [176] &quot;RPS10&quot;     &quot;STT3A&quot;     &quot;CAPZB&quot;     &quot;UQCRFS1&quot;   &quot;ATP5PO&quot;   
-## [181] &quot;PRRC2A&quot;    &quot;LMAN1&quot;     &quot;NASP&quot;      &quot;FASN&quot;      &quot;CCT3&quot;     
-## [186] &quot;MRPL19&quot;    &quot;TUFM&quot;      &quot;ACADVL&quot;    &quot;ENTPD1&quot;    &quot;IDH3A&quot;    
-## [191] &quot;RPL14&quot;     &quot;CCT8&quot;      &quot;RAB7A&quot;     &quot;RAB27A&quot;    &quot;BCAP31&quot;   
-## [196] &quot;HSD17B4&quot;   &quot;HNRNPA3&quot;   &quot;HNRNPM&quot;    &quot;COPA&quot;      &quot;AK2&quot;      
-## [201] &quot;ALDH18A1&quot;  &quot;NAPA&quot;      &quot;CSE1L&quot;     &quot;HADHB&quot;     &quot;ADAR&quot;     
-## [206] &quot;EIF3B&quot;     &quot;ATP5MF&quot;    &quot;TMEM33&quot;    &quot;TPI1&quot;      &quot;ACTB&quot;     
-## [211] &quot;EIF4A1&quot;    &quot;RAB10&quot;     &quot;RAB14&quot;     &quot;RAP1B&quot;     &quot;RPS3A&quot;    
-## [216] &quot;RPL26&quot;     &quot;HNRNPK&quot;    &quot;YWHAG&quot;     &quot;RPS16&quot;     &quot;RPS18&quot;    
-## [221] &quot;RPS13&quot;     &quot;SNRPD3&quot;    &quot;RPL7A&quot;     &quot;RPS4X&quot;     &quot;HIST1H4I&quot; 
-## [226] &quot;RAN&quot;       &quot;RAP1A&quot;     &quot;RPS28&quot;     &quot;UBA52&quot;     &quot;TRA2B&quot;    
-## [231] &quot;RACK1&quot;     &quot;ACTG1&quot;     &quot;EEF1A1&quot;    &quot;TUBA4A&quot;    &quot;TUBB4B&quot;   
-## [236] &quot;HBA2&quot;      &quot;EIF4G2&quot;    &quot;GTF2I&quot;     &quot;PRKDC&quot;     &quot;RPL24&quot;    
-## [241] &quot;SRSF3&quot;     &quot;TFAM&quot;      &quot;SLC25A3&quot;   &quot;PURA&quot;      &quot;CLTC&quot;     
-## [246] &quot;HNRNPU&quot;    &quot;SPTBN1&quot;    &quot;SRSF2&quot;     &quot;RPL6&quot;      &quot;SLC25A11&quot; 
-## [251] &quot;TAP1&quot;      &quot;EIF4G1&quot;    &quot;EXOSC9&quot;    &quot;PRDX1&quot;     &quot;KHDRBS1&quot;  
-## [256] &quot;BAX&quot;       &quot;SRSF1&quot;     &quot;DHX9&quot;      &quot;SSRP1&quot;     &quot;RBBP4&quot;    
-## [261] &quot;GALNT2&quot;    &quot;TBL3&quot;      &quot;ILF2&quot;      &quot;ILF3&quot;      &quot;LMAN2&quot;    
-## [266] &quot;TRAP1&quot;     &quot;TARDBP&quot;    &quot;HNRNPA0&quot;   &quot;PSMD2&quot;     &quot;SRSF6&quot;    
-## [271] &quot;TRIM28&quot;    &quot;TUBA3C&quot;    &quot;SPTAN1&quot;    &quot;DDX39B&quot;    &quot;EIF3A&quot;    
-## [276] &quot;MLEC&quot;      &quot;EIF4A2&quot;    &quot;RBM39&quot;     &quot;SMC1A&quot;     &quot;LBR&quot;      
-## [281] &quot;CHD4&quot;      &quot;KPNB1&quot;     &quot;PSMD6&quot;     &quot;EFTUD2&quot;    &quot;PDIA6&quot;    
-## [286] &quot;PMVK&quot;      &quot;NONO&quot;      &quot;IRF4&quot;      &quot;PCBP2&quot;     &quot;SF3B3&quot;    
-## [291] &quot;ELAVL1&quot;    &quot;NSDHL&quot;     &quot;RAB11B&quot;    &quot;IFI16&quot;     &quot;DECR1&quot;    
-## [296] &quot;PDCD4&quot;     &quot;NOMO2&quot;     &quot;HP1BP3&quot;    &quot;UBAP2&quot;     &quot;ECPAS&quot;    
-## [301] &quot;ATL3&quot;      &quot;PRPF8&quot;     &quot;HIST2H3D&quot;  &quot;TUBA1A&quot;    &quot;SND1&quot;     
-## [306] &quot;MTDH&quot;      &quot;FERMT3&quot;    &quot;CARM1&quot;     &quot;NUDCD3&quot;    &quot;CCAR2&quot;    
-## [311] &quot;WDR36&quot;     &quot;SMARCC2&quot;   &quot;RDH11&quot;     &quot;STT3B&quot;     &quot;DDX54&quot;    
-## [316] &quot;NUP210&quot;    &quot;LPGAT1&quot;    &quot;GCN1&quot;      &quot;RAB8B&quot;     &quot;HIST1H2AC&quot;
-## [321] &quot;CCDC47&quot;    &quot;PYCR2&quot;     &quot;CYFIP2&quot;    &quot;DDX27&quot;     &quot;DDRGK1&quot;   
-## [326] &quot;ABHD14B&quot;   &quot;CDK5RAP3&quot;  &quot;EIF3C&quot;     &quot;PHB2&quot;      &quot;HNRNPAB&quot;  
-## [331] &quot;VRK1&quot;      &quot;NIPSNAP1&quot;  &quot;APOL2&quot;     &quot;MYBBP1A&quot;   &quot;ESYT1&quot;    
-## [336] &quot;HNRNPUL1&quot;  &quot;DERL1&quot;     &quot;TMEM109&quot;   &quot;TMED9&quot;     &quot;SRRT&quot;     
-## [341] &quot;API5&quot;      &quot;NAT10&quot;     &quot;XRN2&quot;      &quot;DDX47&quot;     &quot;LDAH&quot;     
-## [346] &quot;SFXN1&quot;     &quot;DDX21&quot;     &quot;TOMM22&quot;    &quot;PDS5B&quot;     &quot;AGPAT5&quot;   
-## [351] &quot;TECR&quot;      &quot;ATXN10&quot;    &quot;SRP68&quot;     &quot;NDUFA12&quot;   &quot;SLC25A13&quot; 
-## [356] &quot;CPSF3&quot;     &quot;PSME2&quot;     &quot;CORO1C&quot;    &quot;PA2G4&quot;     &quot;RUVBL2&quot;   
-## [361] &quot;EIF3L&quot;     &quot;RUVBL1&quot;    &quot;NUDC&quot;      &quot;VDAC3&quot;     &quot;THRAP3&quot;   
-## [366] &quot;WBP11&quot;     &quot;NOP58&quot;     &quot;LUC7L2&quot;    &quot;HYOU1&quot;     &quot;SUPT16H&quot;  
-## [371] &quot;TRPV2&quot;     &quot;COPG1&quot;     &quot;SQOR&quot;</code></pre>
-<p>Ого, Cколько их! их аж 373 штуки!</p>
-<p>Сделал на всякий случай сетку и для этих <a href="https://string-db.org/cgi/network.pl?taskId=bvOuwM7uHmEj" class="uri">https://string-db.org/cgi/network.pl?taskId=bvOuwM7uHmEj</a></p>
+<pre><code>##   [1] &quot;RBM47&quot;     &quot;MYO1G&quot;     &quot;AIP&quot;       &quot;PGRMC1&quot;    &quot;DDX3X&quot;    
+##   [6] &quot;COPE&quot;      &quot;SCAMP3&quot;    &quot;UQCRQ&quot;     &quot;HNRNPDL&quot;   &quot;XPO1&quot;     
+##  [11] &quot;PGRMC2&quot;    &quot;DHX15&quot;     &quot;CYB5B&quot;     &quot;PHGDH&quot;     &quot;NDUFA2&quot;   
+##  [16] &quot;LANCL1&quot;    &quot;IDH3B&quot;     &quot;PLIN3&quot;     &quot;LPXN&quot;      &quot;CTNND1&quot;   
+##  [21] &quot;NDUFS2&quot;    &quot;H2AFY&quot;     &quot;SEC22B&quot;    &quot;PSIP1&quot;     &quot;NDUFS3&quot;   
+##  [26] &quot;SF3B1&quot;     &quot;SNRNP200&quot;  &quot;NUP155&quot;    &quot;RSL1D1&quot;    &quot;MTA2&quot;     
+##  [31] &quot;TOMM70&quot;    &quot;PRPF6&quot;     &quot;LETM1&quot;     &quot;AP2A1&quot;     &quot;AIFM1&quot;    
+##  [36] &quot;NDUFB10&quot;   &quot;TOMM40&quot;    &quot;CYB5A&quot;     &quot;GLUD1&quot;     &quot;MT-CO2&quot;   
+##  [41] &quot;PGK1&quot;      &quot;HLA-A&quot;     &quot;HLA-DRA&quot;   &quot;TFRC&quot;      &quot;VTN&quot;      
+##  [46] &quot;HLA-DPB1&quot;  &quot;HSPB1&quot;     &quot;RPN1&quot;      &quot;RPN2&quot;      &quot;GNAI2&quot;    
+##  [51] &quot;ATP1A1&quot;    &quot;SLC25A5&quot;   &quot;RPLP1&quot;     &quot;ATP5F1B&quot;   &quot;ENO1&quot;     
+##  [56] &quot;FCER2&quot;     &quot;EPRS&quot;      &quot;ANXA6&quot;     &quot;SLC3A2&quot;    &quot;CYC1&quot;     
+##  [61] &quot;PTPRC&quot;     &quot;SNRPB2&quot;    &quot;VIM&quot;       &quot;RPSA&quot;      &quot;CD48&quot;     
+##  [66] &quot;PARP1&quot;     &quot;ALDOC&quot;     &quot;HIST1H1E&quot;  &quot;HSPD1&quot;     &quot;HSPA5&quot;    
+##  [71] &quot;MTHFD1&quot;    &quot;XRCC6&quot;     &quot;XRCC5&quot;     &quot;COX4I1&quot;    &quot;EEF2&quot;     
+##  [76] &quot;HLA-DRB1&quot;  &quot;LCP1&quot;      &quot;CD59&quot;      &quot;PKM&quot;       &quot;HSP90B1&quot;  
+##  [81] &quot;HNRNPL&quot;    &quot;HIST1H1B&quot;  &quot;POR&quot;       &quot;ATP2A2&quot;    &quot;YBX3&quot;     
+##  [86] &quot;DDX5&quot;      &quot;PSMC3&quot;     &quot;RPL7&quot;      &quot;HLA-B&quot;     &quot;RCC1&quot;     
+##  [91] &quot;MYL12A&quot;    &quot;NCL&quot;       &quot;NDUFV2&quot;    &quot;MX1&quot;       &quot;M6PR&quot;     
+##  [96] &quot;LMNB1&quot;     &quot;FLNA&quot;      &quot;VDAC1&quot;     &quot;FGFR2&quot;     &quot;SDHB&quot;     
+## [101] &quot;FBL&quot;       &quot;PAICS&quot;     &quot;UBA1&quot;      &quot;UQCRC2&quot;    &quot;ATP5PB&quot;   
+## [106] &quot;ATP5F1A&quot;   &quot;PSMA1&quot;     &quot;U2AF2&quot;     &quot;RPL13&quot;     &quot;PTBP1&quot;    
+## [111] &quot;EEF1G&quot;     &quot;RPL10&quot;     &quot;CAD&quot;       &quot;CALR&quot;      &quot;CANX&quot;     
+## [116] &quot;NDUFS1&quot;    &quot;PML&quot;       &quot;PRDX3&quot;     &quot;RPL12&quot;     &quot;PDIA3&quot;    
+## [121] &quot;HLA-F&quot;     &quot;HMOX2&quot;     &quot;SDHA&quot;      &quot;DNAJA1&quot;    &quot;UQCRC1&quot;   
+## [126] &quot;YWHAB&quot;     &quot;PYCR1&quot;     &quot;CD70&quot;      &quot;LSP1&quot;      &quot;PHB&quot;      
+## [131] &quot;RFC4&quot;      &quot;COPB2&quot;     &quot;ATP5F1C&quot;   &quot;RPL4&quot;      &quot;LONP1&quot;    
+## [136] &quot;PPP1CC&quot;    &quot;FDFT1&quot;     &quot;HSPA9&quot;     &quot;EIF4A3&quot;    &quot;RPS19&quot;    
+## [141] &quot;RPL3&quot;      &quot;DDOST&quot;     &quot;HADHA&quot;     &quot;TMPO&quot;      &quot;MTREX&quot;    
+## [146] &quot;LRPPRC&quot;    &quot;RPL35&quot;     &quot;SLC1A4&quot;    &quot;MATR3&quot;     &quot;SSR1&quot;     
+## [151] &quot;VDAC2&quot;     &quot;NOP2&quot;      &quot;RPL5&quot;      &quot;RPS9&quot;      &quot;RPS5&quot;     
+## [156] &quot;RPS10&quot;     &quot;STT3A&quot;     &quot;CAPZB&quot;     &quot;UQCRFS1&quot;   &quot;ATP5PO&quot;   
+## [161] &quot;PRRC2A&quot;    &quot;LMAN1&quot;     &quot;NASP&quot;      &quot;FASN&quot;      &quot;CCT3&quot;     
+## [166] &quot;MRPL19&quot;    &quot;TUFM&quot;      &quot;ACADVL&quot;    &quot;ENTPD1&quot;    &quot;IDH3A&quot;    
+## [171] &quot;RPL14&quot;     &quot;CCT8&quot;      &quot;RAB7A&quot;     &quot;RAB27A&quot;    &quot;BCAP31&quot;   
+## [176] &quot;HSD17B4&quot;   &quot;HNRNPM&quot;    &quot;COPA&quot;      &quot;AK2&quot;       &quot;ALDH18A1&quot; 
+## [181] &quot;NAPA&quot;      &quot;CSE1L&quot;     &quot;HADHB&quot;     &quot;ADAR&quot;      &quot;ATP5MF&quot;   
+## [186] &quot;TMEM33&quot;    &quot;TPI1&quot;      &quot;ACTB&quot;      &quot;RAB10&quot;     &quot;RAB14&quot;    
+## [191] &quot;RAP1B&quot;     &quot;RPS3A&quot;     &quot;RPL26&quot;     &quot;YWHAG&quot;     &quot;RPS16&quot;    
+## [196] &quot;RPS18&quot;     &quot;RPS13&quot;     &quot;RPL7A&quot;     &quot;RPS4X&quot;     &quot;RAN&quot;      
+## [201] &quot;RAP1A&quot;     &quot;RPS28&quot;     &quot;UBA52&quot;     &quot;TRA2B&quot;     &quot;RACK1&quot;    
+## [206] &quot;EEF1A1&quot;    &quot;TUBA4A&quot;    &quot;HBA2&quot;      &quot;GTF2I&quot;     &quot;PRKDC&quot;    
+## [211] &quot;RPL24&quot;     &quot;TFAM&quot;      &quot;SLC25A3&quot;   &quot;PURA&quot;      &quot;CLTC&quot;     
+## [216] &quot;SPTBN1&quot;    &quot;SRSF2&quot;     &quot;RPL6&quot;      &quot;SLC25A11&quot;  &quot;TAP1&quot;     
+## [221] &quot;EIF4G1&quot;    &quot;EXOSC9&quot;    &quot;PRDX1&quot;     &quot;KHDRBS1&quot;   &quot;BAX&quot;      
+## [226] &quot;SRSF1&quot;     &quot;DHX9&quot;      &quot;SSRP1&quot;     &quot;RBBP4&quot;     &quot;GALNT2&quot;   
+## [231] &quot;TBL3&quot;      &quot;ILF2&quot;      &quot;ILF3&quot;      &quot;LMAN2&quot;     &quot;TRAP1&quot;    
+## [236] &quot;TARDBP&quot;    &quot;HNRNPA0&quot;   &quot;PSMD2&quot;     &quot;SRSF6&quot;     &quot;TRIM28&quot;   
+## [241] &quot;SPTAN1&quot;    &quot;DDX39B&quot;    &quot;MLEC&quot;      &quot;EIF4A2&quot;    &quot;RBM39&quot;    
+## [246] &quot;SMC1A&quot;     &quot;LBR&quot;       &quot;CHD4&quot;      &quot;KPNB1&quot;     &quot;PSMD6&quot;    
+## [251] &quot;EFTUD2&quot;    &quot;PDIA6&quot;     &quot;PMVK&quot;      &quot;NONO&quot;      &quot;IRF4&quot;     
+## [256] &quot;PCBP2&quot;     &quot;SF3B3&quot;     &quot;NSDHL&quot;     &quot;RAB11B&quot;    &quot;IFI16&quot;    
+## [261] &quot;DECR1&quot;     &quot;PDCD4&quot;     &quot;NOMO2&quot;     &quot;HP1BP3&quot;    &quot;UBAP2&quot;    
+## [266] &quot;ECPAS&quot;     &quot;ATL3&quot;      &quot;PRPF8&quot;     &quot;HIST2H3D&quot;  &quot;TUBA1A&quot;   
+## [271] &quot;SND1&quot;      &quot;MTDH&quot;      &quot;FERMT3&quot;    &quot;CARM1&quot;     &quot;NUDCD3&quot;   
+## [276] &quot;WDR36&quot;     &quot;SMARCC2&quot;   &quot;RDH11&quot;     &quot;STT3B&quot;     &quot;DDX54&quot;    
+## [281] &quot;NUP210&quot;    &quot;LPGAT1&quot;    &quot;GCN1&quot;      &quot;RAB8B&quot;     &quot;HIST1H2AC&quot;
+## [286] &quot;CCDC47&quot;    &quot;PYCR2&quot;     &quot;CYFIP2&quot;    &quot;DDX27&quot;     &quot;DDRGK1&quot;   
+## [291] &quot;ABHD14B&quot;   &quot;CDK5RAP3&quot;  &quot;PHB2&quot;      &quot;VRK1&quot;      &quot;NIPSNAP1&quot; 
+## [296] &quot;APOL2&quot;     &quot;MYBBP1A&quot;   &quot;ESYT1&quot;     &quot;DERL1&quot;     &quot;TMEM109&quot;  
+## [301] &quot;TMED9&quot;     &quot;API5&quot;      &quot;NAT10&quot;     &quot;DDX47&quot;     &quot;LDAH&quot;     
+## [306] &quot;SFXN1&quot;     &quot;DDX21&quot;     &quot;TOMM22&quot;    &quot;PDS5B&quot;     &quot;AGPAT5&quot;   
+## [311] &quot;TECR&quot;      &quot;ATXN10&quot;    &quot;SRP68&quot;     &quot;NDUFA12&quot;   &quot;SLC25A13&quot; 
+## [316] &quot;CPSF3&quot;     &quot;PSME2&quot;     &quot;CORO1C&quot;    &quot;PA2G4&quot;     &quot;RUVBL2&quot;   
+## [321] &quot;EIF3L&quot;     &quot;RUVBL1&quot;    &quot;NUDC&quot;      &quot;VDAC3&quot;     &quot;THRAP3&quot;   
+## [326] &quot;WBP11&quot;     &quot;NOP58&quot;     &quot;LUC7L2&quot;    &quot;HYOU1&quot;     &quot;SUPT16H&quot;  
+## [331] &quot;TRPV2&quot;     &quot;COPG1&quot;     &quot;SQOR&quot;</code></pre>
+<p>Ого, Cколько их! их аж 333 штук!</p>
+<p>Сетка для этих ребят: <a href="https://string-db.org/cgi/network.pl?taskId=nMG7bC7FM8Xl" class="uri">https://string-db.org/cgi/network.pl?taskId=nMG7bC7FM8Xl</a> - я опять убрал убиквитин</p>
+<p>Есть отличия от CmB, но в целом похоже, тоже ядрышко, тоже рибосомы</p>
 </div>
-<div id="----1" class="section level3">
-<h3>Уникальные для обработки белки</h3>
-<pre class="r"><code>unique_RB &lt;- is.element(RB_dataset$hgnc_symbol, common_RB$hgnc_symbol)
-unique_RB &lt;- RB_dataset[Treatment == &quot;RB&quot;, hgnc_symbol][-unique_RB]
-unique_RB &lt;- unique_RB[!duplicated(unique_RB)]
+<div id="---1" class="section level3">
+<h3>Появляются после обработки</h3>
+<pre class="r"><code>unique_RB &lt;- setdiff(RB_dataset[Treatment == &quot;RB&quot;, hgnc_symbol], RB_dataset[Treatment == &quot;K&quot;, hgnc_symbol])
 unique_RB</code></pre>
-<pre><code>##  [1] &quot;NUDT21&quot;    &quot;SYNCRIP&quot;   &quot;LMNA&quot;      &quot;NPM1&quot;      &quot;TUBB&quot;     
-##  [6] &quot;HSP90AA1&quot;  &quot;HNRNPC&quot;    &quot;HSP90AB1&quot;  &quot;SNRNP70&quot;   &quot;RPS17&quot;    
-## [11] &quot;HNRNPA1&quot;   &quot;HSPA8&quot;     &quot;PABPC1&quot;    &quot;RPS2&quot;      &quot;CBR1&quot;     
-## [16] &quot;HNRNPA2B1&quot; &quot;SFPQ&quot;      &quot;PSMA3&quot;     &quot;HNRNPH3&quot;   &quot;HNRNPH1&quot;  
-## [21] &quot;MYH9&quot;      &quot;RBMX&quot;      &quot;HNRNPA3&quot;   &quot;EIF3B&quot;     &quot;EIF4A1&quot;   
-## [26] &quot;HNRNPK&quot;    &quot;RPS7&quot;      &quot;SNRPE&quot;     &quot;SNRPD3&quot;    &quot;HIST1H4I&quot; 
-## [31] &quot;ACTG1&quot;     &quot;TUBA1B&quot;    &quot;TUBB4B&quot;    &quot;EIF4G2&quot;    &quot;SRSF3&quot;    
-## [36] &quot;H3F3B&quot;     &quot;HNRNPU&quot;    &quot;EWSR1&quot;     &quot;TUBA3C&quot;    &quot;HNRNPD&quot;   
-## [41] &quot;EIF3A&quot;     &quot;SF1&quot;       &quot;ELAVL1&quot;    &quot;FSCN1&quot;     &quot;HRNR&quot;     
-## [46] &quot;CCAR2&quot;     &quot;CPSF7&quot;     &quot;TAF15&quot;     &quot;HIST1H2AA&quot; &quot;EIF3C&quot;    
-## [51] &quot;HNRNPAB&quot;   &quot;HIST1H2BL&quot; &quot;HNRNPUL1&quot;  &quot;SRRT&quot;      &quot;XRN2&quot;</code></pre>
-<p>Их всего - 55</p>
-<p>Вот сеть взаимосвязей для них <a href="https://string-db.org/cgi/network.pl?taskId=y8w0HZfTf3UC" class="uri">https://string-db.org/cgi/network.pl?taskId=y8w0HZfTf3UC</a></p>
+<pre><code>##  [1] &quot;SYNCRIP&quot;   &quot;RPS17&quot;     &quot;RPS7&quot;      &quot;SNRPE&quot;     &quot;TUBA1B&quot;   
+##  [6] &quot;H3F3B&quot;     &quot;EWSR1&quot;     &quot;HNRNPD&quot;    &quot;SF1&quot;       &quot;FSCN1&quot;    
+## [11] &quot;HRNR&quot;      &quot;CPSF7&quot;     &quot;TAF15&quot;     &quot;HIST1H2AA&quot; &quot;HIST1H2BL&quot;</code></pre>
+<p>Их всего - 15</p>
+<p>Для сети 15 штук - несерьезно Какая-то хрень, будем считать, что их нет</p>
 </div>
+<div id="--1" class="section level3">
+<h3>Ядро-цитоплазма</h3>
+<p>Значит, агент RB портит что-то в связи, и теперь за PSMA3 пути они не вытаскиваются.</p>
+<p>Там на картинке есть 2 кластера плотных во взаимодействиях, и это говорит о том, что у нас есть группы белков, которые участвуют в разных вещах - это трансляция и сплайсинг - и то, и другое завязано на РНК.</p>
+<p>Попробуем посмотреть только для цитоплазматические белочки из тех, которые пропадают</p>
+<pre class="r"><code>temp_K &lt;- RB_dataset[Treatment == &quot;K&quot;]
+temp_K &lt;- temp_K[Compartment == &quot;C&quot;, hgnc_symbol]
+
+temp_RB &lt;- RB_dataset[Treatment == &quot;RB&quot;]
+temp_RB &lt;- temp_RB[Compartment == &quot;C&quot;, hgnc_symbol]
+
+unique_K_cp &lt;- setdiff(temp_K, temp_RB)
+rm(temp_K, temp_RB)
+unique_K_cp</code></pre>
+<pre><code>##   [1] &quot;RBM47&quot;    &quot;AIP&quot;      &quot;DDX3X&quot;    &quot;COPE&quot;     &quot;SCAMP3&quot;   &quot;HNRNPDL&quot; 
+##   [7] &quot;XPO1&quot;     &quot;PLIN3&quot;    &quot;LPXN&quot;     &quot;PGK1&quot;     &quot;HLA-A&quot;    &quot;HLA-DRA&quot; 
+##  [13] &quot;HSPB1&quot;    &quot;GNAI2&quot;    &quot;ENO1&quot;     &quot;EPRS&quot;     &quot;ANXA6&quot;    &quot;VIM&quot;     
+##  [19] &quot;RPSA&quot;     &quot;HNRNPA1&quot;  &quot;ALDOC&quot;    &quot;HSPD1&quot;    &quot;HSPA5&quot;    &quot;MTHFD1&quot;  
+##  [25] &quot;XRCC5&quot;    &quot;EEF2&quot;     &quot;HLA-DRB1&quot; &quot;LCP1&quot;     &quot;PKM&quot;      &quot;YBX3&quot;    
+##  [31] &quot;PSMC3&quot;    &quot;RPL7&quot;     &quot;MYL12A&quot;   &quot;NCL&quot;      &quot;MX1&quot;      &quot;PAICS&quot;   
+##  [37] &quot;UBA1&quot;     &quot;PSMA1&quot;    &quot;EEF1G&quot;    &quot;RPL10&quot;    &quot;CAD&quot;      &quot;CANX&quot;    
+##  [43] &quot;DNAJA1&quot;   &quot;YWHAB&quot;    &quot;COPB2&quot;    &quot;HSPA9&quot;    &quot;RPS19&quot;    &quot;RPL35&quot;   
+##  [49] &quot;RPS9&quot;     &quot;RPS5&quot;     &quot;CAPZB&quot;    &quot;PRRC2A&quot;   &quot;LMAN1&quot;    &quot;NASP&quot;    
+##  [55] &quot;FASN&quot;     &quot;CCT8&quot;     &quot;RAB7A&quot;    &quot;COPA&quot;     &quot;CSE1L&quot;    &quot;TPI1&quot;    
+##  [61] &quot;ACTB&quot;     &quot;RAB14&quot;    &quot;RAP1B&quot;    &quot;RPS3A&quot;    &quot;RPL26&quot;    &quot;YWHAG&quot;   
+##  [67] &quot;RPS16&quot;    &quot;RPS18&quot;    &quot;RPS13&quot;    &quot;RPS4X&quot;    &quot;RAN&quot;      &quot;EEF1A1&quot;  
+##  [73] &quot;TUBA4A&quot;   &quot;HBA2&quot;     &quot;PURA&quot;     &quot;EIF4G1&quot;   &quot;PRDX1&quot;    &quot;BAX&quot;     
+##  [79] &quot;TRAP1&quot;    &quot;PSMD2&quot;    &quot;TRIM28&quot;   &quot;EIF4A2&quot;   &quot;KPNB1&quot;    &quot;PSMD6&quot;   
+##  [85] &quot;PDIA6&quot;    &quot;PMVK&quot;     &quot;PCBP2&quot;    &quot;NSDHL&quot;    &quot;RAB11B&quot;   &quot;PDCD4&quot;   
+##  [91] &quot;UBAP2&quot;    &quot;ECPAS&quot;    &quot;ATL3&quot;     &quot;TUBA1A&quot;   &quot;FERMT3&quot;   &quot;CARM1&quot;   
+##  [97] &quot;NUDCD3&quot;   &quot;GCN1&quot;     &quot;ABHD14B&quot;  &quot;XRN2&quot;     &quot;LDAH&quot;     &quot;ATXN10&quot;  
+## [103] &quot;PSME2&quot;    &quot;CORO1C&quot;   &quot;RUVBL2&quot;   &quot;EIF3L&quot;    &quot;RUVBL1&quot;   &quot;NUDC&quot;    
+## [109] &quot;LUC7L2&quot;   &quot;COPG1&quot;</code></pre>
+<p>Их всего - 110</p>
+<p>Что тут у нас?</p>
+<p><a href="https://string-db.org/cgi/network.pl?taskId=nHuSBTMt7dfQ" class="uri">https://string-db.org/cgi/network.pl?taskId=nHuSBTMt7dfQ</a> - рибосомные белки всякие И белки на экспорт из клетки!</p>
+<p>Попробуем посмотреть только на ядерные белочки из тех, которые пропадают</p>
+<pre class="r"><code>temp_K &lt;- RB_dataset[Treatment == &quot;K&quot;]
+temp_K &lt;- temp_K[Compartment == &quot;N&quot;, hgnc_symbol]
+
+temp_RB &lt;- RB_dataset[Treatment == &quot;RB&quot;]
+temp_RB &lt;- temp_RB[Compartment == &quot;N&quot;, hgnc_symbol]
+
+unique_K_nuc &lt;- setdiff(temp_K, temp_RB)
+rm(temp_K, temp_RB)
+unique_K_nuc</code></pre>
+<pre><code>##   [1] &quot;MYO1G&quot;     &quot;PGRMC1&quot;    &quot;SCAMP3&quot;    &quot;UQCRQ&quot;     &quot;HNRNPDL&quot;  
+##   [6] &quot;PGRMC2&quot;    &quot;DHX15&quot;     &quot;CYB5B&quot;     &quot;PHGDH&quot;     &quot;NDUFA2&quot;   
+##  [11] &quot;LANCL1&quot;    &quot;IDH3B&quot;     &quot;CTNND1&quot;    &quot;NDUFS2&quot;    &quot;H2AFY&quot;    
+##  [16] &quot;SEC22B&quot;    &quot;PSIP1&quot;     &quot;NDUFS3&quot;    &quot;SF3B1&quot;     &quot;SNRNP200&quot; 
+##  [21] &quot;NUP155&quot;    &quot;RSL1D1&quot;    &quot;MTA2&quot;      &quot;TOMM70&quot;    &quot;PRPF6&quot;    
+##  [26] &quot;LETM1&quot;     &quot;AP2A1&quot;     &quot;AIFM1&quot;     &quot;NDUFB10&quot;   &quot;TOMM40&quot;   
+##  [31] &quot;CYB5A&quot;     &quot;GLUD1&quot;     &quot;MT-CO2&quot;    &quot;HLA-A&quot;     &quot;HLA-DRA&quot;  
+##  [36] &quot;TFRC&quot;      &quot;VTN&quot;       &quot;HLA-DPB1&quot;  &quot;RPN1&quot;      &quot;RPN2&quot;     
+##  [41] &quot;GNAI2&quot;     &quot;ATP1A1&quot;    &quot;SLC25A5&quot;   &quot;RPLP1&quot;     &quot;ATP5F1B&quot;  
+##  [46] &quot;FCER2&quot;     &quot;TUBB&quot;      &quot;SLC3A2&quot;    &quot;HSP90AB1&quot;  &quot;CYC1&quot;     
+##  [51] &quot;PTPRC&quot;     &quot;SNRPB2&quot;    &quot;VIM&quot;       &quot;RPSA&quot;      &quot;CD48&quot;     
+##  [56] &quot;PARP1&quot;     &quot;HIST1H1E&quot;  &quot;HSPD1&quot;     &quot;HSPA5&quot;     &quot;XRCC6&quot;    
+##  [61] &quot;XRCC5&quot;     &quot;COX4I1&quot;    &quot;EEF2&quot;      &quot;HLA-DRB1&quot;  &quot;LCP1&quot;     
+##  [66] &quot;CD59&quot;      &quot;HSP90B1&quot;   &quot;HNRNPL&quot;    &quot;HIST1H1B&quot;  &quot;POR&quot;      
+##  [71] &quot;ATP2A2&quot;    &quot;DDX5&quot;      &quot;RPL7&quot;      &quot;HLA-B&quot;     &quot;RCC1&quot;     
+##  [76] &quot;MYL12A&quot;    &quot;NCL&quot;       &quot;NDUFV2&quot;    &quot;MX1&quot;       &quot;M6PR&quot;     
+##  [81] &quot;LMNB1&quot;     &quot;FLNA&quot;      &quot;VDAC1&quot;     &quot;FGFR2&quot;     &quot;SDHB&quot;     
+##  [86] &quot;FBL&quot;       &quot;UQCRC2&quot;    &quot;ATP5PB&quot;    &quot;ATP5F1A&quot;   &quot;U2AF2&quot;    
+##  [91] &quot;RPL13&quot;     &quot;PTBP1&quot;     &quot;EEF1G&quot;     &quot;RPL10&quot;     &quot;CALR&quot;     
+##  [96] &quot;CANX&quot;      &quot;NDUFS1&quot;    &quot;PML&quot;       &quot;PRDX3&quot;     &quot;RPL12&quot;    
+## [101] &quot;PDIA3&quot;     &quot;HLA-F&quot;     &quot;HMOX2&quot;     &quot;SDHA&quot;      &quot;UQCRC1&quot;   
+## [106] &quot;PYCR1&quot;     &quot;CD70&quot;      &quot;LSP1&quot;      &quot;PHB&quot;       &quot;RFC4&quot;     
+## [111] &quot;MYH9&quot;      &quot;COPB2&quot;     &quot;ATP5F1C&quot;   &quot;RPL4&quot;      &quot;LONP1&quot;    
+## [116] &quot;PPP1CC&quot;    &quot;FDFT1&quot;     &quot;HSPA9&quot;     &quot;EIF4A3&quot;    &quot;RPS19&quot;    
+## [121] &quot;RPL3&quot;      &quot;DDOST&quot;     &quot;HADHA&quot;     &quot;TMPO&quot;      &quot;MTREX&quot;    
+## [126] &quot;LRPPRC&quot;    &quot;RPL35&quot;     &quot;SLC1A4&quot;    &quot;MATR3&quot;     &quot;SSR1&quot;     
+## [131] &quot;VDAC2&quot;     &quot;NOP2&quot;      &quot;RPL5&quot;      &quot;RPS9&quot;      &quot;RPS5&quot;     
+## [136] &quot;RPS10&quot;     &quot;STT3A&quot;     &quot;UQCRFS1&quot;   &quot;ATP5PO&quot;    &quot;LMAN1&quot;    
+## [141] &quot;CCT3&quot;      &quot;MRPL19&quot;    &quot;TUFM&quot;      &quot;ACADVL&quot;    &quot;ENTPD1&quot;   
+## [146] &quot;IDH3A&quot;     &quot;RPL14&quot;     &quot;CCT8&quot;      &quot;RAB7A&quot;     &quot;RAB27A&quot;   
+## [151] &quot;BCAP31&quot;    &quot;HSD17B4&quot;   &quot;HNRNPM&quot;    &quot;COPA&quot;      &quot;AK2&quot;      
+## [156] &quot;ALDH18A1&quot;  &quot;NAPA&quot;      &quot;HADHB&quot;     &quot;ADAR&quot;      &quot;ATP5MF&quot;   
+## [161] &quot;TMEM33&quot;    &quot;RAB10&quot;     &quot;RPS3A&quot;     &quot;RPL26&quot;     &quot;RPS18&quot;    
+## [166] &quot;RPL7A&quot;     &quot;RPS4X&quot;     &quot;RAP1A&quot;     &quot;RPS28&quot;     &quot;UBA52&quot;    
+## [171] &quot;TRA2B&quot;     &quot;RACK1&quot;     &quot;HBA2&quot;      &quot;GTF2I&quot;     &quot;PRKDC&quot;    
+## [176] &quot;RPL24&quot;     &quot;TFAM&quot;      &quot;SLC25A3&quot;   &quot;CLTC&quot;      &quot;SPTBN1&quot;   
+## [181] &quot;SRSF2&quot;     &quot;RPL6&quot;      &quot;SLC25A11&quot;  &quot;TAP1&quot;      &quot;EXOSC9&quot;   
+## [186] &quot;KHDRBS1&quot;   &quot;BAX&quot;       &quot;SRSF1&quot;     &quot;DHX9&quot;      &quot;SSRP1&quot;    
+## [191] &quot;RBBP4&quot;     &quot;GALNT2&quot;    &quot;TBL3&quot;      &quot;ILF2&quot;      &quot;ILF3&quot;     
+## [196] &quot;LMAN2&quot;     &quot;TRAP1&quot;     &quot;TARDBP&quot;    &quot;HNRNPA0&quot;   &quot;SRSF6&quot;    
+## [201] &quot;SPTAN1&quot;    &quot;DDX39B&quot;    &quot;MLEC&quot;      &quot;RBM39&quot;     &quot;SMC1A&quot;    
+## [206] &quot;LBR&quot;       &quot;CHD4&quot;      &quot;KPNB1&quot;     &quot;EFTUD2&quot;    &quot;PDIA6&quot;    
+## [211] &quot;NONO&quot;      &quot;IRF4&quot;      &quot;SF3B3&quot;     &quot;RAB11B&quot;    &quot;IFI16&quot;    
+## [216] &quot;DECR1&quot;     &quot;NOMO2&quot;     &quot;HP1BP3&quot;    &quot;PRPF8&quot;     &quot;HIST2H3D&quot; 
+## [221] &quot;TUBA1A&quot;    &quot;SND1&quot;      &quot;MTDH&quot;      &quot;FERMT3&quot;    &quot;WDR36&quot;    
+## [226] &quot;SMARCC2&quot;   &quot;RDH11&quot;     &quot;STT3B&quot;     &quot;DDX54&quot;     &quot;NUP210&quot;   
+## [231] &quot;LPGAT1&quot;    &quot;RAB8B&quot;     &quot;HIST1H2AC&quot; &quot;CCDC47&quot;    &quot;PYCR2&quot;    
+## [236] &quot;CYFIP2&quot;    &quot;DDX27&quot;     &quot;DDRGK1&quot;    &quot;CDK5RAP3&quot;  &quot;PHB2&quot;     
+## [241] &quot;VRK1&quot;      &quot;NIPSNAP1&quot;  &quot;APOL2&quot;     &quot;MYBBP1A&quot;   &quot;ESYT1&quot;    
+## [246] &quot;DERL1&quot;     &quot;TMEM109&quot;   &quot;TMED9&quot;     &quot;API5&quot;      &quot;NAT10&quot;    
+## [251] &quot;DDX47&quot;     &quot;SFXN1&quot;     &quot;DDX21&quot;     &quot;TOMM22&quot;    &quot;PDS5B&quot;    
+## [256] &quot;AGPAT5&quot;    &quot;TECR&quot;      &quot;SRP68&quot;     &quot;NDUFA12&quot;   &quot;SLC25A13&quot; 
+## [261] &quot;CPSF3&quot;     &quot;PSME2&quot;     &quot;PA2G4&quot;     &quot;RUVBL1&quot;    &quot;VDAC3&quot;    
+## [266] &quot;THRAP3&quot;    &quot;WBP11&quot;     &quot;NOP58&quot;     &quot;LUC7L2&quot;    &quot;HYOU1&quot;    
+## [271] &quot;SUPT16H&quot;   &quot;TRPV2&quot;     &quot;SQOR&quot;</code></pre>
+<p>Их всего - 273</p>
+<p>Вот сетка для них <a href="https://string-db.org/cgi/network.pl?taskId=W9tJPdoFDqEB" class="uri">https://string-db.org/cgi/network.pl?taskId=W9tJPdoFDqEB</a> - я убрал опять UBA52</p>
+</div>
+<div id="-1" class="section level3">
+<h3>Вывод</h3>
+<p>Очень-очень похоже на предыдущую пробу, но белочки чуть другие Такое ощущение, что вещества действуют примерно одинаково</p>
+</div>
+</div>
+<div id="fc-" class="section level2">
+<h2>FC обработка</h2>
+<div id="-----.-1" class="section level3">
+<h3>Общие для контроля и опыта белочки.</h3>
+<pre class="r"><code>common_FC &lt;- intersect(FC_dataset[Treatment == &quot;K&quot;, hgnc_symbol], 
+                        FC_dataset[Treatment == &quot;FC&quot;, hgnc_symbol])
+common_FC</code></pre>
+<pre><code>##   [1] &quot;MYO1G&quot;     &quot;DDX3X&quot;     &quot;UQCRQ&quot;     &quot;HNRNPDL&quot;   &quot;DHX15&quot;    
+##   [6] &quot;HNRNPR&quot;    &quot;LANCL1&quot;    &quot;IDH3B&quot;     &quot;H2AFY&quot;     &quot;NDUFS3&quot;   
+##  [11] &quot;SNRNP200&quot;  &quot;TOMM70&quot;    &quot;NDUFB10&quot;   &quot;TOMM40&quot;    &quot;GLUD1&quot;    
+##  [16] &quot;MT-CO2&quot;    &quot;HLA-A&quot;     &quot;HLA-DRA&quot;   &quot;LMNA&quot;      &quot;HLA-DPB1&quot; 
+##  [21] &quot;HSPB1&quot;     &quot;RPN1&quot;      &quot;RPN2&quot;      &quot;GNAI2&quot;     &quot;ATP1A1&quot;   
+##  [26] &quot;SLC25A5&quot;   &quot;ATP5F1B&quot;   &quot;FCER2&quot;     &quot;NPM1&quot;      &quot;TUBB&quot;     
+##  [31] &quot;HSP90AA1&quot;  &quot;HNRNPC&quot;    &quot;HSP90AB1&quot;  &quot;CYC1&quot;      &quot;SNRNP70&quot;  
+##  [36] &quot;VIM&quot;       &quot;RPSA&quot;      &quot;HNRNPA1&quot;   &quot;PARP1&quot;     &quot;HSPD1&quot;    
+##  [41] &quot;HSPA5&quot;     &quot;HSPA8&quot;     &quot;PABPC1&quot;    &quot;XRCC6&quot;     &quot;XRCC5&quot;    
+##  [46] &quot;COX4I1&quot;    &quot;HLA-DRB1&quot;  &quot;LCP1&quot;      &quot;HSP90B1&quot;   &quot;RPS2&quot;     
+##  [51] &quot;CBR1&quot;      &quot;HIST1H1B&quot;  &quot;ATP2A2&quot;    &quot;DDX5&quot;      &quot;RPL7&quot;     
+##  [56] &quot;HLA-B&quot;     &quot;NCL&quot;       &quot;MX1&quot;       &quot;LMNB1&quot;     &quot;FLNA&quot;     
+##  [61] &quot;VDAC1&quot;     &quot;FBL&quot;       &quot;HNRNPA2B1&quot; &quot;UQCRC2&quot;    &quot;SFPQ&quot;     
+##  [66] &quot;ATP5PB&quot;    &quot;ATP5F1A&quot;   &quot;PSMA3&quot;     &quot;RPL13&quot;     &quot;PTBP1&quot;    
+##  [71] &quot;EEF1G&quot;     &quot;CANX&quot;      &quot;RPL12&quot;     &quot;PDIA3&quot;     &quot;UQCRC1&quot;   
+##  [76] &quot;HNRNPH3&quot;   &quot;CD70&quot;      &quot;PHB&quot;       &quot;MYH9&quot;      &quot;COPB2&quot;    
+##  [81] &quot;ATP5F1C&quot;   &quot;RPL4&quot;      &quot;LONP1&quot;     &quot;RBMX&quot;      &quot;HSPA9&quot;    
+##  [86] &quot;EIF4A3&quot;    &quot;RPS19&quot;     &quot;RPL3&quot;      &quot;DDOST&quot;     &quot;HADHA&quot;    
+##  [91] &quot;TMPO&quot;      &quot;LRPPRC&quot;    &quot;MATR3&quot;     &quot;VDAC2&quot;     &quot;NOP2&quot;     
+##  [96] &quot;RPS9&quot;      &quot;RPS5&quot;      &quot;RPS10&quot;     &quot;TUFM&quot;      &quot;ACADVL&quot;   
+## [101] &quot;ENTPD1&quot;    &quot;IDH3A&quot;     &quot;RPL14&quot;     &quot;CCT8&quot;      &quot;RAB7A&quot;    
+## [106] &quot;RAB27A&quot;    &quot;HNRNPA3&quot;   &quot;HNRNPM&quot;    &quot;ALDH18A1&quot;  &quot;CSE1L&quot;    
+## [111] &quot;HADHB&quot;     &quot;EIF3B&quot;     &quot;ATP5MF&quot;    &quot;ACTB&quot;      &quot;EIF4A1&quot;   
+## [116] &quot;RPL26&quot;     &quot;HNRNPK&quot;    &quot;SNRPD3&quot;    &quot;RPL7A&quot;     &quot;RPS4X&quot;    
+## [121] &quot;HIST1H4I&quot;  &quot;RAP1A&quot;     &quot;ACTG1&quot;     &quot;EEF1A1&quot;    &quot;TUBA4A&quot;   
+## [126] &quot;HBA2&quot;      &quot;PRKDC&quot;     &quot;RPL24&quot;     &quot;SRSF3&quot;     &quot;TFAM&quot;     
+## [131] &quot;HNRNPU&quot;    &quot;SPTBN1&quot;    &quot;RPL6&quot;      &quot;SLC25A11&quot;  &quot;BAX&quot;      
+## [136] &quot;SRSF1&quot;     &quot;DHX9&quot;      &quot;SSRP1&quot;     &quot;ILF3&quot;      &quot;TRAP1&quot;    
+## [141] &quot;SRSF6&quot;     &quot;SPTAN1&quot;    &quot;DDX39B&quot;    &quot;MLEC&quot;      &quot;KPNB1&quot;    
+## [146] &quot;PDIA6&quot;     &quot;NONO&quot;      &quot;IRF4&quot;      &quot;SF3B3&quot;     &quot;ELAVL1&quot;   
+## [151] &quot;RAB11B&quot;    &quot;HP1BP3&quot;    &quot;UBAP2&quot;     &quot;PRPF8&quot;     &quot;HIST2H3D&quot; 
+## [156] &quot;TUBA1A&quot;    &quot;SND1&quot;      &quot;FERMT3&quot;    &quot;CCAR2&quot;     &quot;HIST1H2AC&quot;
+## [161] &quot;PHB2&quot;      &quot;HNRNPUL1&quot;  &quot;TMEM109&quot;   &quot;SRRT&quot;      &quot;NAT10&quot;    
+## [166] &quot;XRN2&quot;      &quot;DDX47&quot;     &quot;SFXN1&quot;     &quot;DDX21&quot;     &quot;PSME2&quot;    
+## [171] &quot;THRAP3&quot;    &quot;NOP58&quot;     &quot;SUPT16H&quot;</code></pre>
+<p>Их много, в отличие от прошлых разов - аж 173 штук!</p>
+<p>Построим для них сетку <a href="https://string-db.org/cgi/network.pl?taskId=txy4YjtyEyts" class="uri">https://string-db.org/cgi/network.pl?taskId=txy4YjtyEyts</a></p>
+<p>То есть получается, что те взаимодействия, которые изменялись при тех обработках, здесь остаются константными</p>
+</div>
+<div id="---2" class="section level3">
+<h3>Пропадают после обработки</h3>
+<pre class="r"><code>unique_K &lt;- setdiff(FC_dataset[Treatment == &quot;K&quot;, hgnc_symbol], FC_dataset[Treatment == &quot;FC&quot;, hgnc_symbol])
+unique_K</code></pre>
+<pre><code>##   [1] &quot;RBM47&quot;    &quot;AIP&quot;      &quot;PGRMC1&quot;   &quot;COPE&quot;     &quot;SCAMP3&quot;   &quot;XPO1&quot;    
+##   [7] &quot;PGRMC2&quot;   &quot;CYB5B&quot;    &quot;PHGDH&quot;    &quot;NDUFA2&quot;   &quot;NUDT21&quot;   &quot;PLIN3&quot;   
+##  [13] &quot;LPXN&quot;     &quot;CTNND1&quot;   &quot;NDUFS2&quot;   &quot;SEC22B&quot;   &quot;PSIP1&quot;    &quot;SF3B1&quot;   
+##  [19] &quot;NUP155&quot;   &quot;RSL1D1&quot;   &quot;MTA2&quot;     &quot;PRPF6&quot;    &quot;LETM1&quot;    &quot;AP2A1&quot;   
+##  [25] &quot;AIFM1&quot;    &quot;CYB5A&quot;    &quot;PGK1&quot;     &quot;TFRC&quot;     &quot;VTN&quot;      &quot;RPLP1&quot;   
+##  [31] &quot;ENO1&quot;     &quot;EPRS&quot;     &quot;ANXA6&quot;    &quot;SLC3A2&quot;   &quot;PTPRC&quot;    &quot;SNRPB2&quot;  
+##  [37] &quot;CD48&quot;     &quot;ALDOC&quot;    &quot;HIST1H1E&quot; &quot;MTHFD1&quot;   &quot;EEF2&quot;     &quot;CD59&quot;    
+##  [43] &quot;PKM&quot;      &quot;HNRNPL&quot;   &quot;POR&quot;      &quot;YBX3&quot;     &quot;PSMC3&quot;    &quot;RCC1&quot;    
+##  [49] &quot;MYL12A&quot;   &quot;NDUFV2&quot;   &quot;M6PR&quot;     &quot;FGFR2&quot;    &quot;SDHB&quot;     &quot;PAICS&quot;   
+##  [55] &quot;UBA1&quot;     &quot;PSMA1&quot;    &quot;U2AF2&quot;    &quot;RPL10&quot;    &quot;CAD&quot;      &quot;CALR&quot;    
+##  [61] &quot;NDUFS1&quot;   &quot;PML&quot;      &quot;PRDX3&quot;    &quot;HLA-F&quot;    &quot;HMOX2&quot;    &quot;SDHA&quot;    
+##  [67] &quot;DNAJA1&quot;   &quot;HNRNPH1&quot;  &quot;YWHAB&quot;    &quot;PYCR1&quot;    &quot;LSP1&quot;     &quot;RFC4&quot;    
+##  [73] &quot;PPP1CC&quot;   &quot;FDFT1&quot;    &quot;MTREX&quot;    &quot;RPL35&quot;    &quot;SLC1A4&quot;   &quot;SSR1&quot;    
+##  [79] &quot;RPL5&quot;     &quot;STT3A&quot;    &quot;CAPZB&quot;    &quot;UQCRFS1&quot;  &quot;ATP5PO&quot;   &quot;PRRC2A&quot;  
+##  [85] &quot;LMAN1&quot;    &quot;NASP&quot;     &quot;FASN&quot;     &quot;CCT3&quot;     &quot;MRPL19&quot;   &quot;BCAP31&quot;  
+##  [91] &quot;HSD17B4&quot;  &quot;COPA&quot;     &quot;AK2&quot;      &quot;NAPA&quot;     &quot;ADAR&quot;     &quot;TMEM33&quot;  
+##  [97] &quot;TPI1&quot;     &quot;RAB10&quot;    &quot;RAB14&quot;    &quot;RAP1B&quot;    &quot;RPS3A&quot;    &quot;YWHAG&quot;   
+## [103] &quot;RPS16&quot;    &quot;RPS18&quot;    &quot;RPS13&quot;    &quot;RAN&quot;      &quot;RPS28&quot;    &quot;UBA52&quot;   
+## [109] &quot;TRA2B&quot;    &quot;RACK1&quot;    &quot;TUBB4B&quot;   &quot;EIF4G2&quot;   &quot;GTF2I&quot;    &quot;SLC25A3&quot; 
+## [115] &quot;PURA&quot;     &quot;CLTC&quot;     &quot;SRSF2&quot;    &quot;TAP1&quot;     &quot;EIF4G1&quot;   &quot;EXOSC9&quot;  
+## [121] &quot;PRDX1&quot;    &quot;KHDRBS1&quot;  &quot;RBBP4&quot;    &quot;GALNT2&quot;   &quot;TBL3&quot;     &quot;ILF2&quot;    
+## [127] &quot;LMAN2&quot;    &quot;TARDBP&quot;   &quot;HNRNPA0&quot;  &quot;PSMD2&quot;    &quot;TRIM28&quot;   &quot;TUBA3C&quot;  
+## [133] &quot;EIF3A&quot;    &quot;EIF4A2&quot;   &quot;RBM39&quot;    &quot;SMC1A&quot;    &quot;LBR&quot;      &quot;CHD4&quot;    
+## [139] &quot;PSMD6&quot;    &quot;EFTUD2&quot;   &quot;PMVK&quot;     &quot;PCBP2&quot;    &quot;NSDHL&quot;    &quot;IFI16&quot;   
+## [145] &quot;DECR1&quot;    &quot;PDCD4&quot;    &quot;NOMO2&quot;    &quot;ECPAS&quot;    &quot;ATL3&quot;     &quot;MTDH&quot;    
+## [151] &quot;CARM1&quot;    &quot;NUDCD3&quot;   &quot;WDR36&quot;    &quot;SMARCC2&quot;  &quot;RDH11&quot;    &quot;STT3B&quot;   
+## [157] &quot;DDX54&quot;    &quot;NUP210&quot;   &quot;LPGAT1&quot;   &quot;GCN1&quot;     &quot;RAB8B&quot;    &quot;CCDC47&quot;  
+## [163] &quot;PYCR2&quot;    &quot;CYFIP2&quot;   &quot;DDX27&quot;    &quot;DDRGK1&quot;   &quot;ABHD14B&quot;  &quot;CDK5RAP3&quot;
+## [169] &quot;EIF3C&quot;    &quot;HNRNPAB&quot;  &quot;VRK1&quot;     &quot;NIPSNAP1&quot; &quot;APOL2&quot;    &quot;MYBBP1A&quot; 
+## [175] &quot;ESYT1&quot;    &quot;DERL1&quot;    &quot;TMED9&quot;    &quot;API5&quot;     &quot;LDAH&quot;     &quot;TOMM22&quot;  
+## [181] &quot;PDS5B&quot;    &quot;AGPAT5&quot;   &quot;TECR&quot;     &quot;ATXN10&quot;   &quot;SRP68&quot;    &quot;NDUFA12&quot; 
+## [187] &quot;SLC25A13&quot; &quot;CPSF3&quot;    &quot;CORO1C&quot;   &quot;PA2G4&quot;    &quot;RUVBL2&quot;   &quot;EIF3L&quot;   
+## [193] &quot;RUVBL1&quot;   &quot;NUDC&quot;     &quot;VDAC3&quot;    &quot;WBP11&quot;    &quot;LUC7L2&quot;   &quot;HYOU1&quot;   
+## [199] &quot;TRPV2&quot;    &quot;COPG1&quot;    &quot;SQOR&quot;</code></pre>
+<p>Ого, Cколько их! их аж 201 штуки!</p>
+<p>Что у нас в STRING для этих ребят есть?</p>
+<p><a href="https://string-db.org/cgi/network.pl?taskId=C0sdSOt8wxoo" class="uri">https://string-db.org/cgi/network.pl?taskId=C0sdSOt8wxoo</a> - опять удалил убиквитин</p>
+<p>Их много, много РНК-связывания. Здесь снова 2 кластера, но они уже другие по составу белков</p>
+<p>И нет того белка, связующего 2 кластера</p>
+</div>
+<div id="---2" class="section level3">
+<h3>Появляются после обработки</h3>
+<pre class="r"><code>unique_FC &lt;- setdiff(FC_dataset[Treatment == &quot;FC&quot;, hgnc_symbol], FC_dataset[Treatment == &quot;K&quot;, hgnc_symbol])
+unique_FC</code></pre>
+<pre><code>##  [1] &quot;NOP56&quot;     &quot;MYL12B&quot;    &quot;ACTN4&quot;     &quot;SMARCA5&quot;   &quot;P4HB&quot;     
+##  [6] &quot;SNRPA&quot;     &quot;TOP1&quot;      &quot;SLC25A6&quot;   &quot;SNRPB&quot;     &quot;HIST1H1C&quot; 
+## [11] &quot;RPS3&quot;      &quot;EEF1B2&quot;    &quot;AK4&quot;       &quot;HIST1H2BB&quot; &quot;RDX&quot;      
+## [16] &quot;HNRNPF&quot;    &quot;HIST1H2BC&quot; &quot;YBX1&quot;      &quot;EWSR1&quot;     &quot;SPCS2&quot;    
+## [21] &quot;FSCN1&quot;     &quot;H2AFV&quot;     &quot;RAB43&quot;     &quot;HRNR&quot;      &quot;PREX1&quot;    
+## [26] &quot;DDX17&quot;     &quot;RBM14&quot;     &quot;HSD17B10&quot;  &quot;TUBA1C&quot;    &quot;RBM4&quot;     
+## [31] &quot;RTN4&quot;      &quot;NHP2&quot;      &quot;ACTR3B&quot;</code></pre>
+<p>Их всего - 33 - это немного, но хоть что-то</p>
+<p>Глянем по msigdb их функции</p>
+<p>Gene Set Name FDR q-value GO_POLY_A_RNA_BINDING 2.79E-18 GO_RNA_BINDING 1.19E-17 PUJANA_CHEK2_PCC_NETWORK 4.73E-10 GO_RIBONUCLEOPROTEIN_COMPLEX 4.98E-9 CAIRO_HEPATOBLASTOMA_CLASSES_UP 2.19E-8 GO_RNA_PROCESSING 3.61E-7 GO_NUCLEOLUS 3.66E-7 PUJANA_ATM_PCC_NETWORK 3.41E-6 GO_PROTEIN_COMPLEX_SUBUNIT_ORGANIZATION 5.56E-6</p>
+<p>Это забавно, что там актинин, ядрышко, и рнк</p>
+</div>
+<div id="--2" class="section level3">
+<h3>Ядро-цитоплазма</h3>
+<p>Попробуем посмотреть только для цитоплазматические белочки из тех, которые пропадают</p>
+<pre class="r"><code>temp_K &lt;- FC_dataset[Treatment == &quot;K&quot;]
+temp_K &lt;- temp_K[Compartment == &quot;C&quot;, hgnc_symbol]
+
+temp_FC &lt;- FC_dataset[Treatment == &quot;FC&quot;]
+temp_FC &lt;- temp_FC[Compartment == &quot;C&quot;, hgnc_symbol]
+
+unique_K_cp &lt;- setdiff(temp_K, temp_FC)
+rm(temp_K, temp_FC)
+unique_K_cp</code></pre>
+<pre><code>##  [1] &quot;RBM47&quot;    &quot;AIP&quot;      &quot;DDX3X&quot;    &quot;COPE&quot;     &quot;SCAMP3&quot;   &quot;HNRNPDL&quot; 
+##  [7] &quot;XPO1&quot;     &quot;PLIN3&quot;    &quot;LPXN&quot;     &quot;PGK1&quot;     &quot;GNAI2&quot;    &quot;ENO1&quot;    
+## [13] &quot;EPRS&quot;     &quot;HSP90AA1&quot; &quot;ANXA6&quot;    &quot;ALDOC&quot;    &quot;HSPD1&quot;    &quot;HSPA5&quot;   
+## [19] &quot;MTHFD1&quot;   &quot;XRCC5&quot;    &quot;EEF2&quot;     &quot;PKM&quot;      &quot;RPS2&quot;     &quot;YBX3&quot;    
+## [25] &quot;PSMC3&quot;    &quot;RPL7&quot;     &quot;MYL12A&quot;   &quot;NCL&quot;      &quot;PAICS&quot;    &quot;UBA1&quot;    
+## [31] &quot;PSMA1&quot;    &quot;RPL10&quot;    &quot;CAD&quot;      &quot;CANX&quot;     &quot;DNAJA1&quot;   &quot;HNRNPH1&quot; 
+## [37] &quot;YWHAB&quot;    &quot;HSPA9&quot;    &quot;RPS19&quot;    &quot;RPL35&quot;    &quot;RPS9&quot;     &quot;CAPZB&quot;   
+## [43] &quot;PRRC2A&quot;   &quot;LMAN1&quot;    &quot;NASP&quot;     &quot;FASN&quot;     &quot;COPA&quot;     &quot;TPI1&quot;    
+## [49] &quot;RAB14&quot;    &quot;RAP1B&quot;    &quot;RPS3A&quot;    &quot;RPL26&quot;    &quot;YWHAG&quot;    &quot;RPS16&quot;   
+## [55] &quot;RPS18&quot;    &quot;RPS13&quot;    &quot;RPS4X&quot;    &quot;RAN&quot;      &quot;TUBB4B&quot;   &quot;EIF4G2&quot;  
+## [61] &quot;PURA&quot;     &quot;EIF4G1&quot;   &quot;PRDX1&quot;    &quot;BAX&quot;      &quot;TRAP1&quot;    &quot;PSMD2&quot;   
+## [67] &quot;TRIM28&quot;   &quot;TUBA3C&quot;   &quot;EIF3A&quot;    &quot;EIF4A2&quot;   &quot;PSMD6&quot;    &quot;PDIA6&quot;   
+## [73] &quot;PMVK&quot;     &quot;PCBP2&quot;    &quot;NSDHL&quot;    &quot;PDCD4&quot;    &quot;ECPAS&quot;    &quot;ATL3&quot;    
+## [79] &quot;FERMT3&quot;   &quot;CARM1&quot;    &quot;NUDCD3&quot;   &quot;GCN1&quot;     &quot;ABHD14B&quot;  &quot;EIF3C&quot;   
+## [85] &quot;SRRT&quot;     &quot;XRN2&quot;     &quot;LDAH&quot;     &quot;ATXN10&quot;   &quot;CORO1C&quot;   &quot;RUVBL2&quot;  
+## [91] &quot;EIF3L&quot;    &quot;RUVBL1&quot;   &quot;NUDC&quot;     &quot;LUC7L2&quot;   &quot;COPG1&quot;</code></pre>
+<p>Их всего - 95</p>
+<p>Вот тебе картинка - тут только трансляция</p>
+<p><a href="https://string-db.org/cgi/network.pl?taskId=ff8Uzlp622z1" class="uri">https://string-db.org/cgi/network.pl?taskId=ff8Uzlp622z1</a></p>
+<p>Теперь cделаем только для ядерных белочков</p>
+<pre class="r"><code>temp_K &lt;- FC_dataset[Treatment == &quot;K&quot;]
+temp_K &lt;- temp_K[Compartment == &quot;N&quot;, hgnc_symbol]
+
+temp_FC &lt;- FC_dataset[Treatment == &quot;FC&quot;]
+temp_FC &lt;- temp_FC[Compartment == &quot;N&quot;, hgnc_symbol]
+
+unique_K_nuc &lt;- setdiff(temp_K, temp_FC)
+rm(temp_K, temp_FC)
+unique_K_nuc</code></pre>
+<pre><code>##   [1] &quot;PGRMC1&quot;   &quot;SCAMP3&quot;   &quot;PGRMC2&quot;   &quot;CYB5B&quot;    &quot;PHGDH&quot;    &quot;NDUFA2&quot;  
+##   [7] &quot;NUDT21&quot;   &quot;CTNND1&quot;   &quot;NDUFS2&quot;   &quot;SEC22B&quot;   &quot;PSIP1&quot;    &quot;SF3B1&quot;   
+##  [13] &quot;NUP155&quot;   &quot;RSL1D1&quot;   &quot;MTA2&quot;     &quot;PRPF6&quot;    &quot;LETM1&quot;    &quot;AP2A1&quot;   
+##  [19] &quot;AIFM1&quot;    &quot;CYB5A&quot;    &quot;TFRC&quot;     &quot;VTN&quot;      &quot;RPLP1&quot;    &quot;SLC3A2&quot;  
+##  [25] &quot;PTPRC&quot;    &quot;SNRPB2&quot;   &quot;CD48&quot;     &quot;HIST1H1E&quot; &quot;EEF2&quot;     &quot;CD59&quot;    
+##  [31] &quot;HNRNPL&quot;   &quot;POR&quot;      &quot;RCC1&quot;     &quot;MYL12A&quot;   &quot;NDUFV2&quot;   &quot;MX1&quot;     
+##  [37] &quot;M6PR&quot;     &quot;FLNA&quot;     &quot;FGFR2&quot;    &quot;SDHB&quot;     &quot;U2AF2&quot;    &quot;RPL10&quot;   
+##  [43] &quot;CALR&quot;     &quot;NDUFS1&quot;   &quot;PML&quot;      &quot;PRDX3&quot;    &quot;HLA-F&quot;    &quot;HMOX2&quot;   
+##  [49] &quot;SDHA&quot;     &quot;HNRNPH1&quot;  &quot;PYCR1&quot;    &quot;LSP1&quot;     &quot;RFC4&quot;     &quot;PPP1CC&quot;  
+##  [55] &quot;FDFT1&quot;    &quot;MTREX&quot;    &quot;RPL35&quot;    &quot;SLC1A4&quot;   &quot;SSR1&quot;     &quot;RPL5&quot;    
+##  [61] &quot;STT3A&quot;    &quot;UQCRFS1&quot;  &quot;ATP5PO&quot;   &quot;LMAN1&quot;    &quot;CCT3&quot;     &quot;MRPL19&quot;  
+##  [67] &quot;CCT8&quot;     &quot;BCAP31&quot;   &quot;HSD17B4&quot;  &quot;COPA&quot;     &quot;AK2&quot;      &quot;NAPA&quot;    
+##  [73] &quot;ADAR&quot;     &quot;TMEM33&quot;   &quot;RAB10&quot;    &quot;RPS3A&quot;    &quot;RPS18&quot;    &quot;RAP1A&quot;   
+##  [79] &quot;RPS28&quot;    &quot;UBA52&quot;    &quot;TRA2B&quot;    &quot;RACK1&quot;    &quot;ACTG1&quot;    &quot;GTF2I&quot;   
+##  [85] &quot;SLC25A3&quot;  &quot;CLTC&quot;     &quot;SRSF2&quot;    &quot;TAP1&quot;     &quot;EXOSC9&quot;   &quot;KHDRBS1&quot; 
+##  [91] &quot;RBBP4&quot;    &quot;GALNT2&quot;   &quot;TBL3&quot;     &quot;ILF2&quot;     &quot;LMAN2&quot;    &quot;TARDBP&quot;  
+##  [97] &quot;HNRNPA0&quot;  &quot;RBM39&quot;    &quot;SMC1A&quot;    &quot;LBR&quot;      &quot;CHD4&quot;     &quot;EFTUD2&quot;  
+## [103] &quot;RAB11B&quot;   &quot;IFI16&quot;    &quot;DECR1&quot;    &quot;NOMO2&quot;    &quot;TUBA1A&quot;   &quot;MTDH&quot;    
+## [109] &quot;WDR36&quot;    &quot;SMARCC2&quot;  &quot;RDH11&quot;    &quot;STT3B&quot;    &quot;DDX54&quot;    &quot;NUP210&quot;  
+## [115] &quot;LPGAT1&quot;   &quot;RAB8B&quot;    &quot;CCDC47&quot;   &quot;PYCR2&quot;    &quot;CYFIP2&quot;   &quot;DDX27&quot;   
+## [121] &quot;DDRGK1&quot;   &quot;CDK5RAP3&quot; &quot;HNRNPAB&quot;  &quot;VRK1&quot;     &quot;NIPSNAP1&quot; &quot;APOL2&quot;   
+## [127] &quot;MYBBP1A&quot;  &quot;ESYT1&quot;    &quot;DERL1&quot;    &quot;TMED9&quot;    &quot;API5&quot;     &quot;TOMM22&quot;  
+## [133] &quot;PDS5B&quot;    &quot;AGPAT5&quot;   &quot;TECR&quot;     &quot;SRP68&quot;    &quot;NDUFA12&quot;  &quot;SLC25A13&quot;
+## [139] &quot;CPSF3&quot;    &quot;PSME2&quot;    &quot;PA2G4&quot;    &quot;RUVBL1&quot;   &quot;VDAC3&quot;    &quot;WBP11&quot;   
+## [145] &quot;LUC7L2&quot;   &quot;HYOU1&quot;    &quot;TRPV2&quot;    &quot;SQOR&quot;</code></pre>
+<p>Их вcего - 148 - меньше, чем цитоплазматичеcких</p>
+<p><a href="https://string-db.org/cgi/network.pl?taskId=bBQhdQ5DvTTK" class="uri">https://string-db.org/cgi/network.pl?taskId=bBQhdQ5DvTTK</a> - я удалил из состава вершин убиквитин, потому что он ко всему лепится Кластеры отличаются от тех 2 других веществ</p>
+</div>
+<div id="-2" class="section level3">
+<h3>Вывод</h3>
+<p>Действует на ядрышко и синтез рибосом, наверное</p>
+<p>Как работает FC? Точно не на тот белок, который для тех 2 соединений общий, это факт, может, на EEF2?</p>
+</div>
+</div>
+<div id="-" class="section level2">
+<h2>Глобальный вывод</h2>
+<p>FC отличается по эффекту, оказываемому на протеом, и действует на другой белок Все вещества портят трансляцию и связывание с РНК-связывающими белками</p>
+<p>Вот так</p>
 </div>
 
 

@@ -42,40 +42,21 @@ rm(all_intersect)
 ## Группировка бинов обратно в пики
 Сгруппируем общие бины в пики
 
-```{r Гнилой чанк-переделать}
+```{r}
 #Теперь переведем бины обратно в пики
-common_peaks <- data.table()
-common_peaks <- aggregate(common_bins$Peak_Bins,
-                          by = list(common_bins$Peak_name, common_bins$Cell_line)),
-                          FUN = min)
 
-names(common_peaks) <- c("Peak_name", "Cell_line", "Start")
+common_peaks <- common_bins[, START := min(Peak_Bins),
+                          by = .(Peak_name, Cell_line)]
+common_peaks <- common_bins[, STOP := max(Peak_Bins),
+                          by = .(Peak_name, Cell_line)]
 
-common_peaks$Stop <- aggregate(common_bins$Peak_Bins,
-                          by = list(common_bins$Peak_name,common_bins$Cell_line),
-                          FUN = function(x) max(x)+50)[,3]
+common_peaks$Peak_Bins <- NULL
+common_peaks$summit_position <- NULL
+common_peaks <- common_peaks[!duplicated(common_peaks)]
 
-common_peaks$Chromosome <- aggregate(common_bins$Chromosome,
-                          by = list(common_bins$Peak_name),
-                          FUN = function(x) x[1])[,2]
+length(unique(common_peaks$STOP))
+length(unique(common_peaks$START))
 
-common_peaks$Fold_change <- aggregate(common_bins$fold_change,
-                          by = list(common_bins$Peak_name),
-                          FUN = function(x) x[1])[,2]
-
-common_peaks$'p-value' <- aggregate(common_bins$`p-value`,
-                          by = list(common_bins$Peak_name),
-                          FUN = function(x) x[1])[,2]
-
-common_peaks$'q-value' <- aggregate(common_bins$`q-value`,
-                          by = list(common_bins$Peak_name),
-                          FUN = function(x) x[1])[,2]
-
-common_peaks$Summit <- aggregate(common_bins$Summit,
-                          by = list(common_bins$Peak_name),
-                          FUN = function(x) x[1])[,2]
-
-common_peaks <- as.data.table(common_peaks)
 setcolorder(common_peaks, c("Chromosome", "Start", "Stop", "Peak_name", "Summit",
                              "Fold_change", "p-value", "q-value", "Cell_line"))
 
@@ -87,10 +68,19 @@ stopifnot(sum(common_peaks$Start > common_peaks$Stop) == 0)
 
 ##Сформируем .bed - файлы 
 
-Запишем сommon_peaks в uncentered_peaks.bed
+Запишем сommon_peaks в common_peaks.bed
 ```{r}
-fwrite(common_peaks, "BEDs/uncentered_peaks.bed", sep = "\t", col.names = FALSE)
+fwrite(common_peaks, "BEDs/common_peaks.bed", sep = "\t", col.names = FALSE)
 ```
+
+Теперь уберем дупликаты и оставим только нужные нам колонки
+```{r}
+length(unique(common_peaks$Start))
+length(unique(common_peaks$Stop))
+for_fasta <- common_peaks[Cell_line == "HUVEC", .(Chromosome, Start, Stop, Summit)]
+stopifnot(for_fasta$Stop > for_fasta$Start) 
+```
+
 
 Так как у нас есть саммиты для каждого из пиков, то сделаем .bed, где все участки общие будут отцентрованы по позиции саммита.
 Заодно удлинним до 500 и 1000 нуклеотидов общие участки, во избежание всяких погрешностей 

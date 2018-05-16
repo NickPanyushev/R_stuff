@@ -57,6 +57,8 @@ common_peaks <- common_peaks[!duplicated(common_peaks)]
 length(unique(common_peaks$STOP))
 length(unique(common_peaks$START))
 
+temp <- common_peaks$STOP - common_peaks$START
+temp[temp > 300]
 setcolorder(common_peaks, c("Chromosome", "Start", "Stop", "Peak_name", "Summit",
                              "Fold_change", "p-value", "q-value", "Cell_line"))
 

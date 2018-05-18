@@ -24,10 +24,14 @@ file.remove("all_bins.tsv")
 
 ## Пересечение бинов
 
-Пересечем бины
-
+Пересечем бины с помощью foverlaps
 ```{r}
-all_intersect <- Reduce(intersect, all_bins[, .(list(unique(Peak_Bins))), Cell_line]$V1)
+setkeyv(all_bins, c("Chromosome", "Peak_Bins"))
+foverlaps(all_bins[Cell_line == "A549"],
+          all_bins[Cell_line == "HUVEC"])
+
+#Reduce(foverlaps, all_bins )
+
 ```
 Общих бинов всего `r length(all_intersect)` 
 
@@ -35,7 +39,7 @@ all_intersect <- Reduce(intersect, all_bins[, .(list(unique(Peak_Bins))), Cell_l
 
 ```{r}
 common_bins <- all_bins[all_bins$Peak_Bins %in% all_intersect, ]
-common_bins$Summit <- common_bins$Peak_Bins+common_bins$summit_position #Добавили положение бинов 
+common_bins$Summit <- common_bins$Peak_Bins+common_bins$summit_position #Добавили положение саммитов
 rm(all_intersect)
 ```
 
@@ -46,9 +50,10 @@ rm(all_intersect)
 #Теперь переведем бины обратно в пики
 
 common_peaks <- common_bins[, START := min(Peak_Bins),
-                          by = .(Peak_name, Cell_line)]
-common_peaks <- common_bins[, STOP := max(Peak_Bins),
-                          by = .(Peak_name, Cell_line)]
+                          by = .(Peak_name)]
+common_peaks <- common_bins[, STOP := max(Peak_Bins)+50,
+                          by = .(Peak_name)]
+
 
 common_peaks$Peak_Bins <- NULL
 common_peaks$summit_position <- NULL
@@ -56,9 +61,20 @@ common_peaks <- common_peaks[!duplicated(common_peaks)]
 
 length(unique(common_peaks$STOP))
 length(unique(common_peaks$START))
+length(unique(common_peaks$Peak_name))
+
+common_peaks[, .N, by = .(Chromosome, START)]
+
+common_peaks[, length(STOP - START), by = Cell_line]
+common_peaks[, max(STOP - START), by = Cell_line]
 
 temp <- common_peaks$STOP - common_peaks$START
 temp[temp > 300]
+
+summary(temp)
+
+hist(temp)
+boxplot(temp)
 setcolorder(common_peaks, c("Chromosome", "Start", "Stop", "Peak_name", "Summit",
                              "Fold_change", "p-value", "q-value", "Cell_line"))
 

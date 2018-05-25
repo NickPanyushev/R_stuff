@@ -118,6 +118,33 @@ GO_MACROMOLECULAR_COMPLEX_BINDING						2.25E-10
 
 Видим housekeeping - в принципе, понятно, откуда он взялся
 
+Делаем для них колесную диаграмму по biological_process
+
+```{r}
+bp_list <- final_data[hgnc_symbol %in% common_CmB, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top10 biological functions for common proteins for 
+       CmB treatment and control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
+
 ###Пропадают после обработки
 
 ```{r}
@@ -140,6 +167,34 @@ CmB_dataset[`Peptides(95%)` == 29, hgnc_symbol]
 ```
 Все понятно, едем дальше
 
+
+Барплот для них
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_K, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top10 biological functions for proteins present 
+       only in control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
+
+
 ###Появляются после обработки
 
 ```{r}
@@ -153,6 +208,32 @@ unique_Cmb
 CmB_dataset[hgnc_symbol %in% unique_Cmb, `Peptides(95%)`] #разве что один нормально, да и тот тубулин
 ```
 Поэтому, будем считать, что их просто нет.
+
+Но столбики мы таки построим
+
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_Cmb, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top10 biological functions for proteins present 
+       only in CmB- treated sample",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
 
 ###Ядро-цитоплазма
 
@@ -179,6 +260,30 @@ unique_K_cp
 
 https://string-db.org/cgi/network.pl?taskId=5lXzAOtydvu0
 
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_K_cp, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top10 biological functions for cytoplasmic proteins present 
+       only in control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
 Теперь cделаем только для ядерных белочков
 ```{r}
 temp_K <- CmB_dataset[Treatment == "K"]
@@ -195,6 +300,31 @@ unique_K_nuc
 
 https://string-db.org/cgi/network.pl?taskId=CUGnfHTXeqkq - я удалил из состава вершин убиквитин, потому что он ко всему лепится
 Обрати внимание на EIF4A3
+
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_K_nuc, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  labs(title = "Top10 biological functions for nuclear proteins present 
+       only in control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
 
 ###Вывод
 Можно сказать, что Cmb действует на трансляцию в цитоплазме 
@@ -243,6 +373,37 @@ https://string-db.org/cgi/network.pl?taskId=LKQLplgeoqQc
 
 Раз он и там и там есть есть, то, значит, RB на связывание не очень влияет
 
+Столбики
+
+```{r}
+bp_list <- final_data[hgnc_symbol %in% common_RB, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+  labs(title = "Top10 biological functions for proteins common for 
+       RB treatment and control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
+
+
+
+
+
 ###Пропадают после обработки
 
 ```{r}
@@ -256,6 +417,30 @@ https://string-db.org/cgi/network.pl?taskId=nMG7bC7FM8Xl - я опять убр�
 
 Есть отличия от CmB, но в целом похоже, тоже ядрышко, тоже рибосомы
 
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_K_RB, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+  labs(title = "Top10 biological functions for 
+       proteins present only in control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
 
 ###Появляются после обработки
 
@@ -267,6 +452,31 @@ unique_RB
 
 Для сети 15 штук - несерьезно
 Какая-то хрень, будем считать, что их нет
+
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_RB, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+  labs(title = "Top10 biological functions for 
+       proteins present only after RB treatment",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
 
 ###Ядро-цитоплазма
 
@@ -294,6 +504,32 @@ unique_K_cp
 https://string-db.org/cgi/network.pl?taskId=nHuSBTMt7dfQ - рибосомные белки всякие
 И белки на экспорт из клетки!
 
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_K_cp, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+  labs(title = "Top10 biological functions for cytoplasmic proteins
+       present only in control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
+
+
 Попробуем посмотреть только на ядерные белочки из тех, которые пропадают
 
 ```{r}
@@ -311,6 +547,31 @@ unique_K_nuc
 
 Вот сетка для них 
 https://string-db.org/cgi/network.pl?taskId=W9tJPdoFDqEB - я убрал опять UBA52
+
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_K_nuc, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1, N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+  labs(title = "Top10 biological functions for nuclear proteins
+       present only in control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
 
 ###Вывод
 Очень-очень похоже на предыдущую пробу, но белочки чуть другие
@@ -332,6 +593,31 @@ https://string-db.org/cgi/network.pl?taskId=txy4YjtyEyts
 
 То есть получается, что те взаимодействия, которые изменялись при тех обработках, здесь остаются константными
 
+```{r}
+bp_list <- final_data[hgnc_symbol %in% common_FC, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top10 biological functions for common proteins, from 
+       RB treatment and control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
+
 ###Пропадают после обработки
 
 ```{r}
@@ -347,6 +633,31 @@ https://string-db.org/cgi/network.pl?taskId=C0sdSOt8wxoo - опять удали
 Их много, много РНК-связывания. Здесь снова 2 кластера, но они уже другие по составу белков
 
 И нет того белка, связующего 2 кластера
+
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_K, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top10 biological functions for unique proteins
+       present only in control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
 
 ###Появляются после обработки
 
@@ -371,6 +682,31 @@ GO_PROTEIN_COMPLEX_SUBUNIT_ORGANIZATION						5.56E-6
 
 Это забавно, что там актинин, ядрышко, и рнк
 
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_FC, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top10 biological functions for proteins
+       present only after FC treatment",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
+
 ###Ядро-цитоплазма
 
 Попробуем посмотреть только для цитоплазматические белочки из тех, которые пропадают
@@ -392,6 +728,30 @@ unique_K_cp
 
 https://string-db.org/cgi/network.pl?taskId=ff8Uzlp622z1
 
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_K_cp, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top10 biological functions for cytoplasmic proteins
+       present only in control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
 Теперь cделаем только для ядерных белочков
 ```{r}
 temp_K <- FC_dataset[Treatment == "K"]
@@ -409,6 +769,31 @@ unique_K_nuc
 https://string-db.org/cgi/network.pl?taskId=bBQhdQ5DvTTK - я удалил из состава вершин убиквитин, потому что он ко всему лепится
 Кластеры отличаются от тех 2 других веществ
 
+```{r}
+bp_list <- final_data[hgnc_symbol %in% unique_K_nuc, bio_process]
+bp_list <- bp_list[!duplicated(bp_list)]
+total_bp <- data.table(table(unlist(bp_list)))
+total_bp <- total_bp[order(total_bp$N, decreasing = T), ]
+
+ggplot(total_bp[1:10], aes(x=reorder(V1,N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top10 biological functions for nuclear proteins
+       present only in control",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        complete = TRUE) + 
+  coord_flip()
+```
+
+
 ###Вывод
 Действует на ядрышко и синтез рибосом, наверное
 
@@ -421,23 +806,3 @@ FC отличается по эффекту, оказываемому на пр�
 Все вещества портят трансляцию и связывание с РНК-связывающими белками
 
 Вот так
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

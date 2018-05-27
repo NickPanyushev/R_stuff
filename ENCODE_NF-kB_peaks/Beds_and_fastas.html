@@ -129,95 +129,63 @@ all_bins &lt;- fread(&quot;all_bins.tsv&quot;)
 file.remove(&quot;all_bins.tsv&quot;)</code></pre>
 <div id="-" class="section level2">
 <h2>Пересечение бинов</h2>
-<p>Пересечем бины</p>
-<pre class="r"><code>all_intersect &lt;- Reduce(intersect, all_bins[, .(list(unique(Peak_Bins))), Cell_line]$V1)</code></pre>
-<p>Общих бинов всего 310</p>
+<pre class="r"><code>all_bins[, merged := paste(Chromosome, Peak_Bins, sep = &quot;:&quot;)] #Новая переменная, а то у нас нначнут разные хромосомы пересекаться
+all_intersect &lt;- Reduce(intersect, split(all_bins$merged, all_bins$Cell_line))</code></pre>
+<p>Общих бинов всего 302</p>
 <p>Отберем только общие бины, остальные нас не интересуют</p>
-<pre class="r"><code>common_bins &lt;- all_bins[all_bins$Peak_Bins %in% all_intersect, ]
-common_bins$Summit &lt;- common_bins$Peak_Bins+common_bins$summit_position #Добавили положение бинов 
+<pre class="r"><code>common_bins &lt;- all_bins[all_bins$merged %in% all_intersect, ]
+common_bins$Summit &lt;- common_bins$Peak_Bins+common_bins$summit_position #Добавили положение саммитов
 rm(all_intersect)</code></pre>
 </div>
 <div id="----" class="section level2">
 <h2>Группировка бинов обратно в пики</h2>
 <p>Сгруппируем общие бины в пики</p>
 <pre class="r"><code>#Теперь переведем бины обратно в пики
-common_peaks &lt;- data.table()
-common_peaks &lt;- aggregate(common_bins$Peak_Bins,
-                          by = list(common_bins$Peak_name, common_bins$Cell_line),
-                          FUN = min)
 
-names(common_peaks) &lt;- c(&quot;Peak_name&quot;, &quot;Cell_line&quot;, &quot;Start&quot;)
+common_peaks &lt;- common_bins[, START := min(Peak_Bins),
+                          by = .(Peak_name)]
+common_peaks &lt;- common_bins[, STOP := max(Peak_Bins)+50,
+                          by = .(Peak_name)]
 
-common_peaks$Stop &lt;- aggregate(common_bins$Peak_Bins,
-                          by = list(common_bins$Peak_name,common_bins$Cell_line),
-                          FUN = function(x) max(x)+50)[,3]
+common_peaks$Peak_Bins &lt;- NULL
+common_peaks$summit_position &lt;- NULL
+common_peaks$merged &lt;- NULL
 
-common_peaks$Chromosome &lt;- aggregate(common_bins$Chromosome,
-                          by = list(common_bins$Peak_name),
-                          FUN = function(x) x[1])[,2]
+common_peaks &lt;- common_peaks[!duplicated(common_peaks)]
 
-common_peaks$Fold_change &lt;- aggregate(common_bins$fold_change,
-                          by = list(common_bins$Peak_name),
-                          FUN = function(x) x[1])[,2]
-
-common_peaks$'p-value' &lt;- aggregate(common_bins$`p-value`,
-                          by = list(common_bins$Peak_name),
-                          FUN = function(x) x[1])[,2]
-
-common_peaks$'q-value' &lt;- aggregate(common_bins$`q-value`,
-                          by = list(common_bins$Peak_name),
-                          FUN = function(x) x[1])[,2]
-
-common_peaks$Summit &lt;- aggregate(common_bins$Summit,
-                          by = list(common_bins$Peak_name),
-                          FUN = function(x) x[1])[,2]
-
-common_peaks &lt;- as.data.table(common_peaks)
 setcolorder(common_peaks, c(&quot;Chromosome&quot;, &quot;Start&quot;, &quot;Stop&quot;, &quot;Peak_name&quot;, &quot;Summit&quot;,
-                             &quot;Fold_change&quot;, &quot;p-value&quot;, &quot;q-value&quot;, &quot;Cell_line&quot;))
+                             &quot;fold_change&quot;, &quot;p-value&quot;, &quot;q-value&quot;, &quot;Cell_line&quot;, &quot;START&quot;, &quot;STOP&quot;))
 
 # Проверим, нет ли косяков в .bed файле и запишем в файл
-stopifnot(sum(common_peaks$Start &gt; common_peaks$Stop) == 0)</code></pre>
-<p>Общих пиков всего 96</p>
+stopifnot(sum(common_peaks$Start &gt; common_peaks$Stop) == 0)
+stopifnot(length(unique(common_peaks$STOP)) == length(unique(common_peaks$START)))</code></pre>
+<p>Общих пиков всего 81</p>
+<p>Запишем сommon_peaks в Script_files/common_peaks.tsv</p>
+<pre class="r"><code>fwrite(common_peaks, &quot;Script_files/common_peaks.tsv&quot;, sep = &quot;\t&quot;, col.names = FALSE)
+zip(&quot;Script_files/common_peaks.zip&quot;, &quot;Script_files/common_peaks.tsv&quot;)
+file.remove(&quot;Script_files/common_peaks.tsv&quot;)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 </div>
 <div id="-.bed---" class="section level2">
 <h2>Сформируем .bed - файлы</h2>
-<p>Запишем сommon_peaks в uncentered_peaks.bed</p>
-<pre class="r"><code>fwrite(common_peaks, &quot;BEDs/uncentered_peaks.bed&quot;, sep = &quot;\t&quot;, col.names = FALSE)</code></pre>
-<p>Так как у нас есть саммиты для каждого из пиков, то сделаем .bed, где все участки общие будут отцентрованы по позиции саммита. Заодно удлинним до 500 и 1000 нуклеотидов общие участки, во избежание всяких погрешностей</p>
-<pre class="r"><code>region_length &lt;- 500
-for_fasta &lt;- common_peaks[Cell_line == &quot;A549&quot;, .(Chromosome, Start, Stop, Summit)]
-for_fasta$Start &lt;- for_fasta$Summit - region_length/2
-for_fasta$Stop &lt;- for_fasta$Summit + region_length/2
-for_fasta$Summit &lt;- NULL
-stopifnot(for_fasta$Stop - for_fasta$Start  == region_length) #Проверка, все ли у нас получилось
-
-# Сделаем .bed
-fwrite(for_fasta, file = &quot;BEDs/500_centered.bed&quot;, sep = &quot;\t&quot;, col.names = FALSE)
-rm(region_length, for_fasta)</code></pre>
-<pre class="r"><code>region_length &lt;- 1000
-for_fasta &lt;- common_peaks[Cell_line == &quot;A549&quot;, .(Chromosome, Start, Stop, Summit)]
-for_fasta$Start &lt;- for_fasta$Summit - region_length/2
-for_fasta$Stop &lt;- for_fasta$Summit + region_length/2
-for_fasta$Summit &lt;- NULL
-stopifnot(for_fasta$Stop - for_fasta$Start  == region_length) #Проверка, все ли у нас получилось
-
-# Сделаем .bed
-fwrite(for_fasta, file = &quot;BEDs/1000_centered.bed&quot;, sep = &quot;\t&quot;, col.names = FALSE)
-rm(region_length, for_fasta)</code></pre>
+<p>Оставим только нужные нам колонки и уберем дупликаты</p>
+<pre class="r"><code>for_fasta &lt;- common_peaks[, .(Chromosome, START, STOP)]
+for_fasta &lt;- for_fasta[!duplicated(for_fasta)]
+stopifnot(for_fasta$Stop &gt; for_fasta$Start) </code></pre>
+</div>
+<div id="-.bed" class="section level2">
+<h2>Сделаем .bed</h2>
+<pre class="r"><code>fwrite(for_fasta, file = &quot;BEDs/uncentered.bed&quot;, sep = &quot;\t&quot;, col.names = FALSE)
+rm(for_fasta)</code></pre>
 </div>
 <div id="-.fasta---" class="section level2">
 <h2>Сформируем .fasta - файлы</h2>
 <p>Отсортируем .bed файлы и сделаем из них .fasta Запустим для этого bedtools</p>
 <pre class="bash"><code>#Reference genome was downloaded from here ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_24/GRCh38.p5.genome.fa.gz
 cd ~/R_stuff/ENCODE_NF-kB_peaks/BEDs/
-for i in *.bed
-do
-  TAG=${i%%.bed}
-  sort -k 1,1 -k2,2n $TAG.bed &gt; $TAG_sorted.bed
-  rm $TAG.bed &amp;&amp; mv $TAG_sorted.bed $TAG.bed
-  bedtools getfasta -fo ../FASTAs/$TAG.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed $i
-done</code></pre>
+sort -k 1,1 -k2,2n uncentered.bed &gt; uncentered_sorted.bed
+rm uncentered.bed &amp;&amp; mv uncentered_sorted.bed uncentered.bed
+bedtools getfasta -fo ../FASTAs/uncentered.fa -fi ~/Human_genome/Genprime_v24/GRCh38.p5.genome.fa -bed uncentered.bed</code></pre>
 </div>
 <div id="--meme" class="section level2">
 <h2>Фон для MEME</h2>
@@ -225,9 +193,9 @@ done</code></pre>
 <pre class="r"><code>setwd(&quot;FASTAs/&quot;)
 for (i in 1:5){
   t &lt;- sample(unique(all_bins$Cell_line), size = 2)
-  intersect &lt;- intersect(all_bins[Cell_line == t[1], Peak_Bins],
-                        all_bins[Cell_line == t[2], Peak_Bins])
-  temp_bins &lt;- all_bins[all_bins$Peak_Bins %in% intersect, 
+  intersect &lt;- intersect(all_bins[Cell_line == t[1], merged],
+                        all_bins[Cell_line == t[2], merged])
+  temp_bins &lt;- all_bins[all_bins$merged %in% intersect, 
                         .(Chromosome, Cell_line, Peak_name, Peak_Bins) ]
   temp_bins &lt;- temp_bins[Cell_line == t[1], .(Chromosome, Peak_Bins), by=Peak_name]
   temp_bins &lt;- temp_bins[ , .(Chromosome, Start = min(Peak_Bins), 
@@ -245,14 +213,14 @@ rm(i)</code></pre>
 for i in *_bg.bed
 do
     TAG=${i%%.bed}
-    bedtools getfasta -fo ./$TAG.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed $i &amp;&amp; rm $i
+    bedtools getfasta -fo ./$TAG.fa -fi ~/Human_genome/Genprime_v24/GRCh38.p5.genome.fa -bed $i &amp;&amp; rm $i
 done
 zip MEME_background.zip *_bg.fa &amp;&amp; rm *_bg.fa</code></pre>
-<pre><code>##   adding: GM10847_GM18505_bg.fa (deflated 70%)
-##   adding: GM12878_IMR90_bg.fa (deflated 70%)
-##   adding: GM12891_SGBS_bg.fa (deflated 70%)
-##   adding: GM15510_A549_bg.fa (deflated 70%)
-##   adding: GM19099_AC16_bg.fa (deflated 70%)</code></pre>
+<pre><code>##   adding: AC16_GM12878_bg.fa (deflated 70%)
+##   adding: Beas_A549_bg.fa (deflated 70%)
+##   adding: Beas_GM12878_bg.fa (deflated 70%)
+##   adding: GM12892_GM19099_bg.fa (deflated 70%)
+##   adding: GM18951_Beas_bg.fa (deflated 70%)</code></pre>
 </div>
 
 

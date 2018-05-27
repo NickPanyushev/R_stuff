@@ -24,21 +24,16 @@ file.remove("all_bins.tsv")
 
 ## Пересечение бинов
 
-Пересечем бины с помощью foverlaps
 ```{r}
-setkeyv(all_bins, c("Chromosome", "Peak_Bins"))
-foverlaps(all_bins[Cell_line == "A549"],
-          all_bins[Cell_line == "HUVEC"])
-
-#Reduce(foverlaps, all_bins )
-
+all_bins[, merged := paste(Chromosome, Peak_Bins, sep = ":")] #Новая переменная, а то у нас нначнут разные хромосомы пересекаться
+all_intersect <- Reduce(intersect, split(all_bins$merged, all_bins$Cell_line))
 ```
 Общих бинов всего `r length(all_intersect)` 
 
 Отберем только общие бины, остальные нас не интересуют
 
 ```{r}
-common_bins <- all_bins[all_bins$Peak_Bins %in% all_intersect, ]
+common_bins <- all_bins[all_bins$merged %in% all_intersect, ]
 common_bins$Summit <- common_bins$Peak_Bins+common_bins$summit_position #Добавили положение саммитов
 rm(all_intersect)
 ```
@@ -54,93 +49,53 @@ common_peaks <- common_bins[, START := min(Peak_Bins),
 common_peaks <- common_bins[, STOP := max(Peak_Bins)+50,
                           by = .(Peak_name)]
 
-
 common_peaks$Peak_Bins <- NULL
 common_peaks$summit_position <- NULL
+common_peaks$merged <- NULL
+
 common_peaks <- common_peaks[!duplicated(common_peaks)]
 
-length(unique(common_peaks$STOP))
-length(unique(common_peaks$START))
-length(unique(common_peaks$Peak_name))
-
-common_peaks[, .N, by = .(Chromosome, START)]
-
-common_peaks[, length(STOP - START), by = Cell_line]
-common_peaks[, max(STOP - START), by = Cell_line]
-
-temp <- common_peaks$STOP - common_peaks$START
-temp[temp > 300]
-
-summary(temp)
-
-hist(temp)
-boxplot(temp)
 setcolorder(common_peaks, c("Chromosome", "Start", "Stop", "Peak_name", "Summit",
-                             "Fold_change", "p-value", "q-value", "Cell_line"))
+                             "fold_change", "p-value", "q-value", "Cell_line", "START", "STOP"))
 
 # Проверим, нет ли косяков в .bed файле и запишем в файл
 stopifnot(sum(common_peaks$Start > common_peaks$Stop) == 0)
+stopifnot(length(unique(common_peaks$STOP)) == length(unique(common_peaks$START)))
 ```
 
-Общих пиков всего `r length(unique(common_peaks$Start))` 
+Общих пиков всего `r length(unique(common_peaks$START))` 
 
-##Сформируем .bed - файлы 
-
-Запишем сommon_peaks в common_peaks.bed
+Запишем сommon_peaks в Script_files/common_peaks.tsv
 ```{r}
-fwrite(common_peaks, "BEDs/common_peaks.bed", sep = "\t", col.names = FALSE)
+fwrite(common_peaks, "Script_files/common_peaks.tsv", sep = "\t", col.names = FALSE)
+zip("Script_files/common_peaks.zip", "Script_files/common_peaks.tsv")
+file.remove("Script_files/common_peaks.tsv")
 ```
 
-Теперь уберем дупликаты и оставим только нужные нам колонки
+##Сформируем .bed - файлы
+
+Оставим только нужные нам колонки и уберем дупликаты
 ```{r}
-length(unique(common_peaks$Start))
-length(unique(common_peaks$Stop))
-for_fasta <- common_peaks[Cell_line == "HUVEC", .(Chromosome, Start, Stop, Summit)]
+for_fasta <- common_peaks[, .(Chromosome, START, STOP)]
+for_fasta <- for_fasta[!duplicated(for_fasta)]
 stopifnot(for_fasta$Stop > for_fasta$Start) 
 ```
 
-
-Так как у нас есть саммиты для каждого из пиков, то сделаем .bed, где все участки общие будут отцентрованы по позиции саммита.
-Заодно удлинним до 500 и 1000 нуклеотидов общие участки, во избежание всяких погрешностей 
-```{r 500_centered}
-region_length <- 500
-for_fasta <- common_peaks[Cell_line == "A549", .(Chromosome, Start, Stop, Summit)]
-for_fasta$Start <- for_fasta$Summit - region_length/2
-for_fasta$Stop <- for_fasta$Summit + region_length/2
-for_fasta$Summit <- NULL
-stopifnot(for_fasta$Stop - for_fasta$Start  == region_length) #Проверка, все ли у нас получилось
-
-# Сделаем .bed
-fwrite(for_fasta, file = "BEDs/500_centered.bed", sep = "\t", col.names = FALSE)
-rm(region_length, for_fasta)
+## Сделаем .bed
+```{r}
+fwrite(for_fasta, file = "BEDs/uncentered.bed", sep = "\t", col.names = FALSE)
+rm(for_fasta)
 ```
 
-```{r 1000_centered}
-region_length <- 1000
-for_fasta <- common_peaks[Cell_line == "A549", .(Chromosome, Start, Stop, Summit)]
-for_fasta$Start <- for_fasta$Summit - region_length/2
-for_fasta$Stop <- for_fasta$Summit + region_length/2
-for_fasta$Summit <- NULL
-stopifnot(for_fasta$Stop - for_fasta$Start  == region_length) #Проверка, все ли у нас получилось
-
-# Сделаем .bed
-fwrite(for_fasta, file = "BEDs/1000_centered.bed", sep = "\t", col.names = FALSE)
-rm(region_length, for_fasta)
-```
 ##Сформируем .fasta - файлы
-
 Отсортируем .bed файлы и сделаем из них .fasta
 Запустим для этого bedtools
 ```{r make_fasta, engine="bash"}
 #Reference genome was downloaded from here ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_24/GRCh38.p5.genome.fa.gz
 cd ~/R_stuff/ENCODE_NF-kB_peaks/BEDs/
-for i in *.bed
-do
-  TAG=${i%%.bed}
-  sort -k 1,1 -k2,2n $TAG.bed > $TAG_sorted.bed
-  rm $TAG.bed && mv $TAG_sorted.bed $TAG.bed
-  bedtools getfasta -fo ../FASTAs/$TAG.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed $i
-done
+sort -k 1,1 -k2,2n uncentered.bed > uncentered_sorted.bed
+rm uncentered.bed && mv uncentered_sorted.bed uncentered.bed
+bedtools getfasta -fo ../FASTAs/uncentered.fa -fi ~/Human_genome/Genprime_v24/GRCh38.p5.genome.fa -bed uncentered.bed
 ```
 
 ## Фон для MEME
@@ -152,9 +107,9 @@ done
 setwd("FASTAs/")
 for (i in 1:5){
   t <- sample(unique(all_bins$Cell_line), size = 2)
-  intersect <- intersect(all_bins[Cell_line == t[1], Peak_Bins],
-                        all_bins[Cell_line == t[2], Peak_Bins])
-  temp_bins <- all_bins[all_bins$Peak_Bins %in% intersect, 
+  intersect <- intersect(all_bins[Cell_line == t[1], merged],
+                        all_bins[Cell_line == t[2], merged])
+  temp_bins <- all_bins[all_bins$merged %in% intersect, 
                         .(Chromosome, Cell_line, Peak_name, Peak_Bins) ]
   temp_bins <- temp_bins[Cell_line == t[1], .(Chromosome, Peak_Bins), by=Peak_name]
   temp_bins <- temp_bins[ , .(Chromosome, Start = min(Peak_Bins), 
@@ -175,7 +130,7 @@ cd ~/R_stuff/ENCODE_NF-kB_peaks/FASTAs
 for i in *_bg.bed
 do
     TAG=${i%%.bed}
-    bedtools getfasta -fo ./$TAG.fa -fi ~/Human_genome/Genprime_v24/genprime_v24.fa -bed $i && rm $i
+    bedtools getfasta -fo ./$TAG.fa -fi ~/Human_genome/Genprime_v24/GRCh38.p5.genome.fa -bed $i && rm $i
 done
 zip MEME_background.zip *_bg.fa && rm *_bg.fa
 ```

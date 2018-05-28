@@ -26,39 +26,41 @@ file.remove("Gencode_v24.bed")
 #Вытащим только транскрипты
 transcripts <- subset(annotation_v24, annotation_v24$Type == "transcript")
 transcripts$Type <- NULL
-fwrite(transcripts, "../BEDs/transcripts.bed", sep = "\t", col.names = FALSE)
-#zip("../BEDs/transcripts.zip", "transcripts.bed")
-
+fwrite(transcripts, "../Annotation_data/transcripts.bed", sep = "\t", col.names = FALSE)
+zip("../Annotation_data/transcripts.zip", "transcripts.bed")
 rm(annotation_v24)
 ```
 
 Не будем изобретать велосипед, а сделаем скрипт, который с помощью bedtools найдет нам ближайшие гены.
 
 ```{r, engine= 'bash'}
-cd ~/R_stuff/ENCODE_NF-kB_peaks/BEDs
+cd ~/R_stuff/ENCODE_NF-kB_peaks
 #Отсортируем файл с транскриптами и с пиками
+cd Annotation_data
 sortBed -i transcripts.bed > sorted_transcripts.bed
-sortBed -i uncentered_peaks.bed > sorted_uncentered_peaks.bed
-rm uncentered_peaks.bed && mv sorted_uncentered_peaks.bed uncentered_peaks.bed
 rm transcripts.bed && mv sorted_transcripts.bed transcripts.bed
 
+cd ../BEDs
+sortBed -i uncentered.bed > sorted_uncentered.bed
+rm uncentered.bed && mv sorted_uncentered.bed uncentered.bed
+
 #А теперь пошли фичи искать
-closestBed -D b -k 2 -a uncentered_peaks.bed -b transcripts.bed > closest_transcripts.bed
+closestBed -D b -k 2 -a uncentered.bed -b ../Annotation_data/transcripts.bed > closest_transcripts.bed
 ```
 
-Окей, нашли ближайшие транскрипты, отфильруем их и сожмем их в .zip
+Окей, нашли ближайшие транскрипты, отфильруем их
 
 ```{r}
-setwd("~/R_stuff/ENCODE_NF-kB_peaks/BEDs")
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/BEDs/")
 features <- fread("closest_transcripts.bed")
-names(features) <- c("Chromosome", "peak_Start", "peak_Stop", "Peak_name", 
-                             "Fold_change", "p-value", "q-value", "Cell_line",
-                     "Chr", "transcript_Start", "transcript_Stop", "Strand", 
+names(features) <- c("Chromosome", "peak_Start", "peak_Stop", 
+                             "Chr", "transcript_Start", "transcript_Stop", "Strand", 
                      "Ensemble_ID", "distance")
 features$Chr <- NULL
 # Убрали пики, которые лежат очень далеко в пустоте, т.е. от них до гена более 3000 нуклеотидов
-
-features <- subset(features, features$distance<3000 & features$distance > - 3000)
+features <- features[distance <= 3000]
+features <- features[distance >= -3000]
+nrow(features)
 
 #Удалим хвостики у названий транскриптов
 features$Ensemble_ID <- gsub("\\.\\d+", "", features$Ensemble_ID)
@@ -90,27 +92,48 @@ BM_out <- BM_out[BM_out$name_1006 != "molecular_function" &
                   BM_out$name_1006 != "cellular_component" &
                    BM_out$name_1006 != "biological_process" ,]
 
-GO_data <- BM_out %>% group_by(namespace_1003, ensembl_transcript_id)
-names(GO_data) <- c("Chromosome", "Ensemble_ID", "Uniprot_ID", "Gene_symbol", "Biotype",  "GO_name", "Namespace")
-rm(BM_out)
+BM_out <- as.data.table(BM_out)
+
+mol_function <- BM_out[namespace_1003 == "molecular_function", .(uniprotswissprot, hgnc_symbol, name_1006)]
+mol_function[, mol_function := .(list(name_1006)), by=uniprotswissprot]
+mol_function[, name_1006 := NULL]
+mol_function <- mol_function[!duplicated(mol_function)]
+
+cell_component <- BM_out[namespace_1003 == "cellular_component", .(uniprotswissprot, hgnc_symbol, name_1006)]
+cell_component[, cell_component := .(list(name_1006)), by=uniprotswissprot]
+cell_component[, name_1006 := NULL]
+cell_component <- cell_component[!duplicated(cell_component)]
+
+bio_process <- BM_out[namespace_1003 == "biological_process", .(uniprotswissprot, hgnc_symbol, name_1006)]
+bio_process[, bio_process := .(list(name_1006)), by=uniprotswissprot]
+bio_process[, name_1006 := NULL]
+bio_process <- bio_process[!duplicated(bio_process)]
+
+GO_data <- merge(mol_function, cell_component)
+GO_data <- merge(GO_data, bio_process)
+
+#setnames(GO_data, "uniprotswissprot", "Uniprot")
+
+#final_data <- merge(raw_data, GO_data, by = "Uniprot")
+
+rm(BM_out, mol_function, cell_component, bio_process)
 ```
 
-Славно, теперь давай докинем высоту пиков в разных линиях
+Теперь сделаем join GO_out c features
 
 ```{r}
-#Сделаем маленький датасет со всем необходимым
-features <- features[ , c("Ensemble_ID", "distance", "peak_Start", "peak_Stop","Cell_line", "Fold_change", "p-value", "q-value")]
-
+names(features)
+names(GO_data)
 final_peaks <- merge(GO_data, features)
-fwrite(final_peaks, "final_peaks.txt")
+#fwrite(final_peaks, "final_peaks.txt")
 rm(features, GO_data)
 ```
 Так, теперь посмотрим на те гены, около которых лежат общие бины
 
-Не будем учитывать ничего, просто посмотрим, какие есть
 ```{r}
-final_genes <- unique(final_peaks[final_peaks$Biotype == "protein_coding","Gene_symbol"])
-write.csv(final_genes, file = "final_genes.csv", quote = F, row.names = F, col.names = F)
+genes_list <- GO_data$Gene_symbol[!duplicated(GO_data$Gene_symbol)]
+getwd()
+write.csv(genes_list, file = "final_genes.csv", quote = F, row.names = F, col.names = F)
 ```
 
 Всего генов вышло - `r length(final_genes)`

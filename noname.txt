@@ -1,8 +1,0 @@
-ENCODE_NF-kB_peaks/ChromHMM_data/browserdense_ChromHMM_HUVEC_concatenate_25.bed
-ENCODE_NF-kB_peaks/ENSEMBL_data.tar.gz
-ENCODE_NF-kB_peaks/reg_features.bed
-ENCODE_NF-kB_peaks/ChromHMM_data/browserdense_ChromHMM_GM12878_concatenate_25.bed
-ENCODE_NF-kB_peaks/ENSEMBL_data/reg_evidence.txt.gz
-NF-kB_sites/Annotation/Gencode_v24.bed
-ENCODE_NF-kB_peaks/ENSEMBL_data/reg_evidence.txt
-ENCODE_NF-kB_peaks/all_bins.tsv

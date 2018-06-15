@@ -7,11 +7,13 @@ output: html_document
 ```{r libraries import, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 setwd("~/R_stuff/ENCODE_NF-kB_peaks/")
 source("~/R_stuff/Functions.R")
+source("http://bioconductor.org/biocLite.R") 
 library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(data.table)
-library(compiler)
+biocLite("GenomicRanges")
+library(GenomicRanges)
 ```
 
 Импортнем all_bins
@@ -39,31 +41,25 @@ rm(all_intersect)
 ```
 
 ## Группировка бинов обратно в пики
+
 Сгруппируем общие бины в пики
 
 ```{r}
-#Теперь переведем бины обратно в пики
-
 common_peaks <- common_bins[, START := min(Peak_Bins),
-                          by = .(Peak_name)]
+                          by = Peak_name]
 common_peaks <- common_bins[, STOP := max(Peak_Bins)+50,
-                          by = .(Peak_name)]
+                          by = Peak_name]
 
 common_peaks$Peak_Bins <- NULL
 common_peaks$summit_position <- NULL
 common_peaks$merged <- NULL
+common_peaks$Peak_name <- NULL
 
 common_peaks <- common_peaks[!duplicated(common_peaks)]
 
-setcolorder(common_peaks, c("Chromosome", "Start", "Stop", "Peak_name", "Summit",
-                             "fold_change", "p-value", "q-value", "Cell_line", "START", "STOP"))
-
-# Проверим, нет ли косяков в .bed файле и запишем в файл
-stopifnot(sum(common_peaks$Start > common_peaks$Stop) == 0)
-stopifnot(length(unique(common_peaks$STOP)) == length(unique(common_peaks$START)))
+setcolorder(common_peaks, c("Chromosome", "Start", "Stop", "Summit", "Cell_line",
+                             "fold_change", "p-value", "q-value", "START", "STOP"))
 ```
-
-Общих пиков всего `r length(unique(common_peaks$START))` 
 
 Запишем сommon_peaks в Script_files/common_peaks.tsv
 ```{r}
@@ -72,20 +68,24 @@ zip("Script_files/common_peaks.zip", "Script_files/common_peaks.tsv")
 file.remove("Script_files/common_peaks.tsv")
 ```
 
-##Сформируем .bed - файлы
+## Выбросим все, что перекрывается и запишем это в .bed-файл
 
-Оставим только нужные нам колонки и уберем дупликаты
 ```{r}
-for_fasta <- common_peaks[, .(Chromosome, START, STOP)]
-for_fasta <- for_fasta[!duplicated(for_fasta)]
-stopifnot(for_fasta$Stop > for_fasta$Start) 
-```
+for_bed <- GRanges(common_peaks$Chromosome,
+                IRanges(common_peaks$START,
+                        common_peaks$STOP)) 
 
-## Сделаем .bed
-```{r}
-fwrite(for_fasta, file = "BEDs/uncentered.bed", sep = "\t", col.names = FALSE)
-rm(for_fasta)
+for_bed <- as.data.table(reduce(for_bed))
+for_bed <- for_bed[, .(seqnames, start, end)]
+
+# Проверим, нет ли косяков и запишем в файл
+stopifnot(sum(for_bed$start > for_bed$end) == 0)
+stopifnot(length(unique(for_bed$start)) == length(unique(for_bed$end)))
+
+fwrite(for_bed, file = "BEDs/uncentered.bed", sep = "\t", col.names = FALSE)
+rm(for_bed)
 ```
+Общих пиков всего `r length(unique(common_peaks$START))`
 
 ##Сформируем .fasta - файлы
 Отсортируем .bed файлы и сделаем из них .fasta

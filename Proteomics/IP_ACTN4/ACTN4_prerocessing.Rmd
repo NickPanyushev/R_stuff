@@ -1,0 +1,151 @@
+---
+title: "Proteome_analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+setwd("~/R_stuff/Proteomics/")
+library(data.table)
+library(ggplot2)
+library(biomaRt)
+library(dplyr)
+library(tidyr)
+```
+##Подготовка данных
+```{r}
+raw_data <- fread("IP_ACTN4/Misha-Panjushev_IP_6-FDR_ProteinSummary.txt", sep = "\t")
+#raw_data$Total_score <- as.numeric(sapply(raw_data$Total_score, function(x) sub(",", ".", x)))
+#raw_data$Unused_score <- as.numeric(sapply(raw_data$Unused_score, function(x) sub(",", ".", x)))
+#raw_data$`% Cov` <- as.numeric(sapply(raw_data$`% Cov`, function(x) sub(",", ".", x)))
+#raw_data$`% Cov (95)` <- as.numeric(sapply(raw_data$`% Cov (95)`, function(x) sub(",", ".", x)))
+raw_data$Accession <- sapply(raw_data$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
+setnames(raw_data, "Accession", "Uniprot")
+#Удаляем белки с unused score < 1.3
+#raw_data <- raw_data[raw_data$Unused >= 1.3]
+```
+##Аннотация по Gene Ontology
+```{r}
+# define biomart object
+mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
+
+# query biomart
+BM_out <- getBM(attributes = c("name_1006", "namespace_1003", "hgnc_symbol", "uniprotswissprot"),
+                 filters = "uniprotswissprot",
+                values = raw_data$Uniprot, 
+                mart = mart,
+                uniqueRows = TRUE)
+
+#Удаляем неинформативные GO 
+BM_out <- BM_out[BM_out$name_1006 != "molecular_function" &
+                  BM_out$name_1006 != "cellular_component" &
+                   BM_out$name_1006 != "biological_process" ,]
+
+BM_out <- as.data.table(BM_out)
+
+mol_function <- BM_out[namespace_1003 == "molecular_function", .(uniprotswissprot, hgnc_symbol, name_1006)]
+mol_function[, mol_function := .(list(name_1006)), by=uniprotswissprot]
+mol_function[, name_1006 := NULL]
+mol_function <- mol_function[!duplicated(mol_function)]
+
+cell_component <- BM_out[namespace_1003 == "cellular_component", .(uniprotswissprot, hgnc_symbol, name_1006)]
+cell_component[, cell_component := .(list(name_1006)), by=uniprotswissprot]
+cell_component[, name_1006 := NULL]
+cell_component <- cell_component[!duplicated(cell_component)]
+
+bio_process <- BM_out[namespace_1003 == "biological_process", .(uniprotswissprot, hgnc_symbol, name_1006)]
+bio_process[, bio_process := .(list(name_1006)), by=uniprotswissprot]
+bio_process[, name_1006 := NULL]
+bio_process <- bio_process[!duplicated(bio_process)]
+
+GO_data <- merge(mol_function, cell_component)
+GO_data <- merge(GO_data, bio_process)
+
+setnames(GO_data, "uniprotswissprot", "Uniprot")
+
+final_data <- merge(raw_data, GO_data, by = "Uniprot")
+
+rm(BM_out, mol_function, cell_component, bio_process, GO_data, raw_data)
+```
+
+Гистограммки по GO
+```{r}
+unique_RPMI_UBD <- getBM(attributes = c("hgnc_symbol","uniprotswissprot"),
+                 filters = "hgnc_symbol",
+                values = common_UBD, 
+                mart = mart,
+                uniqueRows = TRUE)
+
+
+GO_unique_RPMI_UBD <- merge(unique_RPMI_UBD, final_data[, .(hgnc_symbol, mol_function, bio_process, cell_component)], by = "hgnc_symbol",  all.x = T)
+
+GO_unique_RPMI_UBD <- GO_unique_RPMI_UBD[!duplicated(GO_unique_RPMI_UBD), ]
+mf_table <- table(unlist(GO_unique_RPMI_UBD$mol_function))
+bp_table <- table(unlist(GO_unique_RPMI_UBD$bio_process))
+cc_table <- table(unlist(GO_unique_RPMI_UBD$cell_component))
+```
+
+Гистограммка по mol_function
+```{r, echo=F}
+mf_table <- as.data.table(mf_table)
+mf_table <- mf_table[order(mf_table$N, decreasing = T), ]
+
+ggplot(mf_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 Molecular functions for RPMI8226-unique proteins",
+       x = "Molecular function", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+
+Гистограммка по biological process 
+```{r, echo=FALSE}
+bp_table <- as.data.table(bp_table)
+bp_table <- bp_table[order(bp_table$N, decreasing = T), ]
+
+ggplot(bp_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 biological process for RPMI8226-unique proteins",
+       x = "Biological process", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.8),
+        complete = TRUE)
+```
+  
+  
+Гистограммка по cell_component
+```{r, echo=FALSE}
+cc_table <- as.data.table(cc_table)
+cc_table <- cc_table[order(cc_table$N, decreasing = T), ]
+
+ggplot(cc_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 Cellular compartments for RPMI8226-unique proteins",
+       x = "Subsellular compartment", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.9),
+        complete = TRUE)
+```
+

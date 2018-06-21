@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-setwd("~/R_stuff/Proteomics/")
+setwd("~/R_stuff/Proteomics/IP_ACTN4/")
 library(data.table)
 library(ggplot2)
 library(biomaRt)
@@ -13,16 +13,31 @@ library(tidyr)
 ```
 ##Подготовка данных
 ```{r}
-raw_data <- fread("IP_ACTN4/Misha-Panjushev_IP_6-FDR_ProteinSummary.txt", sep = "\t")
-#raw_data$Total_score <- as.numeric(sapply(raw_data$Total_score, function(x) sub(",", ".", x)))
-#raw_data$Unused_score <- as.numeric(sapply(raw_data$Unused_score, function(x) sub(",", ".", x)))
-#raw_data$`% Cov` <- as.numeric(sapply(raw_data$`% Cov`, function(x) sub(",", ".", x)))
-#raw_data$`% Cov (95)` <- as.numeric(sapply(raw_data$`% Cov (95)`, function(x) sub(",", ".", x)))
-raw_data$Accession <- sapply(raw_data$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
-setnames(raw_data, "Accession", "Uniprot")
+raw_IP6 <- fread("Misha-Panjushev_IP_6-FDR_ProteinSummary.txt", sep = "\t")
+raw_IP4 <- fread("Misha-Panjushev_IP_4_ProteinSummary.txt", sep = "\t")
+raw_IP3 <- fread("Misha-Panjushev_IP_3-FDR_ProteinSummary.txt", sep = "\t")
+
+raw_IP6$Accession <- sapply(raw_IP6$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
+raw_IP4$Accession <- sapply(raw_IP4$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
+raw_IP3$Accession <- sapply(raw_IP3$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
+
+setnames(raw_IP6, "Accession", "Uniprot")
+setnames(raw_IP4, "Accession", "Uniprot")
+setnames(raw_IP3, "Accession", "Uniprot")
+
 #Удаляем белки с unused score < 1.3
-#raw_data <- raw_data[raw_data$Unused >= 1.3]
+raw_IP6 <- raw_IP6[raw_IP6$Unused >= 1.3]
+raw_IP4 <- raw_IP4[raw_IP4$Unused >= 1.3]
+raw_IP3 <- raw_IP3[raw_IP3$Unused >= 1.3]
+
+#Удаляем белки нечеловеческие
+raw_IP6 <- raw_IP6[raw_IP6$Species == "HUMAN"]
+raw_IP4 <- raw_IP4[raw_IP4$Species == "HUMAN"]
+raw_IP3 <- raw_IP3[raw_IP3$Species == "HUMAN"]
+
+rm(raw_IP4)
 ```
+
 ##Аннотация по Gene Ontology
 ```{r}
 # define biomart object

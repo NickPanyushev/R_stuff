@@ -1,0 +1,36 @@
+N	Unused	Total	%Cov	%Cov(50)	%Cov(95)	Accession	Name	Species	Peptides(95%)			Biological Processes	Molecular Function	PANTHER ID
+1	9.62	9.62	13.8300001621246	13.8300001621246	10.6200002133846	sp|P19909|SPG2_STRSG	Immunoglobulin G-binding protein G OS=Streptococcus sp. group G GN=spg PE=1 SV=1	STRSG	5					
+1	0	9.62	13.6199995875359	13.6199995875359	9.375	sp|P06654|SPG1_STRSG	Immunoglobulin G-binding protein G OS=Streptococcus sp. group G GN=spg PE=1 SV=1	STRSG	5					
+1	0	9.62	15.5000001192093	15.5000001192093	11.9099996984005	cont|000168	SPG2_STRSG Immunoglobulin G-binding protein 		5					
+2	4	4	6.36600032448769	6.36600032448769	6.36600032448769	sp|P04264|K2C1_HUMAN	Keratin, type II cytoskeletal 1 OS=Homo sapiens GN=KRT1 PE=1 SV=6	HUMAN	2					
+2	0	4	6.4360000193119	6.4360000193119	6.4360000193119	sp|A5A6M6|K2C1_PANTR	Keratin, type II cytoskeletal 1 OS=Pan troglodytes GN=KRT1 PE=2 SV=1	PANTR	2					
+2	0	4	6.36600032448769	6.36600032448769	6.36600032448769	cont|000135	cra|hCP1609934.2| keratin 1 (epidermolytic hyperkeratosis) [Homo sapiens (contaminant)]	Homo sapiens (contaminant)	2					
+2	0	4	6.36600032448769	6.36600032448769	6.36600032448769	cont|000134	rf|NP_006112.2| keratin 1 [Homo sapiens (contaminant)]	Homo sapiens (contaminant)	2					
+2	0	4	6.36600032448769	6.36600032448769	6.36600032448769	cont|000132	sp|P04264| K2C1_HUMAN Keratin, type II cytoskeletal 1 (Cytokeratin 1) (K1) (CK 1) (67 kDa cytokeratin) (Hair alpha protein) [Homo sapiens (contaminant)]	Homo sapiens (contaminant)	2					
+2	0	1.28	1.81200001388788	1.81200001388788	1.81200001388788	sp|Q4FZU2|K2C6A_RAT	Keratin, type II cytoskeletal 6A OS=Rattus norvegicus GN=Krt6a PE=1 SV=1	RAT	1					
+2	0	1.28	1.77299994975328	1.77299994975328	1.77299994975328	sp|P04259|K2C6B_HUMAN	Keratin, type II cytoskeletal 6B OS=Homo sapiens GN=KRT6B PE=1 SV=5	HUMAN	1					
+3	4	4	16.4499998092651	12.9899993538857	12.9899993538857	sp|P00761|TRYP_PIG	Trypsin OS=Sus scrofa PE=1 SV=1	PIG	2					
+3	0	4	17.0399993658066	13.4499996900558	13.4499996900558	cont|000143	pdb|1FNI_A| A Chain A, Crystal Structure Of Porcine Beta Trypsin With 0.01% Polydocanol [Sus scrofa (contaminant)]	Sus scrofa (contaminant)	2					
+3	0	4	46.340000629425	36.5900009870529	36.5900009870529	cont|000142	pdb|1EPT_B| B Chain B, Porcine E-Trypsin (E.C.3.4.21.4) [Sus scrofa (contaminant)]	Sus scrofa (contaminant)	2					
+3	0	4	16.4499998092651	12.9899993538857	12.9899993538857	cont|000141	spt|P00761| Trypsin precursor (EC 3.4.21.4) [Sus scrofa (contaminant)]	Sus scrofa (contaminant)	2					
+3	0	4	17.0399993658066	13.4499996900558	13.4499996900558	cont|000040	gi|2914482|pdb|1TFX|A Chain A, Complex Of The Second Kunitz Domain Of Tissue Factor Pathway Inhibitor With Porcine Trypsin [Sus scrofa (contaminant)]	Sus scrofa (contaminant)	2					
+3	0	4	30.3999990224838	23.9999994635582	23.9999994635582	cont|000032	gi|1942351|pdb|1AKS|A Chain A, Crystal Structure Of The First Active Autolysate Form Of The Porcine Alpha Trypsin [Sus scrofa (contaminant)]	Sus scrofa (contaminant)	2					
+3	0	4	17.0399993658066	13.4499996900558	13.4499996900558	cont|000023	gi|494360|pdb|1MCT|A Chain A, Trypsin (E.C.3.4.21.4) Complexed With Inhibitor From Bitter Gourd [Sus scrofa (Contaminant)]	Sus scrofa (Contaminant)	2					
+3	0	2	12.559999525547	8.96899998188019	8.96899998188019	cont|000144	pdb|1AN1_E| E Chain E, Leech-Derived Tryptase InhibitorTRYPSIN COMPLEX [Sus scrofa (contaminant)]	Sus scrofa (contaminant)	1					
+3	0	2	4.06499989330769	4.06499989330769	4.06499989330769	sp|P06871|TRY1_CANLF	Cationic trypsin OS=Canis lupus familiaris PE=2 SV=1	CANLF	1					
+4	2.71	2.71	13.4399995207787	9.06300023198128	9.06300023198128	sp|P49312|ROA1_MOUSE	Heterogeneous nuclear ribonucleoprotein A1 OS=Mus musculus GN=Hnrnpa1 PE=1 SV=2	MOUSE	2					
+4	0	2.71	13.4399995207787	9.06300023198128	9.06300023198128	sp|P09867|ROA1_BOVIN	Heterogeneous nuclear ribonucleoprotein A1 OS=Bos taurus GN=HNRNPA1 PE=1 SV=2	BOVIN	2					
+4	0	2.71	11.5599997341633	7.79599994421005	7.79599994421005	sp|P09651|ROA1_HUMAN	Heterogeneous nuclear ribonucleoprotein A1 OS=Homo sapiens GN=HNRNPA1 PE=1 SV=5	HUMAN	2					
+4	0	2.71	13.4399995207787	9.06300023198128	9.06300023198128	sp|P04256|ROA1_RAT	Heterogeneous nuclear ribonucleoprotein A1 OS=Rattus norvegicus GN=Hnrnpa1 PE=1 SV=3	RAT	2					
+4	0	2.71	13.4399995207787	9.06300023198128	9.06300023198128	sp|A5A6H4|ROA1_PANTR	Heterogeneous nuclear ribonucleoprotein A1 OS=Pan troglodytes GN=HNRNPA1 PE=2 SV=1	PANTR	2					
+5	2	2	5.80499991774559	5.80499991774559	5.80499991774559	sp|Q8BG05|ROA3_MOUSE	Heterogeneous nuclear ribonucleoprotein A3 OS=Mus musculus GN=Hnrnpa3 PE=1 SV=1	MOUSE	1					
+5	0	2	5.80499991774559	5.80499991774559	5.80499991774559	sp|Q6URK4|ROA3_RAT	Heterogeneous nuclear ribonucleoprotein A3 OS=Rattus norvegicus GN=Hnrnpa3 PE=1 SV=1	RAT	1					
+5	0	2	5.82000017166138	5.82000017166138	5.82000017166138	sp|P51991|ROA3_HUMAN	Heterogeneous nuclear ribonucleoprotein A3 OS=Homo sapiens GN=HNRNPA3 PE=1 SV=2	HUMAN	1					
+6	2	2	2.50400006771088	2.50400006771088	2.50400006771088	sp|P35908|K22E_HUMAN	Keratin, type II cytoskeletal 2 epidermal OS=Homo sapiens GN=KRT2 PE=1 SV=2	HUMAN	1					
+7	1.72	1.72	20.2299997210503	7.33100026845932	7.33100026845932	sp|Q9TTV2|ROA2_SAGOE	Heterogeneous nuclear ribonucleoproteins A2/B1 OS=Saguinus oedipus GN=HNRNPA2B1 PE=1 SV=1	SAGOE	2					
+7	0	1.72	15.5399993062019	7.33100026845932	7.33100026845932	sp|Q2HJ60|ROA2_BOVIN	Heterogeneous nuclear ribonucleoproteins A2/B1 OS=Bos taurus GN=HNRNPA2B1 PE=2 SV=1	BOVIN	2					
+7	0	1.72	15.0099992752075	7.08199962973595	7.08199962973595	sp|P22626|ROA2_HUMAN	Heterogeneous nuclear ribonucleoproteins A2/B1 OS=Homo sapiens GN=HNRNPA2B1 PE=1 SV=2	HUMAN	2					
+7	0	1.72	15.0099992752075	7.08199962973595	7.08199962973595	sp|O88569|ROA2_MOUSE	Heterogeneous nuclear ribonucleoproteins A2/B1 OS=Mus musculus GN=Hnrnpa2b1 PE=1 SV=2	MOUSE	2					
+7	0	1.72	15.0099992752075	7.08199962973595	7.08199962973595	sp|A7VJC2|ROA2_RAT	Heterogeneous nuclear ribonucleoproteins A2/B1 OS=Rattus norvegicus GN=Hnrnpa2b1 PE=1 SV=1	RAT	2					
+7	0	1.72	11.3300003111362	7.08199962973595	7.08199962973595	sp|Q5RBU8|ROA2_PONAB	Heterogeneous nuclear ribonucleoproteins A2/B1 OS=Pongo abelii GN=HNRNPA2B1 PE=2 SV=1	PONAB	2					
+8	1.03	1.03	5.93900009989738	2.56799999624491	2.56799999624491	sp|P35527|K1C9_HUMAN	Keratin, type I cytoskeletal 9 OS=Homo sapiens GN=KRT9 PE=1 SV=3	HUMAN	1					

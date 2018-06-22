@@ -13,40 +13,53 @@ library(tidyr)
 ```
 ##Подготовка данных
 ```{r}
-raw_IP6 <- fread("Misha-Panjushev_IP_6-FDR_ProteinSummary.txt", sep = "\t")
-raw_IP4 <- fread("Misha-Panjushev_IP_4_ProteinSummary.txt", sep = "\t")
-raw_IP3 <- fread("Misha-Panjushev_IP_3-FDR_ProteinSummary.txt", sep = "\t")
+IP6 <- fread("Misha-Panjushev_IP_6-FDR_ProteinSummary.txt", sep = "\t")
+IP4 <- fread("Misha-Panjushev_IP_4_ProteinSummary.txt", sep = "\t")
+IP3 <- fread("Misha-Panjushev_IP_3-FDR_ProteinSummary.txt", sep = "\t")
 
-raw_IP6$Accession <- sapply(raw_IP6$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
-raw_IP4$Accession <- sapply(raw_IP4$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
-raw_IP3$Accession <- sapply(raw_IP3$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
+IP6$Accession <- sapply(IP6$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
+IP4$Accession <- sapply(IP4$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
+IP3$Accession <- sapply(IP3$Accession, function(x) unlist(strsplit(x, "|", fixed = T))[2])
 
-setnames(raw_IP6, "Accession", "Uniprot")
-setnames(raw_IP4, "Accession", "Uniprot")
-setnames(raw_IP3, "Accession", "Uniprot")
+setnames(IP6, "Accession", "Uniprot")
+setnames(IP4, "Accession", "Uniprot")
+setnames(IP3, "Accession", "Uniprot")
 
-#Удаляем белки с unused score < 1.3
-raw_IP6 <- raw_IP6[raw_IP6$Unused >= 1.3]
-raw_IP4 <- raw_IP4[raw_IP4$Unused >= 1.3]
-raw_IP3 <- raw_IP3[raw_IP3$Unused >= 1.3]
 
-#Удаляем белки нечеловеческие
-raw_IP6 <- raw_IP6[raw_IP6$Species == "HUMAN"]
-raw_IP4 <- raw_IP4[raw_IP4$Species == "HUMAN"]
-raw_IP3 <- raw_IP3[raw_IP3$Species == "HUMAN"]
-
-rm(raw_IP4)
+IP6 <- IP6[, .(Unused, Total, `%Cov`, `%Cov(50)`, `%Cov(95)`, Uniprot, Name, Species, `Peptides(95%)`)]
+IP4 <- IP4[, .(Unused, Total, `%Cov`, `%Cov(50)`, `%Cov(95)`, Uniprot, Name, Species, `Peptides(95%)`)]
+IP3 <- IP3[, .(Unused, Total, `%Cov`, `%Cov(50)`, `%Cov(95)`, Uniprot, Name, Species, `Peptides(95%)`)]
 ```
 
-##Аннотация по Gene Ontology
+Отфильтруем, что не надо
 ```{r}
+#Удаляем белки с unused score < 1.3
+IP6 <- IP6[IP6$Unused >= 1.3]
+IP4 <- IP4[IP4$Unused >= 1.3]
+IP3 <- IP3[IP3$Unused >= 1.3]
+
+#Удаляем белки нечеловеческие
+IP6 <- IP6[IP6$Species == "HUMAN"]
+IP4 <- IP4[IP4$Species == "HUMAN"]
+IP3 <- IP3[IP3$Species == "HUMAN"]
+
+rm(IP4)
+
+IP6 <- IP6[, Species := NULL]
+IP3 <- IP3[, Species := NULL]
+```
+
+Видим, что ничего не удалось в IP4 - выкидываем
+
+##Аннотация по Gene Ontology
+```{r, echo=FALSE}
 # define biomart object
 mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
 
 # query biomart
 BM_out <- getBM(attributes = c("name_1006", "namespace_1003", "hgnc_symbol", "uniprotswissprot"),
                  filters = "uniprotswissprot",
-                values = raw_data$Uniprot, 
+                values = IP3$Uniprot, 
                 mart = mart,
                 uniqueRows = TRUE)
 
@@ -77,10 +90,63 @@ GO_data <- merge(GO_data, bio_process)
 
 setnames(GO_data, "uniprotswissprot", "Uniprot")
 
-final_data <- merge(raw_data, GO_data, by = "Uniprot")
+IP3_data <- merge(IP3, GO_data, by = "Uniprot")
 
-rm(BM_out, mol_function, cell_component, bio_process, GO_data, raw_data)
+rm(BM_out, mol_function, cell_component, bio_process, GO_data, IP3)
 ```
+
+
+```{r, echo=FALSE}
+# query biomart
+BM_out <- getBM(attributes = c("name_1006", "namespace_1003", "hgnc_symbol", "uniprotswissprot"),
+                 filters = "uniprotswissprot",
+                values = IP6$Uniprot, 
+                mart = mart,
+                uniqueRows = TRUE)
+
+#Удаляем неинформативные GO 
+BM_out <- BM_out[BM_out$name_1006 != "molecular_function" &
+                  BM_out$name_1006 != "cellular_component" &
+                   BM_out$name_1006 != "biological_process" ,]
+
+BM_out <- as.data.table(BM_out)
+
+mol_function <- BM_out[namespace_1003 == "molecular_function", .(uniprotswissprot, hgnc_symbol, name_1006)]
+mol_function[, mol_function := .(list(name_1006)), by=uniprotswissprot]
+mol_function[, name_1006 := NULL]
+mol_function <- mol_function[!duplicated(mol_function)]
+
+cell_component <- BM_out[namespace_1003 == "cellular_component", .(uniprotswissprot, hgnc_symbol, name_1006)]
+cell_component[, cell_component := .(list(name_1006)), by=uniprotswissprot]
+cell_component[, name_1006 := NULL]
+cell_component <- cell_component[!duplicated(cell_component)]
+
+bio_process <- BM_out[namespace_1003 == "biological_process", .(uniprotswissprot, hgnc_symbol, name_1006)]
+bio_process[, bio_process := .(list(name_1006)), by=uniprotswissprot]
+bio_process[, name_1006 := NULL]
+bio_process <- bio_process[!duplicated(bio_process)]
+
+GO_data <- merge(mol_function, cell_component)
+GO_data <- merge(GO_data, bio_process)
+
+setnames(GO_data, "uniprotswissprot", "Uniprot")
+
+IP6_data <- merge(IP6, GO_data, by = "Uniprot")
+
+rm(BM_out, mol_function, cell_component, bio_process, GO_data, IP6)
+```
+
+Выгрузим в файлы
+
+```{r}
+write(x = unique(IP3_data$hgnc_symbol), file = "IP3_prot_names.txt")
+write(x = unique(IP6_data$hgnc_symbol), file = "IP6_prot_names.txt")
+```
+
+Генные сеточки: 
+
+https://string-db.org/cgi/network.pl?taskId=pYBPTbzpjT8H - IP6
+https://string-db.org/cgi/network.pl?taskId=PKI7wPo3IxVp - IP3
 
 Гистограммки по GO
 ```{r}
@@ -148,19 +214,4 @@ ggplot(bp_table[1:15], aes(x=reorder(V1,-N), N))+
 cc_table <- as.data.table(cc_table)
 cc_table <- cc_table[order(cc_table$N, decreasing = T), ]
 
-ggplot(cc_table[1:15], aes(x=reorder(V1,-N), N))+
-  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
-  labs(title = "Top15 Cellular compartments for RPMI8226-unique proteins",
-       x = "Subsellular compartment", 
-       y = "Number of occurences")+
-  theme_grey() %+replace% 
-  theme(panel.background = element_rect(fill = "white", colour = NA),
-        panel.border = element_rect(fill = NA, colour = "grey20"),
-        panel.grid.major = element_line(colour = "grey92"), 
-        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
-        strip.background = element_rect(fill = "grey85", colour = "grey20"),
-        legend.key = element_rect(fill = "white", colour = NA),
-        axis.text.x = element_text(angle = 90, hjust = 0.9),
-        complete = TRUE)
-```
-
+ggpl

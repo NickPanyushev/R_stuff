@@ -14,7 +14,6 @@ library(dplyr)
 library(data.table)
 ```
 
-Проаннотируем, как в прошлый раз:
 Используем ту же аннотацию, которую распарсили
 
 ```{r Получение аннотации}
@@ -28,7 +27,7 @@ transcripts <- subset(annotation_v24, annotation_v24$Type == "transcript")
 transcripts$Type <- NULL
 fwrite(transcripts, "../Annotation_data/transcripts.bed", sep = "\t", col.names = FALSE)
 zip("../Annotation_data/transcripts.zip", "transcripts.bed")
-rm(annotation_v24)
+rm(annotation_v24, transcripts)
 ```
 
 Не будем изобретать велосипед, а сделаем скрипт, который с помощью bedtools найдет нам ближайшие гены.
@@ -58,9 +57,8 @@ names(features) <- c("Chromosome", "peak_Start", "peak_Stop",
                      "Ensemble_ID", "distance")
 features$Chr <- NULL
 # Убрали пики, которые лежат очень далеко в пустоте, т.е. от них до гена более 3000 нуклеотидов
-features <- features[distance <= 3000]
-features <- features[distance >= -3000]
-nrow(features)
+#features <- features[distance <= 3000]
+#features <- features[distance >= -3000]
 
 #Удалим хвостики у названий транскриптов
 features$Ensemble_ID <- gsub("\\.\\d+", "", features$Ensemble_ID)
@@ -83,10 +81,7 @@ BM_out <- getBM(attributes = c("chromosome_name","ensembl_transcript_id",
                 values = features$Ensemble_ID, 
                 mart = mart,
                 uniqueRows = TRUE)
-rm(mart)
-```
-Теперь, когда у нас есть огромная аннотация, надо ее расчистить
-```{r}
+
 #Удалим неинформативные GO
 BM_out <- BM_out[BM_out$name_1006 != "molecular_function" &
                   BM_out$name_1006 != "cellular_component" &
@@ -94,17 +89,17 @@ BM_out <- BM_out[BM_out$name_1006 != "molecular_function" &
 
 BM_out <- as.data.table(BM_out)
 
-mol_function <- BM_out[namespace_1003 == "molecular_function", .(uniprotswissprot, hgnc_symbol, name_1006)]
+mol_function <- BM_out[namespace_1003 == "molecular_function", .(uniprotswissprot, hgnc_symbol, name_1006, ensembl_transcript_id)]
 mol_function[, mol_function := .(list(name_1006)), by=uniprotswissprot]
 mol_function[, name_1006 := NULL]
 mol_function <- mol_function[!duplicated(mol_function)]
 
-cell_component <- BM_out[namespace_1003 == "cellular_component", .(uniprotswissprot, hgnc_symbol, name_1006)]
+cell_component <- BM_out[namespace_1003 == "cellular_component", .(uniprotswissprot, hgnc_symbol, name_1006, ensembl_transcript_id)]
 cell_component[, cell_component := .(list(name_1006)), by=uniprotswissprot]
 cell_component[, name_1006 := NULL]
 cell_component <- cell_component[!duplicated(cell_component)]
 
-bio_process <- BM_out[namespace_1003 == "biological_process", .(uniprotswissprot, hgnc_symbol, name_1006)]
+bio_process <- BM_out[namespace_1003 == "biological_process", .(uniprotswissprot, hgnc_symbol, name_1006, ensembl_transcript_id)]
 bio_process[, bio_process := .(list(name_1006)), by=uniprotswissprot]
 bio_process[, name_1006 := NULL]
 bio_process <- bio_process[!duplicated(bio_process)]
@@ -112,32 +107,28 @@ bio_process <- bio_process[!duplicated(bio_process)]
 GO_data <- merge(mol_function, cell_component)
 GO_data <- merge(GO_data, bio_process)
 
-#setnames(GO_data, "uniprotswissprot", "Uniprot")
-
-#final_data <- merge(raw_data, GO_data, by = "Uniprot")
-
 rm(BM_out, mol_function, cell_component, bio_process)
 ```
 
 Теперь сделаем join GO_out c features
 
 ```{r}
-names(features)
-names(GO_data)
-final_peaks <- merge(GO_data, features)
-#fwrite(final_peaks, "final_peaks.txt")
+setnames(GO_data, "ensembl_transcript_id", "Ensemble_ID")
+final_data <- merge(features, GO_data, by = "Ensemble_ID")
+final_data$Ensemble_ID <- NULL
+hist(abs(final_data$peak_Start - final_data$transcript_Start))
+summary(abs(final_data$peak_Start - final_data$transcript_Start))
+boxplot(final_data$distance)
 rm(features, GO_data)
 ```
 Так, теперь посмотрим на те гены, около которых лежат общие бины
 
 ```{r}
 genes_list <- GO_data$Gene_symbol[!duplicated(GO_data$Gene_symbol)]
-getwd()
 write.csv(genes_list, file = "final_genes.csv", quote = F, row.names = F, col.names = F)
 ```
 
 Всего генов вышло - `r length(final_genes)`
-
 
 Вот и славно,все вроде заджойнилось
 Теперь давай-ка глянем на функции, которые у нас вылезли по GO:
@@ -180,83 +171,6 @@ ggplot(final_peaks[final_peaks$distance!=0,], aes(distance, ..count..))+
 
 ```
 Интересный график, понимать буквально я, его, конечно не буду
-
-##Нормальная аннотация по ближайшим TSS
-
-Проанализируем полученные участки по ближайшим генам
-Оценим расстояние до ближайшего старт-кодона, его будем определять как первый нуклеотид транскрипта
-Достанем для начала из аннотации все транскрипты и запишем их в отдельный .bed 
-
-```{r}
-start_codons_v24 <- annotation_v24[annotation_v24$Type == "transcript"]
-start_codons_v24$Type <- NULL
-#Добавим по 10 нуклеотидов к старту, чтобы нормально съел bedtools
-start_codons_v24$Stop <- start_codons_v24$Start + 10
-
-#Проверяем на косячки
-sum(start_codons_v24$Start > start_codons_v24$Stop) #Если 0, то все в порядке
-
-#Запишем в файл
-fwrite(start_codons_v24, file = "start_codons.bed", sep = "\t", col.names = FALSE)
-```
-
-bedtools closest
-```{r, engine= 'bash'}
-cd ~/R_stuff/ENCODE_NF-kB_peaks/
-#Отсортируем файл с регуляторными фичами
-sort -k 1,1 -k2,2n start_codons.bed > start_codons_sorted.bed
-rm start_codons.bed && mv start_codons_sorted.bed start_codons.bed 
-
-#А теперь найдем ближайшие TSS
-closestBed -D b -k 2 -a common_bins.bed -b start_codons.bed > closest_start_codons.bed
-```
-
-Посмотрим, что же вышло
-```{r}
-closest_TSS <- fread("closest_start_codons.bed", sep = "\t")
-names(closest_TSS) <- c("Chromosome", "peak_Start", "peak_Stop", 
-                             "Chr", "feature_Start", "feature_Stop",  
-                     "Strand", "Ensemble_ID", "distance")
-closest_TSS$Chr <- NULL
-
-#Удалим хвостики у названий транскриптов
-closest_TSS$Ensemble_ID <- gsub("\\:\\d+", "", closest_TSS$Ensemble_ID)
-
-#Уберем дупликаты
-closest_TSS <- closest_TSS[!duplicated(closest_TSS)]
-
-#Упорядочим нормально хромосомки, чтобы было красиво
-closest_TSS$Chromosome <- factor(closest_TSS$Chromosome, 
-                                   levels =c("chr1","chr2","chr3","chr4","chr5",
-                                             "chr6","chr7","chr8","chr9","chr10",
-                                             "chr11", "chr12", "chr13", "chr14", "chr15",
-                                             "chr16", "chr17", "chr18", "chr19", "chr20",
-                                             "chr21", "chr22", "chrX", "chrY"))
-
-#Построим график, чтобы понимать распределение этих участков относительно TSS
-
-ggplot(closest_TSS, aes(distance))+
-  geom_histogram(fill = "red", alpha = 0.5)+
-  labs(title = "Peak position distribution",
-       x = "Position",
-       y = "Peak number")+
-  theme_bw()
-
-
-ggplot(closest_TSS, aes(Chromosome, distance))+
-  geom_boxplot()+
-  labs(title = "Peak position distribution",
-       x = "Position",
-       y = "Peak number")+
-    #scale_x_continuous(breaks = seq(-3000, 3000, 500))+
-  theme_bw()
-
-```
-Что-то сайты вокруг TSS примерно распределены.
-
-
-
-
 
 
 ```{r clean-up, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}

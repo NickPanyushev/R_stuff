@@ -116,62 +116,67 @@ rm(BM_out, mol_function, cell_component, bio_process)
 setnames(GO_data, "ensembl_transcript_id", "Ensemble_ID")
 final_data <- merge(features, GO_data, by = "Ensemble_ID")
 final_data$Ensemble_ID <- NULL
-hist(abs(final_data$peak_Start - final_data$transcript_Start))
-summary(abs(final_data$peak_Start - final_data$transcript_Start))
-boxplot(final_data$distance)
 rm(features, GO_data)
 ```
 Так, теперь посмотрим на те гены, около которых лежат общие бины
 
 ```{r}
-genes_list <- GO_data$Gene_symbol[!duplicated(GO_data$Gene_symbol)]
+genes_list <- final_data$hgnc_symbol[!duplicated(final_data$hgnc_symbol)]
 write.csv(genes_list, file = "final_genes.csv", quote = F, row.names = F, col.names = F)
 ```
 
-Всего генов вышло - `r length(final_genes)`
+Всего генов вышло - `r nrow(final_data)`
 
-Вот и славно,все вроде заджойнилось
 Теперь давай-ка глянем на функции, которые у нас вылезли по GO:
 ```{r}
-mf_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "molecular_function"))
+mf_table <- table(unlist(final_data$mol_function))
 
-cc_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "cellular_component"))
+cc_table <- table(unlist(final_data$cell_component))
 
-bp_table <- table(subset(final_peaks$GO_name, final_peaks$Namespace == "biological_process"))
-
-head(sort(mf_table, decreasing = T))
-head(sort(bp_table, decreasing = T))
-head(sort(cc_table, decreasing = T))
-rm(mf_table, cc_table, bp_table)
+bp_table <- table(unlist(final_data$bio_process))
 ```
 
-Panther reactome pathways нам говорит, что с p-value 4.78E-02 обогащен apoptosis pathway 
-Это немного странно, надо разбираться.
 
+По molecular function
+```{r}
+head(sort(mf_table, decreasing = T))
+```
+
+По biological process
+```{r}
+head(sort(bp_table, decreasing = T))
+```
+
+По cellular component
+```{r}
+head(sort(cc_table, decreasing = T))
+```
+
+MsigDB неиллюзорно намекает, что тут NF-kB pathway 
 
 Посмотрим, на то, как распределены гены относительно TSS
 ```{r}
-ggplot(final_peaks, aes(distance, ..count..))+
-  geom_density(aes(fill=Cell_line), alpha = 0.5) +
+ggplot(final_data, aes(distance, ..count..))+
+  geom_density(alpha = 0.5) +
   labs(title = "Peak position distribution",
        x = "Position",
        y = "Peak number")+
-    scale_x_continuous(breaks = seq(-3000, 3000, 500))+
+    scale_x_continuous()+
   theme_bw()
-
-
-
-ggplot(final_peaks[final_peaks$distance!=0,], aes(distance, ..count..))+
-  geom_density(aes(fill=Cell_line), alpha = 0.5) +
-  labs(title = "Peak position distribution",
-       x = "Position",
-       y = "Peak number")+
-    scale_x_continuous(breaks = seq(-3000, 3000, 500))+
-  theme_bw()
-
 ```
-Интересный график, понимать буквально я, его, конечно не буду
 
+Теперь в масштабе побольше
+```{r}
+ggplot(final_data[abs(distance) < 3000], aes(distance, ..count..))+
+  geom_density(alpha = 0.5) +
+  labs(title = "Peak position distribution",
+       x = "Position",
+       y = "Peak number")+
+    scale_x_continuous(breaks = seq(-3000, 3000, 500))+
+  theme_bw()
+```
+
+Итого, можно сказать, что распределены в 2 вариантах - непосредственно на промоторе(TSS) или в энхансере (далеко от TSS). 
 
 ```{r clean-up, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 rm(list = setdiff(ls(), lsf.str()))

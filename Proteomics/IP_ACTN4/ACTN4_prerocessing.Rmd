@@ -12,6 +12,13 @@ library(dplyr)
 library(tidyr)
 ```
 ##Подготовка данных
+
+Немного о данных: 
+это данные с эксперимента IP anti-ACTN4 из ядерных экстрактов 0.4М NaCl
+
+IP3 - IP из ядер H1299
+IP4 - IP PG
+IP6 - IP из ядер H1299 c оверэкспрессией p65
 ```{r}
 IP6 <- fread("Misha-Panjushev_IP_6-FDR_ProteinSummary.txt", sep = "\t")
 IP4 <- fread("Misha-Panjushev_IP_4_ProteinSummary.txt", sep = "\t")
@@ -49,7 +56,7 @@ IP6 <- IP6[, Species := NULL]
 IP3 <- IP3[, Species := NULL]
 ```
 
-Видим, что ничего не удалось в IP4 - выкидываем
+Видим, что ничего не обнаружилось в IP4 - выкидываем
 
 ##Аннотация по Gene Ontology
 ```{r, echo=FALSE}
@@ -146,7 +153,51 @@ write(x = unique(IP6_data$hgnc_symbol), file = "IP6_prot_names.txt")
 Генные сеточки: 
 
 https://string-db.org/cgi/network.pl?taskId=pYBPTbzpjT8H - IP6
-https://string-db.org/cgi/network.pl?taskId=PKI7wPo3IxVp - IP3
+https://string-db.org/cgi/network.pl?taskId=PKI7wPo3IxVp - IP3 
+
+###Общие белки для H1299 и p65
+Теперь посмотрим общие для IP3 и IP6 белки
+```{r}
+common_proteins <- intersect(IP3_data$hgnc_symbol, IP6_data$hgnc_symbol)
+write(x = common_proteins, file = "common_proteins.txt")
+```
+
+Генная сеть: 
+https://string-db.org/cgi/network.pl?taskId=X9NVTerDJafi
+
+###Пропадают при активации p65
+```{r}
+H1299_unique <- setdiff(IP3_data$hgnc_symbol, IP6_data$hgnc_symbol)
+write(x = H1299_unique, file = "H1299_unique.txt")
+```
+
+Генная сеть: 
+https://string-db.org/cgi/network.pl?taskId=X9NVTerDJafi
+
+Опять рибосомы и сплайсинг
+
+###Появляются при активации p65
+```{r}
+p65_unique <- setdiff(IP6_data$hgnc_symbol, IP3_data$hgnc_symbol)
+write(x = p65_unique, file = "p65_unique.txt")
+```
+
+Генная сеть: 
+https://string-db.org/cgi/network.pl?taskId=CV0n4t2CpOYj
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Гистограммки по GO
 ```{r}
@@ -214,4 +265,19 @@ ggplot(bp_table[1:15], aes(x=reorder(V1,-N), N))+
 cc_table <- as.data.table(cc_table)
 cc_table <- cc_table[order(cc_table$N, decreasing = T), ]
 
-ggpl
+ggplot(cc_table[1:15], aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "cyan", alpha = "0.6")+
+  labs(title = "Top15 Cellular compartments for RPMI8226-unique proteins",
+       x = "Subsellular compartment", 
+       y = "Number of occurences")+
+  theme_grey() %+replace% 
+  theme(panel.background = element_rect(fill = "white", colour = NA),
+        panel.border = element_rect(fill = NA, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey92"), 
+        panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+        strip.background = element_rect(fill = "grey85", colour = "grey20"),
+        legend.key = element_rect(fill = "white", colour = NA),
+        axis.text.x = element_text(angle = 90, hjust = 0.9),
+        complete = TRUE)
+```
+

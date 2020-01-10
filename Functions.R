@@ -102,7 +102,7 @@ bins_intersect <- function(df){
   }
   rm(i)
   stopCluster(cl)
-  registerDoSEQ()
+  #registerDoSEQ()
   #Теперь переформуем в 2-столбчатый датасет
   comb_df <- as.data.table(t(comb_df))
   comb_df$Line_number <- c(1:ncells)

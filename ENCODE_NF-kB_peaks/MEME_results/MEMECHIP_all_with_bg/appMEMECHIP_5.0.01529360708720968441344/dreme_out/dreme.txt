@@ -1,0 +1,54 @@
+# DREME 5.0.0
+#     command: dreme -verbosity 1 -oc dreme_out -png -dna -p ./seqs-centered -n ./control-centered -t 7090 -e 0.05
+#   positives: 78 from ./seqs-centered (Mon Jun 18 22:25:18 UTC 2018)
+#   negatives: 2539 from ./control-centered (Mon Jun 18 22:25:19 UTC 2018)
+#        host: node061
+#        when: Mon Jun 18 22:27:22 UTC 2018
+
+MEME version 5.0.0
+
+ALPHABET "DNA" DNA-LIKE
+A "Adenine" CC0000 ~ T "Thymine" 008000
+C "Cytosine" 0000CC ~ G "Guanine" FFB300
+N "Any base" = ACGT
+X = ACGT
+. = ACGT
+V "Not T" = ACG
+H "Not G" = ACT
+D "Not C" = AGT
+B "Not A" = CGT
+M "Amino" = AC
+R "Purine" = AG
+W "Weak" = AT
+S "Strong" = CG
+Y "Pyrimidine" = CT
+K "Keto" = GT
+U = T
+END ALPHABET
+
+strands: + -
+
+Background letter frequencies (from dataset):
+A 0.233 C 0.267 G 0.264 T 0.236
+
+
+MOTIF GGAATTYC DREME-1
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST    GGAATTYC   GRAATTCC         26        282   2.8e-007   3.4e-003
+#         GGAATTTC   GAAATTCC         14        149   2.3e-004   2.8e+000
+#         GGAATTCC   GGAATTCC         12        133   9.6e-004   1.1e+001
+
+letter-probability matrix: alength= 4 w= 8 nsites= 26 E= 3.4e-003
+0.000000 0.000000 1.000000 0.000000
+0.000000 0.000000 1.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.461538 0.000000 0.538462
+0.000000 1.000000 0.000000 0.000000
+
+
+# Stopping reason: E-value threshold exceeded
+#    Running time: 34.03 seconds

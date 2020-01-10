@@ -9,10 +9,20 @@ if (length(file_to_process)==0) {
 }
 
 short_name <- sub('\\..*', '', file_to_process)
-dir.create(paste(short_name, "graphs", sep = "_"))
-dir.create(paste(short_name, "tables", sep = "_"))
+dir.create(paste(short_name, "graphs", sep = "_"), showWarnings = F)
+dir.create(paste(short_name, "tables", sep = "_"), showWarnings = F)
 
 #Считываем инфу из файла и убираем лишние поля
+
+if ( !( "data.table" %in% installed.packages() )){
+  print("Instaling data.table package")
+  install.packages("data.table", quiet = T)
+}
+
+if ( !( "ggplot2" %in% installed.packages() )){
+  print("Instaling ggplot2 package")
+  install.packages("ggplot2", quiet = T)
+}  
 
 suppressMessages(library(data.table))
 suppressMessages(library(ggplot2))
@@ -65,8 +75,8 @@ setwd(paste(short_name, "graphs", sep = "_"))
 
 ifelse(length(by_family) < 20, graph_families <- by_family, graph_families <- by_family[1:20,])
 
-  TE_fams <- ggplot(graph_families, aes(x=reorder(V1,-N), N))+
-  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+TE_fams <- ggplot(graph_families, aes(x=reorder(V1,-N), N))+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = 0.6)+
   labs(title = "Top TE families",
        x = "TE family name",
        y = "Number in genome")+
@@ -85,7 +95,7 @@ ggsave(paste(short_name, "TE_families.png", sep = "_"), plot = TE_fams)
 ifelse(length(by_class) < 20, graph_class <- by_class, graph_class <- by_class[1:20,])
 
 TE_class <- ggplot(graph_class, aes(x=reorder(V1,-N), N))+
-  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = 0.6)+
   labs(title = "TE classes distribution",
        x = "TE class name",
        y = "Number in genome")+
@@ -100,13 +110,11 @@ TE_class <- ggplot(graph_class, aes(x=reorder(V1,-N), N))+
         complete = TRUE)
 ggsave(paste(short_name, "TE_class.png", sep = "_"), plot = TE_class)
 
-
-
 #Plot of the elements names
 ifelse(nrow(by_elements) < 20, graph_elements <- by_elements, graph_elements <- by_elements[1:20,])
 
 TE_names <- ggplot(graph_elements, aes(x=reorder(V1,-N), N))+
-  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = "0.6")+
+  geom_bar(stat = "identity", colour = "black", fill = "red", alpha = 0.6)+
   labs(title = "Top15 TE's",
        x = "TE name",
        y = "Number in genome")+
@@ -137,7 +145,7 @@ bp_element <- bp_element[order(bp_element$V1, decreasing = T), ]
 ifelse(length(bp_family) < 20, graph_families <- bp_family, graph_families <- bp_family[1:20,])
 
 TE_fam_occ <- ggplot(graph_families, aes(x=reorder(family,-V1), V1))+
-  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = 0.6)+
   labs(title = "Top TE families",
        x = "TE family name",
        y = "Occupied nucleotides")+
@@ -154,7 +162,7 @@ ggsave(paste(short_name, "TEs_fam_occupied.png", sep = "_"), plot = TE_fam_occ)
 
 ifelse(length(bp_class) < 20, graph_class <- bp_class, graph_class <- bp_class[1:20,])
 TE_class_occ <- ggplot(graph_class, aes(x=reorder(class,-V1), V1))+
-  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = 0.6)+
   labs(title = "TE classes by occupancy",
        x = "TE class name",
        y = "Occupies nucleotides")+
@@ -172,7 +180,7 @@ ggsave(paste(short_name, "TE_class_occ.png", sep = "_"), plot = TE_class_occ)
 ifelse(length(bp_element) < 20, graph_elements <- bp_element, graph_elements <- bp_element[1:20,])
 
 TE_elem_occ <- ggplot(graph_elements, aes(x=reorder(element_name,-V1), V1))+
-  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = "0.6")+
+  geom_bar(stat = "identity", colour = "black", fill = "green", alpha = 0.6)+
   labs(title = "Top TE elements",
        x = "TE element name",
        y = "Total nucleotides occupied")+

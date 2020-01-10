@@ -1,0 +1,80 @@
+
+Overlap Results
+
+Collection(s):	MF
+# overlaps shown:	10
+# genesets in collections:	901
+# genes in comparison (n):	55
+# genes in universe (N):	45956
+
+Gene Set Name	# Genes in Gene Set (K)	Description	# Genes in Overlap (k)	k/K	p-value	FDR q-value
+GO_TRANSITION_METAL_ION_BINDING	1400	Interacting selectively and non-covalently with a transition metal ions; a transition metal is an element whose atom has an incomplete d-subshell of extranuclear electrons, or which gives rise to a cation or cations with an incomplete d-subshell. Transition metals often have more than one valency state. Biologically relevant transition metals include vanadium, manganese, iron, copper, cobalt, nickel, molybdenum and silver.	13	0.0093	8.13E-9	4.38E-6
+GO_ZINC_ION_BINDING	1155	Interacting selectively and non-covalently with zinc (Zn) ions.	12	0.0104	9.73E-9	4.38E-6
+GO_DOUBLE_STRANDED_DNA_BINDING	764	Interacting selectively and non-covalently with double-stranded DNA.	9	0.0118	2.97E-7	8.61E-5
+GO_SEQUENCE_SPECIFIC_DNA_BINDING	1037	Interacting selectively and non-covalently with DNA of a specific nucleotide composition, e.g. GC-rich DNA binding, or with a specific sequence motif or type of DNA e.g. promotor binding or rDNA binding.	10	0.0096	3.82E-7	8.61E-5
+GO_MACROMOLECULAR_COMPLEX_BINDING	1399	Interacting selectively and non-covalently with any macromolecular complex.	11	0.0079	7E-7	1E-4
+GO_ENZYME_BINDING	1737	Interacting selectively and non-covalently with any enzyme.	12	0.0069	7.94E-7	1E-4
+GO_RNA_POLYMERASE_II_TRANSCRIPTION_FACTOR_ACTIVITY_SEQUENCE_SPECIFIC_DNA_BINDING	629	Interacting selectively and non-covalently with a specific DNA sequence in order to modulate transcription by RNA polymerase II. The transcription factor may or may not also interact selectively with a protein or macromolecular complex.	8	0.0127	8.15E-7	1E-4
+GO_CHROMATIN_BINDING	435	Interacting selectively and non-covalently with chromatin, the network of fibers of DNA, protein, and sometimes RNA, that make up the chromosomes of the eukaryotic nucleus during interphase.	7	0.0161	8.9E-7	1E-4
+GO_TRANSCRIPTIONAL_ACTIVATOR_ACTIVITY_RNA_POLYMERASE_II_TRANSCRIPTION_REGULATORY_REGION_SEQUENCE_SPECIFIC_BINDING	315	Interacting selectively and non-covalently with a sequence of DNA that is in the transcription regulatory region for RNA polymerase II (RNAP II) in order to activate or increase the frequency, rate or extent of transcription from the RNAP II promoter.	6	0.0190	2.16E-6	2.16E-4
+GO_HISTONE_ACETYLTRANSFERASE_BINDING	28	Interacting selectively and non-covalently with the enzyme histone acetyltransferase.	3	0.1071	5.2E-6	4.64E-4
+
+
+Gene/Gene Set Overlap Matrix
+
+Entrez Gene Id	Gene Symbol	Gene Description	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING	GO_DOUBLE_STRANDED_DNA_BINDING	GO_SEQUENCE_SPECIFIC_DNA_BINDING	GO_MACROMOLECULAR_COMPLEX_BINDING	GO_ENZYME_BINDING	GO_RNA_POLYMERASE_II_TRANSCRIPTION_FACTOR_ACTIVITY_SEQUENCE_SPECIFIC_DNA_BINDING	GO_CHROMATIN_BINDING	GO_TRANSCRIPTIONAL_ACTIVATOR_ACTIVITY_RNA_POLYMERASE_II_TRANSCRIPTION_REGULATORY_REGION_SEQUENCE_SPECIFIC_BINDING	GO_HISTONE_ACETYLTRANSFERASE_BINDING
+7157	TP53	tumor protein p53	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING	GO_DOUBLE_STRANDED_DNA_BINDING	GO_SEQUENCE_SPECIFIC_DNA_BINDING	GO_MACROMOLECULAR_COMPLEX_BINDING	GO_ENZYME_BINDING	GO_RNA_POLYMERASE_II_TRANSCRIPTION_FACTOR_ACTIVITY_SEQUENCE_SPECIFIC_DNA_BINDING	GO_CHROMATIN_BINDING	GO_TRANSCRIPTIONAL_ACTIVATOR_ACTIVITY_RNA_POLYMERASE_II_TRANSCRIPTION_REGULATORY_REGION_SEQUENCE_SPECIFIC_BINDING	GO_HISTONE_ACETYLTRANSFERASE_BINDING
+9972	NUP153	nucleoporin 153kDa	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING	GO_DOUBLE_STRANDED_DNA_BINDING		GO_MACROMOLECULAR_COMPLEX_BINDING	GO_ENZYME_BINDING		GO_CHROMATIN_BINDING		
+22933	SIRT2	sirtuin 2	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING			GO_MACROMOLECULAR_COMPLEX_BINDING	GO_ENZYME_BINDING		GO_CHROMATIN_BINDING		GO_HISTONE_ACETYLTRANSFERASE_BINDING
+7186	TRAF2	TNF receptor-associated factor 2	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING			GO_MACROMOLECULAR_COMPLEX_BINDING	GO_ENZYME_BINDING				
+7128	TNFAIP3	tumor necrosis factor, alpha-induced protein 3	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING				GO_ENZYME_BINDING				
+57553	MICAL3	microtubule associated monoxygenase, calponin and LIM domain containing 3	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING				GO_ENZYME_BINDING				
+9404	LPXN	leupaxin	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING								
+1912	PHC2	polyhomeotic homolog 2 (Drosophila)	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING								
+330	BIRC3	baculoviral IAP repeat containing 3	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING								
+6469	SHH	sonic hedgehog	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING								
+27136	MORC1	MORC family CW-type zinc finger 1	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING								
+57178	ZMIZ1	zinc finger, MIZ-type containing 1	GO_TRANSITION_METAL_ION_BINDING	GO_ZINC_ION_BINDING								
+1356	CP	ceruloplasmin (ferroxidase)	GO_TRANSITION_METAL_ION_BINDING									
+4790	NFKB1	nuclear factor of kappa light polypeptide gene enhancer in B-cells 1			GO_DOUBLE_STRANDED_DNA_BINDING	GO_SEQUENCE_SPECIFIC_DNA_BINDING	GO_MACROMOLECULAR_COMPLEX_BINDING		GO_RNA_POLYMERASE_II_TRANSCRIPTION_FACTOR_ACTIVITY_SEQUENCE_SPECIFIC_DNA_BINDING	GO_CHROMATIN_BINDING	GO_TRANSCRIPTIONAL_ACTIVATOR_ACTIVITY_RNA_POLYMERASE_II_TRANSCRIPTION_REGULATORY_REGION_SEQUENCE_SPECIFIC_BINDING	
+4791	NFKB2	nuclear factor of kappa light polypeptide gene enhancer in B-cells 2 (p49/p100)			GO_DOUBLE_STRANDED_DNA_BINDING	GO_SEQUENCE_SPECIFIC_DNA_BINDING	GO_MACROMOLECULAR_COMPLEX_BINDING		GO_RNA_POLYMERASE_II_TRANSCRIPTION_FACTOR_ACTIVITY_SEQUENCE_SPECIFIC_DNA_BINDING	GO_CHROMATIN_BINDING	GO_TRANSCRIPTIONAL_ACTIVATOR_ACTIVITY_RNA_POLYMERASE_II_TRANSCRIPTION_REGULATORY_REGION_SEQUENCE_SPECIFIC_BINDING	
+1385	CREB1	cAMP responsive element binding protein 1			GO_DOUBLE_STRANDED_DNA_BINDING	GO_SEQUENCE_SPECIFIC_DNA_BINDING		GO_ENZYME_BINDING	GO_RNA_POLYMERASE_II_TRANSCRIPTION_FACTOR_ACTIVITY_SEQUENCE_SPECIFIC_DNA_BINDING		GO_TRANSCRIPTIONAL_ACTIVATOR_ACTIVITY_RNA_POLYMERASE_II_TRANSCRIPTION_REGULATORY_REGION_SEQUENCE_SPECIFIC_BINDING	GO_HISTONE_ACETYLTRANSFERASE_BINDING
+2120	ETV6	ets variant 6			GO_DOUBLE_STRANDED_DNA_BINDING	GO_SEQUENCE_SPECIFIC_DNA_BINDING			GO_RNA_POLYMERASE_II_TRANSCRIPTION_FACTOR_ACTIVITY_SEQUENCE_SPECIFIC_DNA_BINDING		GO_TRANSCRIPTIONAL_ACTIVATOR_ACTIVITY_RNA_POLYMERASE_II_TRANSCRIPTION_REGULATORY_REGION_SEQUENCE_SPECIFIC_BINDING	
+5452	POU2F2	POU class 2 homeobox 2			GO_DOUBLE_STRANDED_DNA_BINDING	GO_SEQUENCE_SPECIFIC_DNA_BINDING			GO_RNA_POLYMERASE_II_TRANSCRIPTION_FACTOR_ACTIVITY_SEQUENCE_SPECIFIC_DNA_BINDING		GO_TRANSCRIPTIONAL_ACTIVATOR_ACTIVITY_RNA_POLYMERASE_II_TRANSCRIPTION_REGULATORY_REGION_SEQUENCE_SPECIFIC_BINDING	
+9603	NFE2L3	nuclear factor (erythroid-derived 2)-like 3			GO_DOUBLE_STRANDED_DNA_BINDING	GO_SEQUENCE_SPECIFIC_DNA_BINDING			GO_RNA_POLYMERASE_II_TRANSCRIPTION_FACTOR_ACTIVITY_SEQUENCE_SPECIFIC_DNA_BINDING			
+3096	HIVEP1	human immunodeficiency virus type I enhancer binding protein 1			GO_DOUBLE_STRANDED_DNA_BINDING	GO_SEQUENCE_SPECIFIC_DNA_BINDING			GO_RNA_POLYMERASE_II_TRANSCRIPTION_FACTOR_ACTIVITY_SEQUENCE_SPECIFIC_DNA_BINDING			
+23135	KDM6B	lysine (K)-specific demethylase 6B				GO_SEQUENCE_SPECIFIC_DNA_BINDING	GO_MACROMOLECULAR_COMPLEX_BINDING			GO_CHROMATIN_BINDING		
+3276	PRMT1	protein arginine methyltransferase 1				GO_SEQUENCE_SPECIFIC_DNA_BINDING		GO_ENZYME_BINDING				
+4792	NFKBIA	nuclear factor of kappa light polypeptide gene enhancer in B-cells inhibitor, alpha					GO_MACROMOLECULAR_COMPLEX_BINDING	GO_ENZYME_BINDING				
+80149	ZC3H12A	zinc finger CCCH-type containing 12A					GO_MACROMOLECULAR_COMPLEX_BINDING			GO_CHROMATIN_BINDING		
+55135	WRAP53	WD repeat containing, antisense to TP53					GO_MACROMOLECULAR_COMPLEX_BINDING					
+24139	EML2	echinoderm microtubule associated protein like 2					GO_MACROMOLECULAR_COMPLEX_BINDING					
+5606	MAP2K3	mitogen-activated protein kinase kinase 3						GO_ENZYME_BINDING				
+148022	TICAM1	toll-like receptor adaptor molecule 1						GO_ENZYME_BINDING				
+9482	STX8	syntaxin 8						GO_ENZYME_BINDING				
+602	BCL3	B-cell CLL/lymphoma 3										
+4793	NFKBIB	nuclear factor of kappa light polypeptide gene enhancer in B-cells inhibitor, beta										
+84441	MAML2	mastermind-like 2 (Drosophila)										
+51088	KLHL5	kelch-like 5 (Drosophila)										
+51676	ASB2	ankyrin repeat and SOCS box containing 2										
+25816	TNFAIP8	tumor necrosis factor, alpha-induced protein 8										
+9692	KIAA0391	KIAA0391										
+200558	APLF	aprataxin and PNKP like factor										
+10148	EBI3	Epstein-Barr virus induced 3										
+3460	IFNGR2	interferon gamma receptor 2 (interferon gamma transducer 1)										
+10019	SH2B3	SH2B adaptor protein 3										
+7293	TNFRSF4	tumor necrosis factor receptor superfamily, member 4										
+57514	ARHGAP31	Rho GTPase activating protein 31										
+2889	RAPGEF1	Rap guanine nucleotide exchange factor (GEF) 1										
+80326	WNT10A	wingless-type MMTV integration site family, member 10A										
+259307	IL4I1	interleukin 4 induced 1										
+25841	ABTB2	ankyrin repeat and BTB (POZ) domain containing 2										
+3918	LAMC2	laminin, gamma 2										
+23057	NMNAT2	nicotinamide nucleotide adenylyltransferase 2										
+338440	ANO9	anoctamin 9										
+50515	CHST11	carbohydrate (chondroitin 4) sulfotransferase 11										
+196528	ARID2	AT rich interactive domain 2 (ARID, RFX-like)										
+4814	NINJ1	ninjurin 1										
+57528	KCTD16	potassium channel tetramerisation domain containing 16										
+64207	IRF2BPL	interferon regulatory factor 2 binding protein-like										
+9399	STOML1	stomatin (EPB72)-like 1										

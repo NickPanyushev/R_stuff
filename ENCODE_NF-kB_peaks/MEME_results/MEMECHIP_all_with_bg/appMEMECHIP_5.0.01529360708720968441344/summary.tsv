@@ -1,0 +1,7 @@
+MOTIF_INDEX	MOTIF_SOURCE	MOTIF_ID	ALT_ID	CONSENSUS	WIDTH	SITES	E-VALUE	E-VALUE_SOURCE	MOST_SIMILAR_MOTIF_SOURCE	MOST_SIMILAR_MOTIF	URL
+1	MEME	GGGRATTYCCC	MEME-1	GGGRATTYCCC	11	74	1.1e-132	MEME	db/JASPAR/JASPAR2018_CORE_vertebrates_non-redundant.meme	MA0107.1 (RELA)	http://jaspar2018.genereg.net/matrix/MA0107.1
+2	DREME	GGAATTYC	DREME-1	GGAATTYC	8	26	3.4e-003	DREME	db/JASPAR/JASPAR2018_CORE_vertebrates_non-redundant.meme	MA0107.1 (RELA)	http://jaspar2018.genereg.net/matrix/MA0107.1
+
+# MEME-ChIP (Motif Analysis of Large Nucleotide Datasets): Version 5.0.0 released on Thu Jun 07 12:52:48 2018 -0700
+# The format of this file is described at http://meme-suite.org//doc/meme-chip-output-format.html
+# meme-chip -oc . -time 300 -ccut 100 -neg GM12892_GM19099_bg.fa -order 1 -psp-gen -db db/EUKARYOTE/jolma2013.meme -db db/JASPAR/JASPAR2018_CORE_vertebrates_non-redundant.meme -db db/MOUSE/uniprobe_mouse.meme -meme-mod zoops -meme-minw 6 -meme-maxw 30 -meme-nmotifs 3 -meme-searchsize 100000 -dreme-e 0.05 -centrimo-score 5.0 -centrimo-ethresh 10.0 uncentered.fa

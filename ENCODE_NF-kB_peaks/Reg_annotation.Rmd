@@ -21,13 +21,30 @@ TF binding motifs
 Other regulatory motifs
 miRNA target regions
 
+```{r libraries import, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
+setwd("~/R_stuff/ENCODE_NF-kB_peaks/")
+source("~/R_stuff/Functions.R")
+library(ggplot2)
+library(dplyr)
+library(data.table)
+# library(sjmisc)
+#library(sjlabelled)
+```
+
+```{r, warning=FALSE, message=FALSE, results='hide'} 
+setwd("Script_files/")
+unzip(zipfile = "all_bins.zip")
+all_bins <- fread("all_bins.tsv")
+file.remove("all_bins.tsv")
+```
+
 ```{r}
 #Импортируем их как таблицу
-reg_features <- fread("ENSEMBL_data/reg_features.txt")
-miRNA_targets <- fread("ENSEMBL_data/miRNA_targets.txt")
-other_regions <- fread("ENSEMBL_data/other_regions.txt")
-TF_motifs <- fread("ENSEMBL_data/bind_motifs.txt")
-reg_evidence <- fread("ENSEMBL_data/reg_evidence.txt") #Может быть битым
+reg_features <- fread("Annotation_data/reg_features.txt")
+miRNA_targets <- fread("Annotation_data/miRNA_targets.txt")
+other_regions <- fread("Annotation_data/other_regions.txt")
+TF_motifs <- fread("Annotation_data/bind_motifs.txt")
+reg_evidence <- fread("Annotation_data/reg_evidence.txt") #Может быть битым
 
 #Приведем все эти файлы к единому виду
 names(reg_features) <- c("Chromosome", "Start", "Stop", "Feature")

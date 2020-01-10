@@ -13,7 +13,7 @@ source("~/R_stuff/Functions.R")
 library(ggplot2)
 library(dplyr)
 library(data.table)
-# library(sjmisc)
+#library(sjmisc)
 #library(sjlabelled)
 ```
 
@@ -71,10 +71,11 @@ if (!file.exists("regions_bins.tsv")){
    cell_line <- vector[1]
    region <- as.numeric(vector[2])
    bins <- sel_bins[Cell_line == cell_line, Peak_Bins]
-   bins <- bins[bins > region & bins < region + piece_size]
+   #bins <- bins[bins > region & bins < region + piece_size]
+   bins <- bins[between(bins, region, region+piece_size)]
   return(length(bins))
   }
-  
+  #bin_number_dt <- vapply(new_array, bin_num, FUN.VALUE = numeric(1L))
   bin_number_dt <- apply(new_array, c(2,1), bin_num)
   bin_number_dt <- as.data.table(bin_number_dt)
   names(bin_number_dt) <- unique(all_bins$Cell_line) 
@@ -88,6 +89,29 @@ to_generate_dt$min <- sapply(bin_number_dt, min)
 to_generate_dt$mean <- round(sapply(bin_number_dt, mean), digits = 0)
 to_generate_dt$max <- sapply(bin_number_dt, max)
 to_generate_dt <- to_generate_dt[mean != 0]   #Выбросим пустые регионы, где в среднем нет бинов, только выбросы какие-то
+
+#Сделаем альтернативную функцию, которая берет на вход координату окошка и шаг окошка
+#На выход она отдает 3 значения: минимум, максимум и среднее
+value <- 9900
+```
+
+```{r}
+setwd("Script_files/")
+if (!file.exists("regions_bins.tsv")){
+  bin_num <- function(value, Step = piece_size){
+  tmp <- all_bins[between(Peak_Bins, value, value+Step), .N, by=Cell_line]$N
+  ifelse(length(tmp) > 1, return(tmp), return(0))
+  }
+}else{
+  bin_number_dt <- fread("regions_bins.tsv", sep = "\t")
+}
+to_generate_dt <- data.table(Regions = bins_regions[1:10], min = NA, mean = NA, max = NA)
+sapply(to_generate_dt$Regions, bin_num)
+to_generate_dt$mean <- round(sapply(bin_number_dt, mean), digits = 0)
+to_generate_dt$max <- sapply(bin_number_dt, max)
+to_generate_dt <- to_generate_dt[mean != 0]   #Выбросим пустые регионы, где в среднем нет бинов, только выбросы какие-то
+
+
 ```
 
 Сделаем функцию, которая нам нагенерит вектора
@@ -119,7 +143,7 @@ inter_len <- function(num_vector, mx=intersect_list){
 }
 ```
 
-Теперь сделаем датафрейм такой же, как мы делали для пересечений линий, и но количество пересечений будет отличаться от реальных данных - их будет везде по 500
+Теперь сделаем датафрейм такой же, как мы делали для пересечений линий, но количество пересечений будет отличаться от реальных данных - их будет везде по 500
 ```{r}
 n_lines <- length(unique(all_bins$Cell_line))
 if (!file.exists("Script_files/gen_combinations.tsv")){
@@ -160,7 +184,7 @@ ggplot(comb_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers))+
        x = "Number of lines",
        y = "Common peak number")+
   #scale_y_log10()+
-  ylim(0, 2e+05)+
+  ylim(0, 2e+04)+
 theme_bw()
 ```
   
@@ -174,7 +198,7 @@ ggplot(generated_df[Line_number>=2, ], aes(x = Line_number, y = Bin_numbers))+
        x = "Number of lines",
        y = "Common peak number")+
     #scale_y_log10()+
-  ylim(0, 2e+05)+
+  ylim(0, 2e+04)+
 theme_bw()
 ```
   
@@ -186,16 +210,23 @@ comb_df$type <- "natural"
 generated_df$type <- "unnatural"
 
 all_df <- rbind(comb_df, generated_df)
-#all_df$Bin_numbers[all_df$Bin_numbers == 0] <- NA
+all_df$Bin_numbers[all_df$Bin_numbers == 0] <- NA
 #all_df$type <- factor(all_df$type)
-ggplot(all_df[Line_number > 1], aes(x = Line_number, y = Bin_numbers))+
-  geom_jitter(aes(color = type), position = position_jitterdodge(jitter.width = 0.1), size = 2, alpha = 0.5, na.rm = T) + 
-  labs(title = "Common bin number",
-       x = "Number of lines",
-       y = "Common peak number")+
-   ylim(0, 1e+05)+
-theme_bw()
-```
+
+ggplot(all_df[Line_number > 1], aes(x = Line_number, y = Bin_numbers, color = type))+
+  geom_jitter(size = 1, alpha = 0.5, 
+              position = position_jitter(0.2),
+              na.rm = T, show.legend = F) + 
+  labs(title = "Количество общих бинов",
+       x = "Количество пересеченных линий",
+       y = "Количество общих бинов")+
+  scale_x_continuous(breaks=c(1:14))+
+  ylim(0, 2e+04)+
+  theme_bw()
+  
+ggsave("~/Podg_lab/ВКР/Пересечения_5000.png", plot = last_plot(), 
+  dpi = 400, units = c("cm"), limitsize = TRUE)
+``````
 Проверим теперь это t- тестом
 ```{r}
 t.test(generated_df[generated_df$Line_number == 13, Bin_numbers], comb_df[comb_df$Line_number == 13, Bin_numbers], alternative = "less")
@@ -227,6 +258,7 @@ summary(fit_mean_natural)
 Вроде как подтвердили, что зависимость есть, давай теперь попробуем получить реальные значения по всем точкам
 ```{r}
 fit_natural <- lm(Line_number ~ I(1/Bin_numbers), comb_df[Line_number>1, ])
+
 #Что мы имеем 
 summary(fit_natural)
 #R^2 отстойный, да и хуй бы с ним
@@ -274,7 +306,7 @@ summary(fit_generated)
 #Выглядит нормальненько
 
 #Немного непонятных метрик
-plot(fit_generated)
+#plot(fit_generated)
 ```
 А теперь предскажем, как поведет себя количество пересечений при увеличении количества линий
 ```{r}
@@ -345,5 +377,5 @@ ggplot(common_bins, aes(Chromosome, fill = Chromosome))+
 
 
 ```{r clean-up, echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
-rm(list = setdiff(ls(), lsf.str()))
+#rm(list = setdiff(ls(), lsf.str()))
 ```

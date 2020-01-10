@@ -1,0 +1,24 @@
+# 1-order Markov frequencies from file ./uncentered.fa
+# seqs: 78    min: 100    max: 1150    avg: 205.1    sum: 16000    alph: DNA
+# order 0
+A 2.173e-01
+C 2.827e-01
+G 2.827e-01
+T 2.173e-01
+# order 1
+AA 5.769e-02
+AC 4.748e-02
+AG 7.622e-02
+AT 3.561e-02
+CA 7.172e-02
+CC 9.983e-02
+CG 3.517e-02
+CT 7.622e-02
+GA 6.318e-02
+GC 7.242e-02
+GG 9.983e-02
+GT 4.748e-02
+TA 2.456e-02
+TC 6.318e-02
+TG 7.172e-02
+TT 5.769e-02

@@ -1,0 +1,70 @@
+Invoking:
+  getsize ./uncentered.fa 1> $metrics
+Finished invoke:
+  name: count_seqs  status: 0  time: 0.023902
+Invoking:
+  fasta-most -min 50 < ./uncentered.fa 1> $metrics
+Finished invoke:
+  name: most_seqs  status: 0  time: 0.099448
+Invoking:
+  fasta-center -dna -len 100 < ./uncentered.fa 1> ./seqs-centered
+Finished invoke:
+  name: center_seqs  status: 0  time: 0.121663
+Invoking:
+  fasta-shuffle-letters ./seqs-centered ./seqs-shuffled -kmer 2 -tag -dinuc -dna -seed 1
+Finished invoke:
+  name: shuffle_seqs  status: 0  time: 0.025396
+Invoking:
+  fasta-get-markov -nostatus -nosummary -dna -m 1 ./uncentered.fa ./background
+Finished invoke:
+  name: bg  status: 0  time: 0.022833
+Invoking:
+  getsize ./GM12892_GM19099_bg.fa 1> $metrics
+Finished invoke:
+  name: count_seqs  status: 0  time: 0.061118
+Invoking:
+  fasta-center -dna -len 100 < ./GM12892_GM19099_bg.fa 1> ./control-centered
+Finished invoke:
+  name: center_control  status: 0  time: 0.238685
+Invoking:
+  psp-gen -pos ./seqs-centered -neg ./control-centered -minw 6 -maxw 20 -dna -revcomp 1> ./psp
+Finished invoke:
+  name: psp  status: 0  time: 81.989697
+Invoking:
+  meme ./seqs-centered -oc meme_out -mod zoops -nmotifs 3 -minw 6 -maxw 30 -bfile ./background -dna -searchsize 100000 -time 5059 -psp ./psp -revcomp -nostatus
+Finished invoke:
+  name: meme  status: 0  time: 40.589549
+Invoking:
+  dreme -verbosity 1 -oc dreme_out -png -dna -p ./seqs-centered -n ./control-centered -t 7090 -e 0.05
+Finished invoke:
+  name: dreme  status: 0  time: 34.550419
+Invoking:
+  centrimo -seqlen 200 -verbosity 1 -oc centrimo_out -bfile ./background -score 5.0 -ethresh 10.0 -neg ./GM12892_GM19099_bg.fa ./uncentered.fa meme_out/meme.xml dreme_out/dreme.xml db/EUKARYOTE/jolma2013.meme db/JASPAR/JASPAR2018_CORE_vertebrates_non-redundant.meme db/MOUSE/uniprobe_mouse.meme
+Finished invoke:
+  name: centrimo  status: 256  time: 1.492878
+Invoking:
+  tomtom -verbosity 1 -oc meme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc meme_out/meme.xml db/EUKARYOTE/jolma2013.meme db/JASPAR/JASPAR2018_CORE_vertebrates_non-redundant.meme db/MOUSE/uniprobe_mouse.meme
+Finished invoke:
+  name: meme_tomtom  status: 0  time: 35.743657
+Invoking:
+  tomtom -verbosity 1 -oc dreme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc dreme_out/dreme.xml db/EUKARYOTE/jolma2013.meme db/JASPAR/JASPAR2018_CORE_vertebrates_non-redundant.meme db/MOUSE/uniprobe_mouse.meme
+Finished invoke:
+  name: dreme_tomtom  status: 0  time: 2.843068
+Invoking:
+  tomtom -verbosity 1 -text -thresh 0.1 ./combined.meme ./combined.meme 1> ./motif_alignment.txt
+Finished invoke:
+  name: align  status: 0  time: 0.041477
+Invoking:
+  spamo -verbosity 1 -oc spamo_out_1 -bgfile ./background -keepprimary -primary GGGRATTYCCC ./uncentered.fa meme_out/meme.xml meme_out/meme.xml dreme_out/dreme.xml db/EUKARYOTE/jolma2013.meme db/JASPAR/JASPAR2018_CORE_vertebrates_non-redundant.meme db/MOUSE/uniprobe_mouse.meme
+Finished invoke:
+  name: spamo1  status: 0  time: 7.190949
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc fimo_out_1 --bgfile ./background --motif GGGRATTYCCC meme_out/meme.xml ./uncentered.fa
+Finished invoke:
+  name: fimo1  status: 0  time: 0.110555
+Writing output
+Invoking:
+  meme-chip_html_to_tsv ./meme-chip.html ./summary.tsv "meme-chip -oc . -time 300 -ccut 100 -neg GM12892_GM19099_bg.fa -order 1 -psp-gen -db db/EUKARYOTE/jolma2013.meme -db db/JASPAR/JASPAR2018_CORE_vertebrates_non-redundant.meme -db db/MOUSE/uniprobe_mouse.meme -meme-mod zoops -meme-minw 6 -meme-maxw 30 -meme-nmotifs 3 -meme-searchsize 100000 -dreme-e 0.05 -centrimo-score 5.0 -centrimo-ethresh 10.0 uncentered.fa" 5.0.0 "Thu Jun 07 12\:52\:48 2018 -0700"
+Finished invoke:
+  name: summary  status: 0  time: 0.24028
+Done
